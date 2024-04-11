@@ -31,7 +31,7 @@ XCTraceSample >> primitiveName [
 { #category : #'api - accessing' }
 XCTraceSample >> sampleTime [
 
-	^ self childNamed: 'sample-time'
+	^ (self childNamed: 'sample-time') attributeAt: 'fmt'
 ]
 
 { #category : #accessing }
