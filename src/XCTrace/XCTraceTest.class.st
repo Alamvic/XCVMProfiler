@@ -34,6 +34,21 @@ XCTraceTest >> testContentOfProfiler [
 	"""
 ]
 
+{ #category : #test }
+XCTraceTest >> testNameOfASample [
+	|treeSamples|
+	treeSamples := tree samples.
+	self assert: ((treeSamples second stackTrace frameNameAt: 10) sameAs: 'dyld4::Loader::getLoader(Diagnostics&, dyld4::RuntimeState&, char const*, dyld4::Loader::LoadOptions const&)').
+]
+
+{ #category : #test }
+XCTraceTest >> testSamplesTime [
+	|treeSamples|
+	treeSamples := tree samples.
+	self assert: ((treeSamples first sampleTime) sameAs: '00:00.383.060').
+
+]
+
 { #category : #'basic tests' }
 XCTraceTest >> testSizeOfEmptySample [
 	self assert: treeEmpty samples size equals: 0.
