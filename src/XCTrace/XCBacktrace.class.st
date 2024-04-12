@@ -17,6 +17,12 @@ XCBacktrace class >> sample: aXCTraceSample node: aXMLElement [
 ]
 
 { #category : #accessing }
+XCBacktrace >> frameNameAt: pos [
+	
+	^ (self frames at: pos) attributeAt: 'name'
+]
+
+{ #category : #accessing }
 XCBacktrace >> frames [
 	
 	node ifNil: [ ^ #() ].
