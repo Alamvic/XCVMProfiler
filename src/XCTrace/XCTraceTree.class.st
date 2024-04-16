@@ -58,7 +58,7 @@ XCTraceTree >> rootTime [
 XCTraceTree >> samples [
 
 	^ samples ifNil: [
-		  samples := dom root elements first elements
+		  samples := dom root elements first elements asOrderedCollection
 			             select: [ :node | node name = 'row' ]
 			             thenCollect: [ :sampleNode |
 				self haltIf: [ sampleNode isNil ].

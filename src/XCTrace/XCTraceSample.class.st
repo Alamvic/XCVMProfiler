@@ -31,7 +31,7 @@ XCTraceSample >> primitiveName [
 { #category : #'api - accessing' }
 XCTraceSample >> sampleTime [
 
-	^ (self childNamed: 'sample-time') attributeAt: 'fmt'
+	^ self childNamed: 'sample-time'
 ]
 
 { #category : #accessing }
@@ -45,7 +45,7 @@ XCTraceSample >> stackTrace [
 { #category : #accessing }
 XCTraceSample >> threadId [
 	
-	^ (self childNamed: 'thread') attributeAt: 'id'
+	^ self childNamed: 'thread'
 ]
 
 { #category : #'api - accessing' }

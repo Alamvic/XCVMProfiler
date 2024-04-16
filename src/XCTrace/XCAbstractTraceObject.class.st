@@ -21,25 +21,23 @@ XCAbstractTraceObject >> childNamed: aPropertyName ifAbsent: aBlock [
 		            childrenNamed: aPropertyName
 		            ifAbsent: [ ^ aBlock value ].
 	self assert: children size = 1.
-	^ children first
+	(children first class = XMLNodeList and: children first size =1)
+		ifTrue: [^ children first first] 
+		ifFalse: [^ children first].
+	
 ]
 
 { #category : #'api - accessing' }
 XCAbstractTraceObject >> childrenNamed: aPropertyName [
 
-	^ node elements
-		  select: [ :e | e name = aPropertyName ]
-		  thenCollect: [ :subnode |
-			  (subnode includesAttribute: 'id')
-				  ifTrue: [
-					  self tree
-						  indexAt: aPropertyName
-						  atId: (subnode attributeAt: 'id')
-						  put: subnode ]
-				  ifFalse: [
-				  self tree
-					  indexAt: aPropertyName
-					  atId: (subnode attributeAt: 'ref') ] ]
+	^ (self node
+		nodesSelect: [:e | ((e class = XMLElement) and: [e name = aPropertyName] )] )
+		collect: [:subnode | (subnode nodes) asString 
+			ifNotEmpty: [subnode nodes]
+			ifEmpty: [(subnode includesAttribute: 'fmt')
+				ifTrue: [subnode attributeAt: 'fmt']
+				ifFalse: [ subnode attributeAt: 'name'] ]]
+
 ]
 
 { #category : #'api - accessing' }
@@ -49,6 +47,11 @@ XCAbstractTraceObject >> childrenNamed: aPropertyName ifAbsent: aBlock [
 	children := self childrenNamed: aPropertyName.
 	children isEmpty ifTrue: [ aBlock value ].
 	^ children
+]
+
+{ #category : #accessing }
+XCAbstractTraceObject >> node [ 
+	^ node
 ]
 
 { #category : #accessing }
