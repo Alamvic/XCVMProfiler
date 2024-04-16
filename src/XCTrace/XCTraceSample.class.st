@@ -9,6 +9,14 @@ Class {
 }
 
 { #category : #'instance creation' }
+XCTraceSample class >> tree: aXCTraceTree [
+
+	^ self new
+		  tree: aXCTraceTree;
+		  yourself
+]
+
+{ #category : #'instance creation' }
 XCTraceSample class >> tree: aXCTraceTree node: aXMLElement [
 
 	^ self new
