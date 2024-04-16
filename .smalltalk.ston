@@ -2,7 +2,7 @@ SmalltalkCISpec {
   #loading : [
     SCIMetacelloLoadSpec {
       #baseline : 'MyProject',
-      #platforms : [ #squeak, #pharo, #gemstone ]
+      #platforms : [ #pharo ]
     }
   ]
 }
