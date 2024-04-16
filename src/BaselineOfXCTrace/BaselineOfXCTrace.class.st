@@ -21,7 +21,7 @@ BaselineOfXCTrace >> baseline: spec [
 		
 		"Packages"
 		spec 
-			package: #XCTrace with: [spec requires: 'XML-Parser'];
+			package: #XCTrace with: [spec requires: #XMLParser];
 			package: 'XCTrace-Tests' with: [spec requires: #XCTrace] ]
 ]
 
