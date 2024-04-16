@@ -21,7 +21,7 @@ XCAbstractTraceObject >> childNamed: aPropertyName ifAbsent: aBlock [
 		            childrenNamed: aPropertyName
 		            ifAbsent: [ ^ aBlock value ].
 	self assert: children size = 1.
-	(children first class = XMLNodeList and: children first size =1)
+	(children first size = 1)
 		ifTrue: [^ children first first] 
 		ifFalse: [^ children first].
 	

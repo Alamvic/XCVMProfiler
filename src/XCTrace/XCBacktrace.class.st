@@ -25,14 +25,14 @@ XCBacktrace >> frameAt: pos [
 { #category : #accessing }
 XCBacktrace >> frameNameAt: pos [
 	
-	^ (self frameAt: pos) name
+	^ (self frameAt: pos) attributeAt: 'name'
 ]
 
 { #category : #accessing }
 XCBacktrace >> frames [
 	
 	node ifNil: [ ^ #() ].
-	^ self node elementsDo: [:e | e childrenNamed: 'frame']
+	^ (self node elementsCollect: [:e | e]) asOrderedCollection
 ]
 
 { #category : #accessing }
