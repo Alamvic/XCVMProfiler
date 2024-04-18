@@ -39,18 +39,24 @@ XCTraceTest >> setUp [
 
 ]
 
+{ #category : #running }
+XCTraceTest >> tearDown [ 
+
+	fr ensureDelete.
+	frEmpty ensureDelete.
+	super tearDown.
+]
+
 { #category : #'as yet unclassified' }
 XCTraceTest >> testContentOfProfiler [
 	"""
 	Needs a rework.
-	|treeSamples profiler names|.
-	treeSamples := tree samples.
+	|profiler names|
 	profiler := 	XCVMProfiler default classify: treeSamples.
 	names := profiler threads collect: [:p |
 		p pointsOfInterest do: [:n |
 			{'Machine Code'.'Trampolines'.'MC -> Primitive'.'compilation'.'interpret'.'Interpreter -> Primitive'} includes: (n name)]].
 	"""
-	
 ]
 
 { #category : #tests }
