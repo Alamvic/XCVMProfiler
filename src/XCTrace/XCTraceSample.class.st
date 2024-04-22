@@ -9,6 +9,14 @@ Class {
 }
 
 { #category : #'instance creation' }
+XCTraceSample class >> tree: aXCTraceTree [
+
+	^ self new
+		  tree: aXCTraceTree;
+		  yourself
+]
+
+{ #category : #'instance creation' }
 XCTraceSample class >> tree: aXCTraceTree node: aXMLElement [
 
 	^ self new
@@ -31,7 +39,7 @@ XCTraceSample >> primitiveName [
 { #category : #'api - accessing' }
 XCTraceSample >> sampleTime [
 
-	^ (self childNamed: 'sample-time') attributeAt: 'fmt'
+	^ self childNamed: 'sample-time'
 ]
 
 { #category : #accessing }
@@ -45,7 +53,7 @@ XCTraceSample >> stackTrace [
 { #category : #accessing }
 XCTraceSample >> threadId [
 	
-	^ (self childNamed: 'thread') attributeAt: 'id'
+	^ self childNamed: 'thread'
 ]
 
 { #category : #'api - accessing' }
