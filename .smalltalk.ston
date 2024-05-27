@@ -4,6 +4,11 @@ SmalltalkCISpec {
       #baseline : 'XCTrace',
       #directory : 'src',
       #platforms : [ #pharo ]
+    },
+    SCIMetacelloLoadSpec {
+      #baseline : 'TreeParser',
+      #directory : 'src',
+      #platforms : [ #pharo ]
     }
   ]
 }
