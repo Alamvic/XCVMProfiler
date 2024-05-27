@@ -28,6 +28,14 @@ TreeChildren >> children: aTreeChildren [
 ]
 
 { #category : #accessing }
+TreeChildren >> estimatePercentage [
+	|childrenPercentage sumOfPercents|
+	sumOfPercents := 0.
+	childrenPercentage := self children collect: [:n | sumOfPercents := (n percentage) + sumOfPercents ].
+	percentage := percentage - childrenPercentage.
+]
+
+{ #category : #accessing }
 TreeChildren >> name [
 	^ name
 ]

@@ -14,19 +14,21 @@ TreeParse class >> fromFile: aFile [
 		content: aFile.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TreeParse >> asNodes [
 
-	^ TreeNodes new
-		nodes: content.
+	^ TreeNodes new nodes: content
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TreeParse >> content: aFile [
-	content := (aFile contents) lines reject: [:line | line beginsWith: '#'].
+
+	content := aFile contents lines reject: [ :line |
+		           line beginsWith: '#' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TreeParse >> readLine: pos [
-	^ content at: pos.
+
+	^ content at: pos
 ]

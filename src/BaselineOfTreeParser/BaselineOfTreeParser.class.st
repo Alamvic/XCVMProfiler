@@ -10,7 +10,8 @@ BaselineOfTreeParser >> baseline: spec [
 	spec for: #common do: [
 		"Packages"
 		spec 
-			package: #TreeParser ]
+			package: #TreeParser;
+			package: 'TreeParser-Tests' with: [ spec requires: #TreeParser ] ]
 ]
 
 { #category : #accessing }
