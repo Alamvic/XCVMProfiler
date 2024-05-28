@@ -9,28 +9,22 @@ Class {
 
 { #category : #accessing }
 TreeNodes >> classify [
-	"Recreates the parent/child links given by the file."
+	"Establish every parent/child links given by the file."
 
-	| length list |
-	length := self numberOfFunctions.
-	list := Array new: length.
-
-	1 to: length do: [:i | 
-		list at: i put: (self classify: i) ].
-	
-	^ list
+	^ (self classify: 1 withParent: nil)
 ]
 
 { #category : #accessing }
-TreeNodes >> classify: aLine [
+TreeNodes >> classify: aLine withParent: aParent [
+	"Establish the parent/child links, starting from a given line and optionally a parent."
 
-	| length child |
-	length := self numberOfFunctions.
+	| child |
 	child := TreeChildren new
-				 children: (self findChildrenOf: aLine);
-				 parent: (self findParentOf: aLine);
-				 name: (self nameOf: aLine);
-				 percentage: (self percentageOf: aLine).
+		         name: (self nameOf: aLine);
+		         percentage: (self percentageOf: aLine);
+		         parent: aParent.
+	child children: ((self findChildrenOf: aLine) collect: [ :c |
+			 self classify: c withParent: child ]).
 	^ child
 ]
 
@@ -44,6 +38,7 @@ TreeNodes >> differenceOfSpacesAt: aNode [
 
 { #category : #accessing }
 TreeNodes >> findChildrenOf: aNode [
+	"Gives an ordered collection of every indexes of the lines where there is a child."
 
 	| lastNode everyChildren |
 	lastNode := self numberOfFunctions.
@@ -52,18 +47,19 @@ TreeNodes >> findChildrenOf: aNode [
 	aNode = lastNode ifTrue: [ ^ everyChildren ].
 
 	((self differenceOfSpacesAt: aNode) <= 10 and: (self differenceOfSpacesAt: aNode) >= 0) 
-		ifTrue: [	everyChildren add: (self nameOf: aNode + 1).
+		ifTrue: [	everyChildren add: aNode + 1.
 		^ everyChildren ].
 
-	aNode + 1 to: lastNode - 1 do: [ :i |
+	aNode to: lastNode do: [ :i |
 		(self numberOfSpacesAt: i) - (self numberOfSpacesAt: aNode) = 11
-			ifTrue: [ everyChildren add: (self nameOf: i) ] ].
+			ifTrue: [ everyChildren add: i ] ].
 
 	^ everyChildren
 ]
 
 { #category : #accessing }
 TreeNodes >> findParentOf: aNode [
+	"Gives the index of the line where the parent is."
 
 	| i |
 	i := aNode-1.
@@ -71,7 +67,7 @@ TreeNodes >> findParentOf: aNode [
 		whileTrue: [ i := i - 1 ].
 
 	(i > 0)
-		ifTrue: [	 ^ self nameOf: i ]
+		ifTrue: [	 ^ i ]
 		ifFalse: [ ^ nil ]
 ]
 
@@ -139,7 +135,7 @@ TreeNodes >> numberOfSpacesAt: aNode [
 TreeNodes >> percentageOf: aLine [
 	"Gives the percentage from a function at a given line"
 
-	"In the case of multiples functions for one percentage, it gives the same percentage so it's precise yet."
+	"In the case of multiples functions for one percentage, it gives the same percentage to every functions."
 
 	| line numbers |
 	self assert: aLine >= 1.

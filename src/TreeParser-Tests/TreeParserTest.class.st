@@ -120,63 +120,74 @@ TreeParserTest >> tearDown [
 ]
 
 { #category : #tests }
-TreeParserTest >> testFindChildrenOf [
-
-	| childrenTest |
-	childrenTest := OrderedCollection new.
-	childrenTest
-		add: '__x64_sys_read';
-		add: 'syscall_exit_to_user_mode';
-		add: '__x64_sys_openat'.
-		
-	self assert:
-		((testNodeMultipleChildren findChildrenOf: 3) first sameAs: childrenTest first).
-		
-	self assert:
-		((testNodeMultipleChildren findChildrenOf: 3) second sameAs: childrenTest second).
-		
-	self assert:
-		((testNodeMultipleChildren findChildrenOf: 3) third sameAs: childrenTest third)
-]
-
-{ #category : #tests }
-TreeParserTest >> testFindParentOf [
-
-	self assert: ((testNodeMultipleChildren findParentOf: 4) sameAs: 'do_syscall_64').
+TreeParserTest >> testClassify [
 	
-	self assert: ((testNodeMultipleChildren findParentOf: 6) sameAs: 'syscall_exit_to_user_mode')
-]
-
-{ #category : #tests }
-TreeParserTest >> testNameOf [
-
-	self assert: ((testNodeSamePercentage nameOf: 4) sameAs: '__x64_sys_read').
+	| family example |
+	family := testNodeMultipleChildren classify.
+	example := family children first children first children.
 	
-	self assert: ((testNodeSamePercentage nameOf: 6) sameAs: 'vfs_read' )
+	self assert: example size equals: 3.
+	
+	self assert: example first name equals: '__x64_sys_read'.
+	
+	self assert: example second name equals: 'syscall_exit_to_user_mode'.
+	
+	self assert: example third name equals: '__x64_sys_openat'.
+	
+	self assert: example first parent equals: example second parent
 ]
 
 { #category : #tests }
-TreeParserTest >> testNumberOfFunctions [
-
-	self assert: (testNodeSimple numberOfFunctions) equals: 4.
-]
-
-{ #category : #tests }
-TreeParserTest >> testNumberOfSpaces [
-
-	self assert: (testNodeSimple numberOfSpacesAt: 1) equals: 4.
-]
-
-{ #category : #tests }
-TreeParserTest >> testPercentageOf [
+TreeParserTest >> testEstimatePercentageOf [
 
 	self assert: (testNodeSamePercentage percentageOf: 4) equals: 36.78
 ]
 
 { #category : #tests }
+TreeParserTest >> testFindChildrenOf [
+
+	self assert:
+		(testNodeMultipleChildren findChildrenOf: 3) first equals: 4.
+		
+	self assert:
+		(testNodeMultipleChildren findChildrenOf: 3) second equals: 5.
+		
+	self assert:
+		(testNodeMultipleChildren findChildrenOf: 3) third equals: 8
+]
+
+{ #category : #tests }
+TreeParserTest >> testFindParentOf [
+
+	self assert: (testNodeMultipleChildren findParentOf: 4) equals: 3.
+	
+	self assert: (testNodeMultipleChildren findParentOf: 6) equals: 5
+]
+
+{ #category : #tests }
+TreeParserTest >> testNameOf [
+
+	self assert: (testNodeSamePercentage nameOf: 4) equals: '__x64_sys_read'.
+	
+	self assert: (testNodeSamePercentage nameOf: 6) equals: 'vfs_read'
+]
+
+{ #category : #tests }
+TreeParserTest >> testNumberOfFunctions [
+
+	self assert: (testNodeSimple numberOfFunctions) equals: 4
+]
+
+{ #category : #tests }
+TreeParserTest >> testNumberOfSpaces [
+
+	self assert: (testNodeSimple numberOfSpacesAt: 1) equals: 4
+]
+
+{ #category : #tests }
 TreeParserTest >> testReadALine [
 
-	self assert: ((treeSimple readLine: 3) sameAs: '            ---entry_SYSCALL_64_after_hwframe').
+	self assert: (treeSimple readLine: 3) equals: '            ---entry_SYSCALL_64_after_hwframe'
 ]
 
 { #category : #tests }
