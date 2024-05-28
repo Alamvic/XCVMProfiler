@@ -29,7 +29,20 @@ TreeChildren >> estimatePercentage [
 	sumOfPercents := 0.
 	self children collect: [ :n |
 		sumOfPercents := n percentage + sumOfPercents ].
-	percentage := percentage - sumOfPercents
+	
+	percentage - sumOfPercents >= 0
+		ifTrue: [ percentage := (percentage - sumOfPercents) roundUpTo: 0.01 ].
+	^ percentage
+]
+
+{ #category : #accessing }
+TreeChildren >> firstChildrenOf: aNumber [
+	"Gives the children of the first children of each generations a given times."
+
+	| child |
+	child := self.
+	1 to: aNumber do: [:c | child := child children first ].
+	^ child
 ]
 
 { #category : #accessing }

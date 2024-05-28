@@ -83,17 +83,25 @@ TreeNodes >> lastNodeOf: aNode [
 ]
 
 { #category : #accessing }
+TreeNodes >> lastSpaceAt: aLine [
+	"Gives the index of the last space at a given line."
+	
+	| lastSpace line|
+	line := nodes at: aLine.
+	lastSpace := line size.
+	
+	1 to: (line size) do: [:i | ( ( (line at: i) = Character space) or: ( (line at: i) = $-) )
+		ifTrue: [ lastSpace := line size - i ] ].
+	^ lastSpace
+]
+
+{ #category : #accessing }
 TreeNodes >> nameOf: aLine [
 	"Gets the name of a function at a given line."
 
 	| line |
 	line := (self withoutSpaces at: aLine) copyWithout: $-.
-	(aLine > 1 and: [
-		 (self percentageOf: aLine - 1) = (self percentageOf: aLine) ])
-		ifTrue: [ ^ line ]
-		ifFalse: [
-			^ line last:
-				  line size - (self percentageOf: aLine) asString size - 1 ]
+	^ line last: (self lastSpaceAt: aLine)
 ]
 
 { #category : #accessing }

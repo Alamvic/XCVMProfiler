@@ -124,7 +124,7 @@ TreeParserTest >> testClassify [
 	
 	| family example |
 	family := testNodeMultipleChildren classify.
-	example := family children first children first children.
+	example := (family firstChildrenOf: 2) children.
 	
 	self assert: example size equals: 3.
 	
@@ -138,9 +138,15 @@ TreeParserTest >> testClassify [
 ]
 
 { #category : #tests }
-TreeParserTest >> testEstimatePercentageOf [
-
-	self assert: (testNodeSamePercentage percentageOf: 4) equals: 36.78
+TreeParserTest >> testEstimatePercentage [
+	
+	| family example |
+	family := testNodeSamePercentage classify.
+	example := family firstChildrenOf: 2.
+	
+	self assert: example estimatePercentage equals: 9.13.
+	
+	self assert: example children first estimatePercentage equals: 0.0
 ]
 
 { #category : #tests }
@@ -166,6 +172,8 @@ TreeParserTest >> testFindParentOf [
 
 { #category : #tests }
 TreeParserTest >> testNameOf [
+
+	self assert: (testNodeSimple nameOf: 1) equals: 'entry_SYSCALL_64_after_hwframe'.
 
 	self assert: (testNodeSamePercentage nameOf: 4) equals: '__x64_sys_read'.
 	
