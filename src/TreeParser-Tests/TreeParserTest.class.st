@@ -18,10 +18,61 @@ Class {
 
 { #category : #running }
 TreeParserTest >> setUp [
+	"Commands ran:"
+	"sudo perf record -g --call-graph=dwarf -- ./script2.sh --all-user"
+	"sudo perf report --header --stdio > perf_example.txt"
 
 	super setUp.
 	memoryFS := FileSystem memory.
-	memoryFS / ('perf_stock_simple.txt') writeStreamDo: [:stream | stream nextPutAll: '# To display the perf.data header info, please use --header/--header-only options.
+	memoryFS / ('perf_stock_simple.txt') writeStreamDo: [:stream | stream nextPutAll: '# ========
+# captured on    : Wed May 29 09:28:58 2024
+# header version : 1
+# data offset    : 352
+# data size      : 16366888
+# feat offset    : 16367240
+# hostname : matburnx-laptop
+# os release : 6.8.0-76060800daily20240311-generic
+# perf version : 6.8.0
+# arch : x86_64
+# nrcpus online : 12
+# nrcpus avail : 12
+# cpudesc : AMD Ryzen 5 4600H with Radeon Graphics
+# cpuid : AuthenticAMD,23,96,1
+# total memory : 15776888 kB
+# cmdline : /usr/lib/linux-tools-6.8.0-76060800daily20240311/perf record -g --call-graph=dwarf -- ./script2.sh --all-user 
+# event : name = cycles:P, , id = { 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287 }, type = 0 (PERF_TYPE_HARDWARE), size = 136, config = 0 (PERF_COUNT_HW_CPU_CYCLES), { sample_period, sample_freq } = 4000, sample_type = IP|TID|TIME|ADDR|CALLCHAIN|PERIOD|REGS_USER|STACK_USER|DATA_SRC, read_format = ID|LOST, disabled = 1, inherit = 1, mmap = 1, comm = 1, freq = 1, enable_on_exec = 1, task = 1, precise_ip = 2, mmap_data = 1, sample_id_all = 1, exclude_callchain_user = 1, mmap2 = 1, comm_exec = 1, ksymbol = 1, bpf_event = 1, sample_regs_user = 0xff0fff, sample_stack_user = 8192
+# CPU_TOPOLOGY info available, use -I to display
+# NUMA_TOPOLOGY info available, use -I to display
+# pmu mappings: cpu = 4, amd_iommu_0 = 12, breakpoint = 5, ibs_fetch = 10, ibs_op = 11, kprobe = 8, msr = 13, power = 14, software = 1, tracepoint = 2, uprobe = 9
+# CACHE info available, use -I to display
+# time of first sample : 924.754662
+# time of last sample : 925.152255
+# sample duration :    397.592 ms
+# MEM_TOPOLOGY info available, use -I to display
+# bpf_prog_info 2: bpf_prog_7cc47bbf07148bfe_hid_tail_call addr 0xffffffffc0314954 size 110
+# bpf_prog_info 5: bpf_prog_e3dbd137be8d6168 addr 0xffffffffc0314b30 size 313
+# bpf_prog_info 6: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0314c9c size 58
+# bpf_prog_info 7: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0314d2c size 58
+# bpf_prog_info 8: bpf_prog_0ecd07b7b633809f addr 0xffffffffc0316e30 size 777
+# bpf_prog_info 9: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0317158 size 95
+# bpf_prog_info 10: bpf_prog_6deef7357e7b4530 addr 0xffffffffc03171d8 size 95
+# bpf_prog_info 11: bpf_prog_ee0e253c78993a24 addr 0xffffffffc031eb10 size 675
+# bpf_prog_info 12: bpf_prog_ee0e253c78993a24 addr 0xffffffffc031f018 size 671
+# bpf_prog_info 13: bpf_prog_8b9c33f36f812014 addr 0xffffffffc03214a4 size 1109
+# bpf_prog_info 14: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0321914 size 95
+# bpf_prog_info 15: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0321994 size 94
+# bpf_prog_info 19: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0328bdc size 94
+# bpf_prog_info 20: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0328c48 size 95
+# bpf_prog_info 21: bpf_prog_28a890580b33b0dc addr 0xffffffffc032b50c size 872
+# bpf_prog_info 22: bpf_prog_ee0e253c78993a24 addr 0xffffffffc032d4d0 size 673
+# bpf_prog_info 29: bpf_prog_6be0d743674e5faa_syscall__execve addr 0xffffffffc034c570 size 5360
+# bpf_prog_info 30: bpf_prog_a43530058ef998f5_do_ret_sys_execve addr 0xffffffffc034daa0 size 589
+# btf info of id 5
+# btf info of id 176
+# cpu pmu capabilities: max_precise=0
+# AMD systems uses ibs_op// PMU for some precise events, e.g.: cycles:p, see the ''perf list'' man page for further details.
+# missing features: (null) BRANCH_STACK GROUP_DESC AUXTRACE STAT CLOCKID DIR_FORMAT COMPRESSED CLOCK_DATA HYBRID_TOPOLOGY 
+# ========
 #
 #
 # Total Lost Samples: 0
@@ -41,7 +92,55 @@ TreeParserTest >> setUp [
                           |--36.78%--__x64_sys_read
 '].
 
-	memoryFS / ('perf_stock_same_percentage.txt') writeStreamDo: [:stream | stream nextPutAll: '# To display the perf.data header info, please use --header/--header-only options.
+	memoryFS / ('perf_stock_same_percentage.txt') writeStreamDo: [:stream | stream nextPutAll: '# ========
+# captured on    : Wed May 29 09:28:58 2024
+# header version : 1
+# data offset    : 352
+# data size      : 16366888
+# feat offset    : 16367240
+# hostname : matburnx-laptop
+# os release : 6.8.0-76060800daily20240311-generic
+# perf version : 6.8.0
+# arch : x86_64
+# nrcpus online : 12
+# nrcpus avail : 12
+# cpudesc : AMD Ryzen 5 4600H with Radeon Graphics
+# cpuid : AuthenticAMD,23,96,1
+# total memory : 15776888 kB
+# cmdline : /usr/lib/linux-tools-6.8.0-76060800daily20240311/perf record -g --call-graph=dwarf -- ./script2.sh --all-user 
+# event : name = cycles:P, , id = { 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287 }, type = 0 (PERF_TYPE_HARDWARE), size = 136, config = 0 (PERF_COUNT_HW_CPU_CYCLES), { sample_period, sample_freq } = 4000, sample_type = IP|TID|TIME|ADDR|CALLCHAIN|PERIOD|REGS_USER|STACK_USER|DATA_SRC, read_format = ID|LOST, disabled = 1, inherit = 1, mmap = 1, comm = 1, freq = 1, enable_on_exec = 1, task = 1, precise_ip = 2, mmap_data = 1, sample_id_all = 1, exclude_callchain_user = 1, mmap2 = 1, comm_exec = 1, ksymbol = 1, bpf_event = 1, sample_regs_user = 0xff0fff, sample_stack_user = 8192
+# CPU_TOPOLOGY info available, use -I to display
+# NUMA_TOPOLOGY info available, use -I to display
+# pmu mappings: cpu = 4, amd_iommu_0 = 12, breakpoint = 5, ibs_fetch = 10, ibs_op = 11, kprobe = 8, msr = 13, power = 14, software = 1, tracepoint = 2, uprobe = 9
+# CACHE info available, use -I to display
+# time of first sample : 924.754662
+# time of last sample : 925.152255
+# sample duration :    397.592 ms
+# MEM_TOPOLOGY info available, use -I to display
+# bpf_prog_info 2: bpf_prog_7cc47bbf07148bfe_hid_tail_call addr 0xffffffffc0314954 size 110
+# bpf_prog_info 5: bpf_prog_e3dbd137be8d6168 addr 0xffffffffc0314b30 size 313
+# bpf_prog_info 6: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0314c9c size 58
+# bpf_prog_info 7: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0314d2c size 58
+# bpf_prog_info 8: bpf_prog_0ecd07b7b633809f addr 0xffffffffc0316e30 size 777
+# bpf_prog_info 9: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0317158 size 95
+# bpf_prog_info 10: bpf_prog_6deef7357e7b4530 addr 0xffffffffc03171d8 size 95
+# bpf_prog_info 11: bpf_prog_ee0e253c78993a24 addr 0xffffffffc031eb10 size 675
+# bpf_prog_info 12: bpf_prog_ee0e253c78993a24 addr 0xffffffffc031f018 size 671
+# bpf_prog_info 13: bpf_prog_8b9c33f36f812014 addr 0xffffffffc03214a4 size 1109
+# bpf_prog_info 14: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0321914 size 95
+# bpf_prog_info 15: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0321994 size 94
+# bpf_prog_info 19: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0328bdc size 94
+# bpf_prog_info 20: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0328c48 size 95
+# bpf_prog_info 21: bpf_prog_28a890580b33b0dc addr 0xffffffffc032b50c size 872
+# bpf_prog_info 22: bpf_prog_ee0e253c78993a24 addr 0xffffffffc032d4d0 size 673
+# bpf_prog_info 29: bpf_prog_6be0d743674e5faa_syscall__execve addr 0xffffffffc034c570 size 5360
+# bpf_prog_info 30: bpf_prog_a43530058ef998f5_do_ret_sys_execve addr 0xffffffffc034daa0 size 589
+# btf info of id 5
+# btf info of id 176
+# cpu pmu capabilities: max_precise=0
+# AMD systems uses ibs_op// PMU for some precise events, e.g.: cycles:p, see the ''perf list'' man page for further details.
+# missing features: (null) BRANCH_STACK GROUP_DESC AUXTRACE STAT CLOCKID DIR_FORMAT COMPRESSED CLOCK_DATA HYBRID_TOPOLOGY 
+# ========
 #
 #
 # Total Lost Samples: 0
@@ -66,7 +165,55 @@ TreeParserTest >> setUp [
                           |                     |          
 '].
 
-	memoryFS / ('perf_stock_multiple_children.txt') writeStreamDo: [:stream | stream nextPutAll: '# To display the perf.data header info, please use --header/--header-only options.
+	memoryFS / ('perf_stock_multiple_children.txt') writeStreamDo: [:stream | stream nextPutAll: '# ========
+# captured on    : Wed May 29 09:28:58 2024
+# header version : 1
+# data offset    : 352
+# data size      : 16366888
+# feat offset    : 16367240
+# hostname : matburnx-laptop
+# os release : 6.8.0-76060800daily20240311-generic
+# perf version : 6.8.0
+# arch : x86_64
+# nrcpus online : 12
+# nrcpus avail : 12
+# cpudesc : AMD Ryzen 5 4600H with Radeon Graphics
+# cpuid : AuthenticAMD,23,96,1
+# total memory : 15776888 kB
+# cmdline : /usr/lib/linux-tools-6.8.0-76060800daily20240311/perf record -g --call-graph=dwarf -- ./script2.sh --all-user 
+# event : name = cycles:P, , id = { 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287 }, type = 0 (PERF_TYPE_HARDWARE), size = 136, config = 0 (PERF_COUNT_HW_CPU_CYCLES), { sample_period, sample_freq } = 4000, sample_type = IP|TID|TIME|ADDR|CALLCHAIN|PERIOD|REGS_USER|STACK_USER|DATA_SRC, read_format = ID|LOST, disabled = 1, inherit = 1, mmap = 1, comm = 1, freq = 1, enable_on_exec = 1, task = 1, precise_ip = 2, mmap_data = 1, sample_id_all = 1, exclude_callchain_user = 1, mmap2 = 1, comm_exec = 1, ksymbol = 1, bpf_event = 1, sample_regs_user = 0xff0fff, sample_stack_user = 8192
+# CPU_TOPOLOGY info available, use -I to display
+# NUMA_TOPOLOGY info available, use -I to display
+# pmu mappings: cpu = 4, amd_iommu_0 = 12, breakpoint = 5, ibs_fetch = 10, ibs_op = 11, kprobe = 8, msr = 13, power = 14, software = 1, tracepoint = 2, uprobe = 9
+# CACHE info available, use -I to display
+# time of first sample : 924.754662
+# time of last sample : 925.152255
+# sample duration :    397.592 ms
+# MEM_TOPOLOGY info available, use -I to display
+# bpf_prog_info 2: bpf_prog_7cc47bbf07148bfe_hid_tail_call addr 0xffffffffc0314954 size 110
+# bpf_prog_info 5: bpf_prog_e3dbd137be8d6168 addr 0xffffffffc0314b30 size 313
+# bpf_prog_info 6: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0314c9c size 58
+# bpf_prog_info 7: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0314d2c size 58
+# bpf_prog_info 8: bpf_prog_0ecd07b7b633809f addr 0xffffffffc0316e30 size 777
+# bpf_prog_info 9: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0317158 size 95
+# bpf_prog_info 10: bpf_prog_6deef7357e7b4530 addr 0xffffffffc03171d8 size 95
+# bpf_prog_info 11: bpf_prog_ee0e253c78993a24 addr 0xffffffffc031eb10 size 675
+# bpf_prog_info 12: bpf_prog_ee0e253c78993a24 addr 0xffffffffc031f018 size 671
+# bpf_prog_info 13: bpf_prog_8b9c33f36f812014 addr 0xffffffffc03214a4 size 1109
+# bpf_prog_info 14: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0321914 size 95
+# bpf_prog_info 15: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0321994 size 94
+# bpf_prog_info 19: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0328bdc size 94
+# bpf_prog_info 20: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0328c48 size 95
+# bpf_prog_info 21: bpf_prog_28a890580b33b0dc addr 0xffffffffc032b50c size 872
+# bpf_prog_info 22: bpf_prog_ee0e253c78993a24 addr 0xffffffffc032d4d0 size 673
+# bpf_prog_info 29: bpf_prog_6be0d743674e5faa_syscall__execve addr 0xffffffffc034c570 size 5360
+# bpf_prog_info 30: bpf_prog_a43530058ef998f5_do_ret_sys_execve addr 0xffffffffc034daa0 size 589
+# btf info of id 5
+# btf info of id 176
+# cpu pmu capabilities: max_precise=0
+# AMD systems uses ibs_op// PMU for some precise events, e.g.: cycles:p, see the ''perf list'' man page for further details.
+# missing features: (null) BRANCH_STACK GROUP_DESC AUXTRACE STAT CLOCKID DIR_FORMAT COMPRESSED CLOCK_DATA HYBRID_TOPOLOGY 
+# ========
 #
 #
 # Total Lost Samples: 0
@@ -97,16 +244,16 @@ TreeParserTest >> setUp [
 '].
 
 	fileSimple := memoryFS / ('perf_stock_simple.txt').
-	treeSimple := TreeParse fromFile: fileSimple.
-	testNodeSimple := treeSimple asNodes.
+	treeSimple := TreeParser fromFile: fileSimple.
+	testNodeSimple := TreeNodes fromContent: treeSimple.
 	
 	fileSamePercentage := memoryFS / ('perf_stock_same_percentage.txt').
-	treeSamePercentage := TreeParse fromFile: fileSamePercentage.
-	testNodeSamePercentage := treeSamePercentage asNodes.
+	treeSamePercentage := TreeParser fromFile: fileSamePercentage.
+	testNodeSamePercentage := TreeNodes fromContent: treeSamePercentage.
 	
 	fileMultipleChildren := memoryFS / ('perf_stock_multiple_children.txt').
-	treeMultipleChildren := TreeParse fromFile: fileMultipleChildren.
-	testNodeMultipleChildren := treeMultipleChildren asNodes.
+	treeMultipleChildren := TreeParser fromFile: fileMultipleChildren.
+	testNodeMultipleChildren := TreeNodes fromContent: treeMultipleChildren.
 	
 ]
 
@@ -126,13 +273,22 @@ TreeParserTest >> testClassify [
 	family := testNodeMultipleChildren classify.
 	example := (family firstChildrenOf: 2) children.
 	
-	self assert: example size equals: 3.
-	
 	self assert: example first name equals: '__x64_sys_read'.
 	
 	self assert: example second name equals: 'syscall_exit_to_user_mode'.
 	
 	self assert: example third name equals: '__x64_sys_openat'.
+	
+]
+
+{ #category : #tests }
+TreeParserTest >> testClassifySameParent [
+	
+	| family example |
+	family := testNodeMultipleChildren classify.
+	example := (family firstChildrenOf: 2) children.
+	
+	self assert: family children first children first equals: example first parent.
 	
 	self assert: example first parent equals: example second parent
 ]
@@ -150,29 +306,110 @@ TreeParserTest >> testEstimatePercentage [
 ]
 
 { #category : #tests }
+TreeParserTest >> testFindChildrenIndexOf [
+	"Two cases that shouldn't happen."
+	self assert:
+		(testNodeMultipleChildren findChildrenIndexOfIndex: 0) isNil.
+	
+	self assert:
+		(testNodeMultipleChildren findChildrenIndexOfIndex: 10) isNil.
+	
+	"Case where 2 functions have the same number of spaces."
+	self assert:
+		(testNodeSimple findChildrenIndexOfIndex: 3) equals: {4} asOrderedCollection.
+	
+	"Classical case"
+	self assert:
+		(testNodeSamePercentage findChildrenIndexOfIndex: 5) equals: {6} asOrderedCollection.
+	
+	"Multiple children"
+	self assert:
+		(testNodeMultipleChildren findChildrenIndexOfIndex: 3) equals: {4 . 5 . 8} asOrderedCollection.
+]
+
+{ #category : #tests }
 TreeParserTest >> testFindChildrenOf [
 
-	self assert:
-		(testNodeMultipleChildren findChildrenOf: 3) first equals: 4.
-		
-	self assert:
-		(testNodeMultipleChildren findChildrenOf: 3) second equals: 5.
-		
-	self assert:
-		(testNodeMultipleChildren findChildrenOf: 3) third equals: 8
+	| aNode |
+	aNode := testNodeMultipleChildren nodeAtIndex: 3.
+
+	self
+		assert: aNode children first name
+		equals: (testNodeMultipleChildren nameOf: 4).
+	self
+		assert: aNode children second name
+		equals: (testNodeMultipleChildren nameOf: 5).
+	self
+		assert: aNode children third name
+		equals: (testNodeMultipleChildren nameOf: 8)
+]
+
+{ #category : #tests }
+TreeParserTest >> testFindChildrenOfRecursive [
+
+	| aNode |
+	aNode := testNodeMultipleChildren nodeAtIndex: 3.
+
+	self
+		assert: aNode children second children first name
+		equals: (testNodeMultipleChildren nameOf: 6).
+	self
+		assert: aNode children second children first children first name
+		equals: (testNodeMultipleChildren nameOf: 7)
+]
+
+{ #category : #tests }
+TreeParserTest >> testFindParentIndexOf [
+	
+	"Two cases that shouldn't happen."
+	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 0) isNil.
+	
+	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 11) isNil.
+	
+	"The first doesn't have a parent."
+	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 1) isNil.
+	
+	"Two classical cases."
+	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 5) equals: 3.
+	
+	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 6) equals: 5
 ]
 
 { #category : #tests }
 TreeParserTest >> testFindParentOf [
-
-	self assert: (testNodeMultipleChildren findParentOf: 4) equals: 3.
 	
-	self assert: (testNodeMultipleChildren findParentOf: 6) equals: 5
+	"Two cases that shouldn't happen."
+	self assert: (testNodeMultipleChildren findParentOfIndex: 0) isNil.
+	
+	self assert: (testNodeMultipleChildren findParentOfIndex: 11) isNil.
+	
+	"The first doesn't have a parent."
+	self assert: (testNodeMultipleChildren findParentOfIndex: 1) isNil.
+	
+	"Two classical cases."
+	self assert: (testNodeMultipleChildren findParentOfIndex: 5) name equals: (testNodeMultipleChildren nameOf: 3).
+	
+	self assert: (testNodeMultipleChildren findParentOfIndex: 6) name equals: (testNodeMultipleChildren nameOf: 5)
+]
+
+{ #category : #tests }
+TreeParserTest >> testIsLeaf [
+
+	| family example |
+	family := testNodeSimple classify.
+	example := (family firstChildrenOf: 2).
+	
+	self assert: example isLeaf not.
+	self assert: example isNotLeaf.
+	
+	self assert: example children first isLeaf.
+	self assert: example children first isNotLeaf not.
 ]
 
 { #category : #tests }
 TreeParserTest >> testNameOf [
 
+	"Three cases where the parsing is different."
 	self assert: (testNodeSimple nameOf: 1) equals: 'entry_SYSCALL_64_after_hwframe'.
 
 	self assert: (testNodeSamePercentage nameOf: 4) equals: '__x64_sys_read'.
@@ -201,5 +438,43 @@ TreeParserTest >> testReadALine [
 { #category : #tests }
 TreeParserTest >> testSimplePercentageOf [
 
-	self assert: (testNodeSimple percentageOf: 3) equals: 45.91
+	"Case with 4 digits."	
+	self assert: (testNodeSimple percentageOf: 3) equals: 45.91.
+	
+	"Case with 3 digits."
+	self assert: (testNodeMultipleChildren percentageOf: 8) equals: 0.53
+]
+
+{ #category : #tests }
+TreeParserTest >> testTime [
+
+	self assert: treeSimple time equals: 397.0.
+	
+	self assert: testNodeSimple time equals: 397.0.
+	
+	self assert: testNodeSimple classify time equals: 397.0.
+]
+
+{ #category : #tests }
+TreeParserTest >> testTraces [
+
+	| family traces |
+	family := testNodeSimple classify.
+	traces := family traces.
+
+	self assert: traces size equals: 1.
+	
+	self assert: traces first name equals: '__x64_sys_read'.
+	
+	self assert: traces first weight equals: 146.017.
+]
+
+{ #category : #tests }
+TreeParserTest >> testWeight [
+	
+	| family example |
+	family := testNodeMultipleChildren classify.
+	example := family firstChildrenOf: 2.
+	
+	self assert: example weight equals: 6.829.
 ]

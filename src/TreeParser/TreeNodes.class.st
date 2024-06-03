@@ -2,10 +2,19 @@ Class {
 	#name : #TreeNodes,
 	#superclass : #Object,
 	#instVars : [
-		'nodes'
+		'time',
+		'nodeStrings'
 	],
 	#category : #TreeParser
 }
+
+{ #category : #'instance creation' }
+TreeNodes class >> fromContent: aTreeParse [
+
+	^ self new
+		nodes: aTreeParse content;
+		time: aTreeParse time.
+]
 
 { #category : #accessing }
 TreeNodes >> classify [
@@ -22,9 +31,12 @@ TreeNodes >> classify: aLine withParent: aParent [
 	child := TreeChildren new
 		         name: (self nameOf: aLine);
 		         percentage: (self percentageOf: aLine);
+					time: self time;
 		         parent: aParent.
-	child children: ((self findChildrenOf: aLine) collect: [ :c |
+	child children: ((self findChildrenIndexOfIndex: aLine) collect: [ :c |
 			 self classify: c withParent: child ]).
+	child estimatePercentage.
+	child weight.
 	^ child
 ]
 
@@ -32,12 +44,13 @@ TreeNodes >> classify: aLine withParent: aParent [
 TreeNodes >> differenceOfSpacesAt: aNode [
 	"Gives the difference of the number of spaces between 2 followed lines."
 
+	self assert: aNode > 0.
 	self assert: aNode < self numberOfFunctions.
 	^ (self numberOfSpacesAt: aNode + 1) - (self numberOfSpacesAt: aNode)
 ]
 
 { #category : #accessing }
-TreeNodes >> findChildrenOf: aNode [
+TreeNodes >> findChildrenIndexOfIndex: aNode [
 	"Gives an ordered collection of every indexes of the lines where there is a child."
 
 	| lastNode everyChildren |
@@ -45,6 +58,7 @@ TreeNodes >> findChildrenOf: aNode [
 	everyChildren := OrderedCollection new.
 
 	aNode = lastNode ifTrue: [ ^ everyChildren ].
+	( aNode < 1 or: aNode > lastNode ) ifTrue: [ ^ nil ].
 
 	((self differenceOfSpacesAt: aNode) <= 10 and: (self differenceOfSpacesAt: aNode) >= 0) 
 		ifTrue: [	everyChildren add: aNode + 1.
@@ -58,28 +72,27 @@ TreeNodes >> findChildrenOf: aNode [
 ]
 
 { #category : #accessing }
-TreeNodes >> findParentOf: aNode [
+TreeNodes >> findParentIndexOfIndex: aNodeIndex [
 	"Gives the index of the line where the parent is."
 
 	| i |
-	i := aNode-1.
-	[ i > 1 and: [ ( (self numberOfSpacesAt: aNode) - (self numberOfSpacesAt: i) ) < 0 ] ]
+
+	i := aNodeIndex-1.
+	[ (i > 1 and: i <= self numberOfFunctions) and: [ ( (self numberOfSpacesAt: aNodeIndex) - (self numberOfSpacesAt: i) ) <= 0 ] ]
 		whileTrue: [ i := i - 1 ].
 
-	(i > 0)
+	((i > 0) and: i <= self numberOfFunctions)
 		ifTrue: [	 ^ i ]
 		ifFalse: [ ^ nil ]
 ]
 
 { #category : #accessing }
-TreeNodes >> lastNodeOf: aNode [
-	"Give the index of the last node starting from a given node."
+TreeNodes >> findParentOfIndex: aNodeIndex [
+	"Gives the node representing the parent of the node at aNodeIndex."
 
-	| lastNode |
-	lastNode := self numberOfFunctions.
-	aNode to: lastNode - 1 do: [ :i |
-	(self differenceOfSpacesAt: i) < 0 ifTrue: [ ^ i ] ].
-	^ aNode
+	| parentIndex |
+	parentIndex := self findParentIndexOfIndex: aNodeIndex.
+	^ self nodeAtIndex: parentIndex
 ]
 
 { #category : #accessing }
@@ -87,7 +100,10 @@ TreeNodes >> lastSpaceAt: aLine [
 	"Gives the index of the last space at a given line."
 	
 	| lastSpace line|
-	line := nodes at: aLine.
+	self assert: aLine >= 1.
+	self assert: aLine <= self numberOfFunctions.
+	
+	line := nodeStrings at: aLine.
 	lastSpace := line size.
 	
 	1 to: (line size) do: [:i | ( ( (line at: i) = Character space) or: ( (line at: i) = $-) )
@@ -100,21 +116,38 @@ TreeNodes >> nameOf: aLine [
 	"Gets the name of a function at a given line."
 
 	| line |
+	self assert: aLine >= 1.
+	self assert: aLine <= self numberOfFunctions.
+	
 	line := (self withoutSpaces at: aLine) copyWithout: $-.
 	^ line last: (self lastSpaceAt: aLine)
 ]
 
 { #category : #accessing }
+TreeNodes >> nodeAtIndex: aNodeIndex [
+	"Gives the node representing the node at aNodeIndex."
+
+	aNodeIndex ifNil: [ ^ nil ].
+	^ TreeNode new
+		  parser: self;
+		  index: aNodeIndex;
+		  name: (self nameOf: aNodeIndex);
+		  weight: 0;
+		  yourself
+]
+
+{ #category : #accessing }
 TreeNodes >> nodes [
 
-	^ nodes
+	^ nodeStrings
 ]
 
 { #category : #accessing }
 TreeNodes >> nodes: aContent [
 
-	nodes := aContent select: [ :c |
-		         ((c copyWithout: Character space) copyWithout: $|)
+	"Ignore all lines that are empty or have useless information"
+	nodeStrings := aContent select: [ :line |
+		         ((line copyWithout: Character space) copyWithout: $|)
 			         isNotEmpty ]
 ]
 
@@ -122,7 +155,7 @@ TreeNodes >> nodes: aContent [
 TreeNodes >> numberOfFunctions [
 	"Gives the number of non-unique functions mentioned in the file."
 
-	^ nodes size
+	^ nodeStrings size
 ]
 
 { #category : #accessing }
@@ -146,7 +179,8 @@ TreeNodes >> percentageOf: aLine [
 	"In the case of multiples functions for one percentage, it gives the same percentage to every functions."
 
 	| line numbers |
-	self assert: aLine >= 1.
+	self assert: aLine > 0.
+	self assert: aLine <= self numberOfFunctions.
 	line := self nodes at: aLine.
 
 	numbers := (((self withoutSpaces at: aLine) copyWithout: $-) first: 5)
@@ -158,6 +192,18 @@ TreeNodes >> percentageOf: aLine [
 	numbers size >= 4
 		ifTrue: [ ^ ((numbers first: 4) asInteger / 100) asFloat ]
 		ifFalse: [ ^ ((numbers first: 3) asInteger / 100) asFloat ]
+]
+
+{ #category : #accessing }
+TreeNodes >> time [
+
+	^ time
+]
+
+{ #category : #accessing }
+TreeNodes >> time: aFloat [
+
+	time := aFloat.
 ]
 
 { #category : #accessing }
