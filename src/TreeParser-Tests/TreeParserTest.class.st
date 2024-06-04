@@ -6,9 +6,6 @@ Class {
 		'fileSimple',
 		'fileSamePercentage',
 		'fileMultipleChildren',
-		'treeSimple',
-		'treeSamePercentage',
-		'treeMultipleChildren',
 		'testNodeSimple',
 		'testNodeSamePercentage',
 		'testNodeMultipleChildren'
@@ -244,16 +241,13 @@ TreeParserTest >> setUp [
 '].
 
 	fileSimple := memoryFS / ('perf_stock_simple.txt').
-	treeSimple := TreeParser fromFile: fileSimple.
-	testNodeSimple := TreeNodes fromContent: treeSimple.
+	testNodeSimple := TreeParser fromFile: fileSimple.
 	
 	fileSamePercentage := memoryFS / ('perf_stock_same_percentage.txt').
-	treeSamePercentage := TreeParser fromFile: fileSamePercentage.
-	testNodeSamePercentage := TreeNodes fromContent: treeSamePercentage.
+	testNodeSamePercentage := TreeParser fromFile: fileSamePercentage.
 	
 	fileMultipleChildren := memoryFS / ('perf_stock_multiple_children.txt').
-	treeMultipleChildren := TreeParser fromFile: fileMultipleChildren.
-	testNodeMultipleChildren := TreeNodes fromContent: treeMultipleChildren.
+	testNodeMultipleChildren := TreeParser fromFile: fileMultipleChildren.
 	
 ]
 
@@ -267,52 +261,13 @@ TreeParserTest >> tearDown [
 ]
 
 { #category : #tests }
-TreeParserTest >> testClassify [
-	
-	| family example |
-	family := testNodeMultipleChildren classify.
-	example := (family firstChildrenOf: 2) children.
-	
-	self assert: example first name equals: '__x64_sys_read'.
-	
-	self assert: example second name equals: 'syscall_exit_to_user_mode'.
-	
-	self assert: example third name equals: '__x64_sys_openat'.
-	
-]
-
-{ #category : #tests }
-TreeParserTest >> testClassifySameParent [
-	
-	| family example |
-	family := testNodeMultipleChildren classify.
-	example := (family firstChildrenOf: 2) children.
-	
-	self assert: family children first children first equals: example first parent.
-	
-	self assert: example first parent equals: example second parent
-]
-
-{ #category : #tests }
-TreeParserTest >> testEstimatePercentage [
-	
-	| family example |
-	family := testNodeSamePercentage classify.
-	example := family firstChildrenOf: 2.
-	
-	self assert: example estimatePercentage equals: 9.13.
-	
-	self assert: example children first estimatePercentage equals: 0.0
-]
-
-{ #category : #tests }
-TreeParserTest >> testFindChildrenIndexOf [
+TreeParserTest >> testFindChildrenIndexOfIndex [
 	"Two cases that shouldn't happen."
 	self assert:
-		(testNodeMultipleChildren findChildrenIndexOfIndex: 0) isNil.
+		(testNodeSimple findChildrenIndexOfIndex: 0) isZero.
 	
 	self assert:
-		(testNodeMultipleChildren findChildrenIndexOfIndex: 10) isNil.
+		(testNodeSimple findChildrenIndexOfIndex: 5) isZero.
 	
 	"Case where 2 functions have the same number of spaces."
 	self assert:
@@ -328,19 +283,19 @@ TreeParserTest >> testFindChildrenIndexOf [
 ]
 
 { #category : #tests }
-TreeParserTest >> testFindChildrenOf [
+TreeParserTest >> testFindChildrenOfIndex [
 
 	| aNode |
-	aNode := testNodeMultipleChildren nodeAtIndex: 3.
+	aNode := testNodeMultipleChildren findChildrenOfIndex: 3.
 
 	self
-		assert: aNode children first name
+		assert: aNode first name
 		equals: (testNodeMultipleChildren nameOf: 4).
 	self
-		assert: aNode children second name
+		assert: aNode second name
 		equals: (testNodeMultipleChildren nameOf: 5).
 	self
-		assert: aNode children third name
+		assert: aNode third name
 		equals: (testNodeMultipleChildren nameOf: 8)
 ]
 
@@ -348,7 +303,8 @@ TreeParserTest >> testFindChildrenOf [
 TreeParserTest >> testFindChildrenOfRecursive [
 
 	| aNode |
-	aNode := testNodeMultipleChildren nodeAtIndex: 3.
+	aNode := testNodeMultipleChildren nodes.
+	aNode := aNode firstChildrenOf: 2.
 
 	self
 		assert: aNode children second children first name
@@ -359,44 +315,65 @@ TreeParserTest >> testFindChildrenOfRecursive [
 ]
 
 { #category : #tests }
-TreeParserTest >> testFindParentIndexOf [
+TreeParserTest >> testFindParentIndexOfIndex [
 	
 	"Two cases that shouldn't happen."
-	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 0) isNil.
+	self assert: (testNodeSimple findParentIndexOfIndex: 0) isZero.
 	
-	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 11) isNil.
+	self assert: (testNodeSimple findParentIndexOfIndex: 5) isZero.
 	
 	"The first doesn't have a parent."
-	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 1) isNil.
+	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 1) isZero.
 	
 	"Two classical cases."
 	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 5) equals: 3.
 	
-	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 6) equals: 5
+	self assert: (testNodeMultipleChildren findParentIndexOfIndex: 9) equals: 8
 ]
 
 { #category : #tests }
-TreeParserTest >> testFindParentOf [
-	
+TreeParserTest >> testFindParentOfIndex [
 	"Two cases that shouldn't happen."
-	self assert: (testNodeMultipleChildren findParentOfIndex: 0) isNil.
-	
-	self assert: (testNodeMultipleChildren findParentOfIndex: 11) isNil.
-	
+
+	self assert: (testNodeSimple findParentOfIndex: 0) isNil.
+
+	self assert: (testNodeSimple findParentOfIndex: 5) isNil.
+
 	"The first doesn't have a parent."
 	self assert: (testNodeMultipleChildren findParentOfIndex: 1) isNil.
-	
+
 	"Two classical cases."
-	self assert: (testNodeMultipleChildren findParentOfIndex: 5) name equals: (testNodeMultipleChildren nameOf: 3).
-	
-	self assert: (testNodeMultipleChildren findParentOfIndex: 6) name equals: (testNodeMultipleChildren nameOf: 5)
+	self
+		assert: (testNodeMultipleChildren findParentOfIndex: 5) name
+		equals: (testNodeMultipleChildren nameOf: 3).
+
+	self
+		assert: (testNodeMultipleChildren findParentOfIndex: 6) name
+		equals: (testNodeMultipleChildren nameOf: 5)
+]
+
+{ #category : #tests }
+TreeParserTest >> testFindParentOfRecursive [
+
+	| aNode |
+	aNode := testNodeMultipleChildren nodes.
+	aNode := aNode firstChildrenOf: 2.
+
+	self
+		assert: aNode parent name
+		equals: (testNodeMultipleChildren nameOf: 2).
+
+	self
+		assert:
+		(testNodeMultipleChildren findParentOfIndex: 2) children first name
+		equals: (testNodeMultipleChildren findParentOfIndex: 3) name
 ]
 
 { #category : #tests }
 TreeParserTest >> testIsLeaf [
 
 	| family example |
-	family := testNodeSimple classify.
+	family := testNodeSimple nodes.
 	example := (family firstChildrenOf: 2).
 	
 	self assert: example isLeaf not.
@@ -409,6 +386,11 @@ TreeParserTest >> testIsLeaf [
 { #category : #tests }
 TreeParserTest >> testNameOf [
 
+	"Limit cases"
+	self assert: (testNodeSimple nameOf: 0) isNil.
+	
+	self assert: (testNodeSimple nameOf: 5) isNil.
+
 	"Three cases where the parsing is different."
 	self assert: (testNodeSimple nameOf: 1) equals: 'entry_SYSCALL_64_after_hwframe'.
 
@@ -418,63 +400,138 @@ TreeParserTest >> testNameOf [
 ]
 
 { #category : #tests }
+TreeParserTest >> testNodes [
+	
+	| family example |
+	family := testNodeMultipleChildren nodes.
+	example := (family firstChildrenOf: 2) children.
+	
+	self assert: example first name equals: '__x64_sys_read'.
+	
+	self assert: example second name equals: 'syscall_exit_to_user_mode'.
+	
+	self assert: example third name equals: '__x64_sys_openat'.
+	
+]
+
+{ #category : #tests }
+TreeParserTest >> testNodesSameParent [
+	
+	| family example |
+	family := testNodeMultipleChildren nodes.
+	example := (family firstChildrenOf: 2) children.
+	
+	self assert: family children first children first equals: example first parent.
+	
+	self assert: example first parent equals: example second parent
+]
+
+{ #category : #tests }
 TreeParserTest >> testNumberOfFunctions [
 
 	self assert: (testNodeSimple numberOfFunctions) equals: 4
 ]
 
 { #category : #tests }
-TreeParserTest >> testNumberOfSpaces [
+TreeParserTest >> testNumberOfSpacesAt [
+
+	
+	self assert: (testNodeSimple numberOfSpacesAt: 0) isZero.
+	
+	self assert: (testNodeSimple numberOfSpacesAt: 5) isZero.
 
 	self assert: (testNodeSimple numberOfSpacesAt: 1) equals: 4
 ]
 
 { #category : #tests }
-TreeParserTest >> testReadALine [
+TreeParserTest >> testPercentageOf [
+	"Limit cases"
 
-	self assert: (treeSimple readLine: 3) equals: '            ---entry_SYSCALL_64_after_hwframe'
+	self assert: (testNodeSimple percentageOf: 0) isZero.
+
+	self assert: (testNodeSimple percentageOf: 5) isZero.
+
+	"Cases with 4 digits."
+	self assert: (testNodeSimple percentageOf: 3) equals: 45.91.
+
+	self assert: (testNodeSimple percentageOf: 1) equals: 46.02.
+
+
+	"Case with 3 digits."
+	self assert: (testNodeMultipleChildren percentageOf: 8) equals: 0.53.
+
+	"Case with same percentage"
+	self
+		assert: (testNodeSamePercentage percentageOf: 4)
+		equals: (testNodeSamePercentage percentageOf: 5)
 ]
 
 { #category : #tests }
-TreeParserTest >> testSimplePercentageOf [
+TreeParserTest >> testReadLine [
 
-	"Case with 4 digits."	
-	self assert: (testNodeSimple percentageOf: 3) equals: 45.91.
+	"Limit cases."
+	self assert: (testNodeSimple readLine: 0) isNil.
 	
-	"Case with 3 digits."
-	self assert: (testNodeMultipleChildren percentageOf: 8) equals: 0.53
+	self assert: (testNodeSimple readLine: 5) isNil.
+
+	self assert: (testNodeSimple readLine: 3) equals: '                --45.91%--do_syscall_64'
+]
+
+{ #category : #tests }
+TreeParserTest >> testRealPercentageOf [
+
+	"Limit cases."
+	self assert: (testNodeSimple realPercentageOf: 0) isZero.
+
+	self assert: (testNodeSimple realPercentageOf: 5) isZero.
+
+	self
+		assert: (testNodeSamePercentage realPercentageOf: 3)
+		equals: 9.13.
+
+	self assert: (testNodeSamePercentage realPercentageOf: 4) equals: 0.0
 ]
 
 { #category : #tests }
 TreeParserTest >> testTime [
-
-	self assert: treeSimple time equals: 397.0.
 	
 	self assert: testNodeSimple time equals: 397.0.
 	
-	self assert: testNodeSimple classify time equals: 397.0.
+	self assert: testNodeSimple nodes time equals: 397.0.
 ]
 
 { #category : #tests }
 TreeParserTest >> testTraces [
 
 	| family traces |
-	family := testNodeSimple classify.
+	family := testNodeSimple nodes.
 	traces := family traces.
 
 	self assert: traces size equals: 1.
 	
 	self assert: traces first name equals: '__x64_sys_read'.
 	
-	self assert: traces first weight equals: 146.017.
+	self assert: traces first weight equals: 146.02.
 ]
 
 { #category : #tests }
 TreeParserTest >> testWeight [
 	
 	| family example |
-	family := testNodeMultipleChildren classify.
+	family := testNodeMultipleChildren nodes.
 	example := family firstChildrenOf: 2.
 	
-	self assert: example weight equals: 6.829.
+	self assert: example weight equals: 6.83.
+]
+
+{ #category : #tests }
+TreeParserTest >> testWeightOf [
+	
+	"Limit cases"
+	self assert: (testNodeSimple weightOf: 0) isZero.
+	
+	self assert: (testNodeSimple weightOf: 5) isZero.
+	
+	"Classical case"
+	self assert: (testNodeSimple weightOf: 3) equals: 36.25.
 ]

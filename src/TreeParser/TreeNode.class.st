@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'name',
 		'weight',
-		'parser',
-		'index'
+		'children',
+		'parent',
+		'totalTime'
 	],
 	#category : #TreeParser
 }
@@ -13,20 +14,45 @@ Class {
 { #category : #accessing }
 TreeNode >> children [
 
-	^ (parser findChildrenIndexOfIndex: index) collect: [ :childIndex |
-		  parser nodeAtIndex: childIndex ]
+	^ children
 ]
 
 { #category : #accessing }
-TreeNode >> index [
+TreeNode >> children: aCollectionOfTreeNode [
 
-	^ index
+	children:= aCollectionOfTreeNode
 ]
 
 { #category : #accessing }
-TreeNode >> index: anObject [
+TreeNode >> firstChildrenOf: aNumber [
+	"Gives the children of the first children of each generations a given times."
 
-	index := anObject
+	| child |
+	child := self.
+	1 to: aNumber do: [ :c | child := child children first ].
+	^ child
+]
+
+{ #category : #accessing }
+TreeNode >> isLeaf [
+
+	^ self children isEmpty
+]
+
+{ #category : #accessing }
+TreeNode >> isNotLeaf [
+
+	^ self children isNotEmpty
+]
+
+{ #category : #accessing }
+TreeNode >> leaves: leaves [
+
+	self isLeaf ifTrue: [
+		leaves add: self.
+		^ leaves ].
+
+	^ self children collect: [ :child | child leaves: leaves ]
 ]
 
 { #category : #accessing }
@@ -36,21 +62,47 @@ TreeNode >> name [
 ]
 
 { #category : #accessing }
-TreeNode >> name: anObject [
+TreeNode >> name: aString [
 
-	name := anObject
+	name := aString
 ]
 
 { #category : #accessing }
-TreeNode >> parser [
+TreeNode >> parent [
 
-	^ parser
+	^ parent
 ]
 
 { #category : #accessing }
-TreeNode >> parser: anObject [
+TreeNode >> parent: aTreeNode [
 
-	parser := anObject
+	parent := aTreeNode
+]
+
+{ #category : #accessing }
+TreeNode >> time [
+
+	^ totalTime
+]
+
+{ #category : #accessing }
+TreeNode >> time: aFloat [
+
+	totalTime := aFloat
+]
+
+{ #category : #accessing }
+TreeNode >> traces [
+
+	| leaves |
+	leaves := OrderedCollection new.
+	self leaves: leaves.
+
+	^ leaves collect: [ :l |
+		  TreeTrace new
+			  name: l name;
+			  weight: l weight;
+			  yourself ]
 ]
 
 { #category : #accessing }
@@ -60,7 +112,7 @@ TreeNode >> weight [
 ]
 
 { #category : #accessing }
-TreeNode >> weight: anObject [
+TreeNode >> weight: aFloat [
 
-	weight := anObject
+	weight := aFloat
 ]
