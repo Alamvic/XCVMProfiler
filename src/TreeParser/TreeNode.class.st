@@ -24,13 +24,19 @@ TreeNode >> children: aCollectionOfTreeNode [
 ]
 
 { #category : #accessing }
-TreeNode >> firstChildrenOf: aNumber [
-	"Gives the children of the first children of each generations a given times."
+TreeNode >> collectLeavesIn: leaves [
 
-	| child |
-	child := self.
-	1 to: aNumber do: [ :c | child := child children first ].
-	^ child
+	self isLeaf ifTrue: [
+		leaves add: self.
+		^ leaves ].
+
+	^ self children collect: [ :child | child collectLeavesIn: leaves ]
+]
+
+{ #category : #accessing }
+TreeNode >> firstChild [
+
+	^ self children first
 ]
 
 { #category : #accessing }
@@ -43,16 +49,6 @@ TreeNode >> isLeaf [
 TreeNode >> isNotLeaf [
 
 	^ self children isNotEmpty
-]
-
-{ #category : #accessing }
-TreeNode >> leaves: leaves [
-
-	self isLeaf ifTrue: [
-		leaves add: self.
-		^ leaves ].
-
-	^ self children collect: [ :child | child leaves: leaves ]
 ]
 
 { #category : #accessing }
@@ -96,7 +92,7 @@ TreeNode >> traces [
 
 	| leaves |
 	leaves := OrderedCollection new.
-	self leaves: leaves.
+	self collectLeavesIn: leaves.
 
 	^ leaves collect: [ :l |
 		  TreeTrace new
