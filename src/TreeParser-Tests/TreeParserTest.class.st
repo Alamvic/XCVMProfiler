@@ -269,9 +269,9 @@ TreeParserTest >> tearDown [
 { #category : #tests }
 TreeParserTest >> testDifferenceOfSpacesAt [
 
-	self assert: (testParserSimple differenceOfSpacesAt: 0) isZero.
+	self assert: (testParserSimple differenceOfSpacesAt: 0) isNil.
 	
-	self assert: (testParserSimple differenceOfSpacesAt: 5) isZero.
+	self assert: (testParserSimple differenceOfSpacesAt: (testParserSimple numberOfFunctions + 1)) isNil.
 	
 	"Classical case"
 	self assert: (testParserSamePercentage differenceOfSpacesAt: 6) equals: 1.
@@ -287,11 +287,11 @@ TreeParserTest >> testFindChildrenIndexOfIndex [
 
 	self assert: (testParserSimple findChildrenIndexOfIndex: 0) isZero.
 
-	self assert: (testParserSimple findChildrenIndexOfIndex: 5) isZero.
+	self assert: (testParserSimple findChildrenIndexOfIndex: (testParserSimple numberOfFunctions + 1)) isZero.
 
 	"The last has no children"
 
-	self assert: (testParserSimple findChildrenIndexOfIndex: 4) isEmpty.
+	self assert: (testParserSimple findChildrenIndexOfIndex: (testParserSimple numberOfFunctions)) isEmpty.
 
 	"Case where 2 functions have the same number of spaces."
 	self
@@ -358,7 +358,7 @@ TreeParserTest >> testLastSpaceAt [
 
 	self assert: (testParserSimple lastSpaceAt: 0) isNil.
 	
-	self assert: (testParserSimple lastSpaceAt: 5) isNil.
+	self assert: (testParserSimple lastSpaceAt: (testParserSimple numberOfFunctions + 1)) isNil.
 	
 	self assert: (testParserSimple lastSpaceAt: 1) equals: 86.
 	
@@ -371,7 +371,7 @@ TreeParserTest >> testNameOf [
 	"Limit cases"
 	self assert: (testParserSimple nameOf: 0) isNil.
 	
-	self assert: (testParserSimple nameOf: 5) isNil.
+	self assert: (testParserSimple nameOf: (testParserSimple numberOfFunctions + 1)) isNil.
 
 	"Three cases where the parsing is different."
 	self assert: (testParserSimple nameOf: 1) equals: 'entry_SYSCALL_64_after_hwframe'.
@@ -382,11 +382,11 @@ TreeParserTest >> testNameOf [
 ]
 
 { #category : #tests }
-TreeParserTest >> testNodeAtIndexWithParent [
+TreeParserTest >> testNodeAtIndex [
 
-	self assert: (testParserSimple nodeAtIndex: 0 withParent: nil) isNil.
+	self assert: (testParserSimple nodeAtIndex: 0) isNil.
 	
-	self assert: (testParserSimple nodeAtIndex: 5 withParent: nil) isNil.
+	self assert: (testParserSimple nodeAtIndex: (testParserSimple numberOfFunctions + 1)) isNil.
 	
 	"Needs more tests!!!"
 ]
@@ -427,7 +427,7 @@ TreeParserTest >> testNumberOfSpacesAt [
 	
 	self assert: (testParserSimple numberOfSpacesAt: 0) isZero.
 	
-	self assert: (testParserSimple numberOfSpacesAt: 5) isZero.
+	self assert: (testParserSimple numberOfSpacesAt: (testParserSimple numberOfFunctions + 1)) isZero.
 
 	self assert: (testParserSimple numberOfSpacesAt: 1) equals: 4.
 	
@@ -440,7 +440,7 @@ TreeParserTest >> testPercentageOf [
 
 	self assert: (testParserSimple percentageOf: 0) isZero.
 
-	self assert: (testParserSimple percentageOf: 5) isZero.
+	self assert: (testParserSimple percentageOf: (testParserSimple numberOfFunctions + 1)) isZero.
 
 	"Cases with 4 digits."
 	self assert: (testParserSimple percentageOf: 3) equals: 45.91.
@@ -467,7 +467,7 @@ TreeParserTest >> testReadLine [
 	"Limit cases."
 	self assert: (testParserSimple readLine: 0) isNil.
 	
-	self assert: (testParserSimple readLine: 5) isNil.
+	self assert: (testParserSimple readLine: (testParserSimple numberOfFunctions + 1)) isNil.
 
 	self assert: (testParserSimple readLine: 3) equals: '                --45.91%--do_syscall_64'
 ]
@@ -478,7 +478,7 @@ TreeParserTest >> testRealPercentageOf [
 	"Limit cases."
 	self assert: (testParserSimple realPercentageOf: 0) isZero.
 
-	self assert: (testParserSimple realPercentageOf: 5) isZero.
+	self assert: (testParserSimple realPercentageOf: (testParserSimple numberOfFunctions + 1)) isZero.
 
 	self
 		assert: (testParserSamePercentage realPercentageOf: 3)
@@ -523,7 +523,7 @@ TreeParserTest >> testWeightOf [
 	"Limit cases"
 	self assert: (testParserSimple weightOf: 0) isZero.
 	
-	self assert: (testParserSimple weightOf: 5) isZero.
+	self assert: (testParserSimple weightOf: (testParserSimple numberOfFunctions + 1)) isZero.
 	
 	"Classical case"
 	self assert: (testParserSimple weightOf: 3) equals: 36.31.

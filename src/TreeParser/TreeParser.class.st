@@ -52,10 +52,10 @@ TreeParser >> differenceOfSpacesAt: aNodeIndex [
 	"Gives the difference of the number of spaces between 2 followed lines."
 
 	^ (aNodeIndex between: 1 and: self numberOfFunctions)
+		  ifFalse: [ nil ]
 		  ifTrue: [
 			  (self numberOfSpacesAt: aNodeIndex + 1)
 			  - (self numberOfSpacesAt: aNodeIndex) ]
-		  ifFalse: [ ^ 0 ]
 ]
 
 { #category : #accessing }
@@ -66,7 +66,6 @@ TreeParser >> findChildrenIndexOfIndex: aNode [
 	lastNode := self numberOfFunctions.
 	everyChildren := OrderedCollection new.
 
-	aNode = lastNode ifTrue: [ ^ everyChildren ].
 	(aNode between: 1 and: lastNode) ifFalse: [ ^ 0 ].
 
 	(((self differenceOfSpacesAt: aNode) between: 1 and: 10) or: [
@@ -89,7 +88,7 @@ TreeParser >> findChildrenOfIndex: aNodeIndex [
 	| collectionOfChildrenIndexes |
 	collectionOfChildrenIndexes := self findChildrenIndexOfIndex: aNodeIndex.
 	^ collectionOfChildrenIndexes collect: [ :childIndex |
-		  self nodeAtIndex: childIndex withParent: nil ]
+		  self nodeAtIndex: childIndex ]
 ]
 
 { #category : #accessing }
@@ -100,7 +99,7 @@ TreeParser >> lastSpaceAt: aLine [
 	(aLine between: 1 and: self numberOfFunctions) ifFalse: [ ^ nil ].
 
 	line := self readLine: aLine.
-	lastSpace := line size.
+	lastSpace := 0.
 
 	1 to: line size do: [ :i |
 		((line at: i) = Character space or: [ (line at: i) = $- ]) ifTrue: [
@@ -120,7 +119,7 @@ TreeParser >> nameOf: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> nodeAtIndex: aNodeIndex withParent: aTreeNode [
+TreeParser >> nodeAtIndex: aNodeIndex [
 	"Gives the node representing the node at aNodeIndex."
 
 	| child |
@@ -130,7 +129,6 @@ TreeParser >> nodeAtIndex: aNodeIndex withParent: aTreeNode [
 		         name: (self nameOf: aNodeIndex);
 		         weight: (self weightOf: aNodeIndex);
 		         time: self time;
-		         parent: aTreeNode;
 		         yourself.
 	child children: (self findChildrenOfIndex: aNodeIndex).
 	child children do: [ :grandchild | grandchild parent: child ].
@@ -148,17 +146,18 @@ TreeParser >> numberOfFunctions [
 TreeParser >> numberOfSpacesAt: aNodeIndex [
 	"Gives the number of spaces at a certain line."
 
-	| count spacesAreEnded |
+	| count lineRead |
 	count := 0.
-	spacesAreEnded := false.
-	
-	(aNodeIndex between: 1 and: self numberOfFunctions) ifFalse: [ ^ 0 ]. 
-	
-	(self readLine: aNodeIndex) do: [ :c |
-		(c ~= Character space and: [ c ~= $| ])
-			ifFalse: [ spacesAreEnded ifFalse: [ count := count + 1 ] ]
-			ifTrue: [ spacesAreEnded := true ] ].
-	^ count
+
+	(aNodeIndex between: 1 and: self numberOfFunctions) ifFalse: [
+		^ count ].
+
+	lineRead := self readLine: aNodeIndex.
+	count := 1.
+
+	[(lineRead at: count) = Character space or: [
+		(lineRead at: count) = $| ] ] whileTrue: [ count := count + 1 ].
+	^ count - 1
 ]
 
 { #category : #accessing }
@@ -195,8 +194,9 @@ TreeParser >> realPercentageOf: aNodeIndex [
 
 	| children childrenPercentage |
 	children := self findChildrenIndexOfIndex: aNodeIndex.
-	children isCollection ifFalse: [ ^ 0 ].
 	childrenPercentage := 0.
+	children isCollection ifFalse: [ ^ self percentageOf: aNodeIndex ].
+
 
 	1 to: children size do: [ :childIndex |
 		childrenPercentage := childrenPercentage
@@ -211,7 +211,7 @@ TreeParser >> realPercentageOf: aNodeIndex [
 TreeParser >> root [
 	"Gives the first parent of the nodes"
 
-	^ self nodeAtIndex: 1 withParent: nil
+	^ self nodeAtIndex: 1
 ]
 
 { #category : #accessing }
