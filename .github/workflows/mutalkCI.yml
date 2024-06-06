@@ -2,12 +2,12 @@ name: MutalkCI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths-ignore:
     - 'README.md'
     - 'resources/**'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths-ignore:
     - 'README.md'
     - 'resources/**'
