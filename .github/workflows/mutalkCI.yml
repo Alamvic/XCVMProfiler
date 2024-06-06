@@ -42,7 +42,7 @@ jobs:
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://pharo-contributions/mutalk/src" BaselineOfMuTalk
         shell: bash
       
-      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=XCTrace
+      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}}
         shell: bash
 
       - uses: actions/upload-artifact@v2
