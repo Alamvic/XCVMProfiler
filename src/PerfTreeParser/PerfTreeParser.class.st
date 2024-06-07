@@ -1,15 +1,15 @@
 Class {
-	#name : #TreeParser,
+	#name : #PerfTreeParser,
 	#superclass : #Object,
 	#instVars : [
 		'content',
 		'totalTime'
 	],
-	#category : #TreeParser
+	#category : #PerfTreeParser
 }
 
 { #category : #'instance creation' }
-TreeParser class >> fromFile: aFile [
+PerfTreeParser class >> fromFile: aFile [
 
 	^ self new
 		  content: aFile asFileReference;
@@ -17,19 +17,19 @@ TreeParser class >> fromFile: aFile [
 ]
 
 { #category : #'instance creation' }
-TreeParser class >> parseFile: aFile [
+PerfTreeParser class >> parseFile: aFile [
 
 	^ (self fromFile: aFile) root
 ]
 
 { #category : #accessing }
-TreeParser >> content [
+PerfTreeParser >> content [
 
 	^ content
 ]
 
 { #category : #accessing }
-TreeParser >> content: aFile [
+PerfTreeParser >> content: aFile [
 	"Extract the interesting content from the file."
 
 	| fileContents i |
@@ -48,7 +48,7 @@ TreeParser >> content: aFile [
 ]
 
 { #category : #accessing }
-TreeParser >> differenceOfSpacesAt: aNodeIndex [
+PerfTreeParser >> differenceOfSpacesAt: aNodeIndex [
 	"Gives the difference of the number of spaces between 2 followed lines."
 
 	^ (aNodeIndex between: 1 and: self numberOfFunctions)
@@ -59,7 +59,7 @@ TreeParser >> differenceOfSpacesAt: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> findChildrenIndexOfIndex: aNode [
+PerfTreeParser >> findChildrenIndexOfIndex: aNode [
 	"Gives an ordered collection of every indexes of the lines where there is a child."
 
 	| lastNode everyChildren |
@@ -82,7 +82,7 @@ TreeParser >> findChildrenIndexOfIndex: aNode [
 ]
 
 { #category : #accessing }
-TreeParser >> findChildrenOfIndex: aNodeIndex [
+PerfTreeParser >> findChildrenOfIndex: aNodeIndex [
 	"Gives the nodes representing every children at the node aNodeIndex."
 
 	| collectionOfChildrenIndexes |
@@ -92,7 +92,7 @@ TreeParser >> findChildrenOfIndex: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> lastSpaceAt: aLine [
+PerfTreeParser >> lastSpaceAt: aLine [
 	"Gives the index of the last space or '-' at a given line."
 
 	| lastSpace line |
@@ -108,7 +108,7 @@ TreeParser >> lastSpaceAt: aLine [
 ]
 
 { #category : #accessing }
-TreeParser >> nameOf: aNodeIndex [
+PerfTreeParser >> nameOf: aNodeIndex [
 	"Gives the name of a function at aNodeIndex."
 
 	| aLine |
@@ -119,13 +119,13 @@ TreeParser >> nameOf: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> nodeAtIndex: aNodeIndex [
+PerfTreeParser >> nodeAtIndex: aNodeIndex [
 	"Gives the node representing the node at aNodeIndex."
 
 	| child |
 	(aNodeIndex between: 1 and: self numberOfFunctions) ifFalse: [ ^ nil ].
 
-	child := TreeNode new
+	child := PerfTreeNode new
 		         name: (self nameOf: aNodeIndex);
 		         weight: (self weightOf: aNodeIndex);
 		         time: self time;
@@ -136,14 +136,14 @@ TreeParser >> nodeAtIndex: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> numberOfFunctions [
+PerfTreeParser >> numberOfFunctions [
 	"Gives the number of functions present in the file."
 
 	^ content size
 ]
 
 { #category : #accessing }
-TreeParser >> numberOfSpacesAt: aNodeIndex [
+PerfTreeParser >> numberOfSpacesAt: aNodeIndex [
 	"Gives the number of spaces at a certain line."
 
 	| count lineRead |
@@ -161,7 +161,7 @@ TreeParser >> numberOfSpacesAt: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> percentageOf: aLine [
+PerfTreeParser >> percentageOf: aLine [
 	"Gives the percentage from a function at a given line"
 
 	"In the case of multiples functions for one percentage, it gives the same percentage to every functions."
@@ -181,7 +181,7 @@ TreeParser >> percentageOf: aLine [
 ]
 
 { #category : #accessing }
-TreeParser >> readLine: anIndex [
+PerfTreeParser >> readLine: anIndex [
 	"Reads a line from the file without the commentaries."
 
 	(anIndex between: 1 and: self numberOfFunctions)
@@ -190,7 +190,7 @@ TreeParser >> readLine: anIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> realPercentageOf: aNodeIndex [
+PerfTreeParser >> realPercentageOf: aNodeIndex [
 
 	| children childrenPercentage |
 	children := self findChildrenIndexOfIndex: aNodeIndex.
@@ -208,26 +208,26 @@ TreeParser >> realPercentageOf: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> root [
+PerfTreeParser >> root [
 	"Gives the first parent of the nodes"
 
 	^ self nodeAtIndex: 1
 ]
 
 { #category : #accessing }
-TreeParser >> time [
+PerfTreeParser >> time [
 
 	^ totalTime
 ]
 
 { #category : #accessing }
-TreeParser >> time: aFloat [
+PerfTreeParser >> time: aFloat [
 
 	totalTime := aFloat.
 ]
 
 { #category : #accessing }
-TreeParser >> weightOf: aNodeIndex [
+PerfTreeParser >> weightOf: aNodeIndex [
 
 	| newPercentage |
 	newPercentage := self realPercentageOf: aNodeIndex.
@@ -236,7 +236,7 @@ TreeParser >> weightOf: aNodeIndex [
 ]
 
 { #category : #accessing }
-TreeParser >> withoutSpaces [
+PerfTreeParser >> withoutSpaces [
 	"Gives a line without the characters that are not interesting."
 
 	^ self content collect: [ :c |

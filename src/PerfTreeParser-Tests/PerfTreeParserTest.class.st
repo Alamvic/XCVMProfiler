@@ -1,5 +1,5 @@
 Class {
-	#name : #TreeParserTest,
+	#name : #PerfTreeParserTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'memoryFS',
@@ -13,11 +13,11 @@ Class {
 		'testNodeSamePercentage',
 		'testNodeMultipleChildren'
 	],
-	#category : #'TreeParser-Tests'
+	#category : #'PerfTreeParser-Tests'
 }
 
 { #category : #running }
-TreeParserTest >> setUp [
+PerfTreeParserTest >> setUp [
 	"Commands ran:"
 	"sudo perf record -g --call-graph=dwarf -- ./script2.sh --all-user"
 	"sudo perf report --header --stdio > perf_example.txt"
@@ -244,21 +244,21 @@ TreeParserTest >> setUp [
 '].
 
 	fileSimple := memoryFS / ('perf_stock_simple.txt').
-	testParserSimple := TreeParser fromFile: fileSimple.
-	testNodeSimple := TreeParser parseFile: fileSimple.
+	testParserSimple := PerfTreeParser fromFile: fileSimple.
+	testNodeSimple := PerfTreeParser parseFile: fileSimple.
 	
 	fileSamePercentage := memoryFS / ('perf_stock_same_percentage.txt').
-	testParserSamePercentage := TreeParser fromFile: fileSamePercentage.
-	testNodeSamePercentage := TreeParser parseFile: fileSamePercentage.
+	testParserSamePercentage := PerfTreeParser fromFile: fileSamePercentage.
+	testNodeSamePercentage := PerfTreeParser parseFile: fileSamePercentage.
 	
 	fileMultipleChildren := memoryFS / ('perf_stock_multiple_children.txt').
-	testParserMultipleChildren := TreeParser fromFile: fileMultipleChildren.
-	testNodeMultipleChildren := TreeParser parseFile: fileMultipleChildren.
+	testParserMultipleChildren := PerfTreeParser fromFile: fileMultipleChildren.
+	testNodeMultipleChildren := PerfTreeParser parseFile: fileMultipleChildren.
 	
 ]
 
 { #category : #running }
-TreeParserTest >> tearDown [
+PerfTreeParserTest >> tearDown [
 
 	fileSimple ensureDelete.
 	fileSamePercentage ensureDelete.
@@ -267,7 +267,7 @@ TreeParserTest >> tearDown [
 ]
 
 { #category : #tests }
-TreeParserTest >> testDifferenceOfSpacesAt [
+PerfTreeParserTest >> testDifferenceOfSpacesAt [
 
 	self assert: (testParserSimple differenceOfSpacesAt: 0) isNil.
 	
@@ -282,7 +282,7 @@ TreeParserTest >> testDifferenceOfSpacesAt [
 ]
 
 { #category : #tests }
-TreeParserTest >> testFindChildrenIndexOfIndex [
+PerfTreeParserTest >> testFindChildrenIndexOfIndex [
 	"Two cases that shouldn't happen."
 
 	self assert: (testParserSimple findChildrenIndexOfIndex: 0) isZero.
@@ -310,7 +310,7 @@ TreeParserTest >> testFindChildrenIndexOfIndex [
 ]
 
 { #category : #tests }
-TreeParserTest >> testFindChildrenOfIndex [
+PerfTreeParserTest >> testFindChildrenOfIndex [
 
 	| aNode |
 	aNode := testParserMultipleChildren findChildrenOfIndex: 3.
@@ -327,7 +327,7 @@ TreeParserTest >> testFindChildrenOfIndex [
 ]
 
 { #category : #tests }
-TreeParserTest >> testFindChildrenOfRecursive [
+PerfTreeParserTest >> testFindChildrenOfRecursive [
 
 	| aNode |
 	aNode := testNodeMultipleChildren firstChild firstChild.
@@ -341,7 +341,7 @@ TreeParserTest >> testFindChildrenOfRecursive [
 ]
 
 { #category : #tests }
-TreeParserTest >> testIsLeaf [
+PerfTreeParserTest >> testIsLeaf [
 
 	| example |
 	example := testNodeSimple firstChild firstChild.
@@ -354,7 +354,7 @@ TreeParserTest >> testIsLeaf [
 ]
 
 { #category : #tests }
-TreeParserTest >> testLastSpaceAt [
+PerfTreeParserTest >> testLastSpaceAt [
 
 	self assert: (testParserSimple lastSpaceAt: 0) isNil.
 	
@@ -366,7 +366,7 @@ TreeParserTest >> testLastSpaceAt [
 ]
 
 { #category : #tests }
-TreeParserTest >> testNameOf [
+PerfTreeParserTest >> testNameOf [
 
 	"Limit cases"
 	self assert: (testParserSimple nameOf: 0) isNil.
@@ -382,7 +382,7 @@ TreeParserTest >> testNameOf [
 ]
 
 { #category : #tests }
-TreeParserTest >> testNodeAtIndex [
+PerfTreeParserTest >> testNodeAtIndex [
 
 	self assert: (testParserSimple nodeAtIndex: 0) isNil.
 	
@@ -392,7 +392,7 @@ TreeParserTest >> testNodeAtIndex [
 ]
 
 { #category : #tests }
-TreeParserTest >> testNodes [
+PerfTreeParserTest >> testNodes [
 
 	| example |
 	example := testNodeMultipleChildren firstChild firstChild children.
@@ -405,7 +405,7 @@ TreeParserTest >> testNodes [
 ]
 
 { #category : #tests }
-TreeParserTest >> testNodesSameParent [
+PerfTreeParserTest >> testNodesSameParent [
 	
 	| example |
 	example := (testNodeMultipleChildren firstChild firstChild) children.
@@ -416,13 +416,13 @@ TreeParserTest >> testNodesSameParent [
 ]
 
 { #category : #tests }
-TreeParserTest >> testNumberOfFunctions [
+PerfTreeParserTest >> testNumberOfFunctions [
 
 	self assert: (testParserSimple numberOfFunctions) equals: 4
 ]
 
 { #category : #tests }
-TreeParserTest >> testNumberOfSpacesAt [
+PerfTreeParserTest >> testNumberOfSpacesAt [
 
 	
 	self assert: (testParserSimple numberOfSpacesAt: 0) isZero.
@@ -435,7 +435,7 @@ TreeParserTest >> testNumberOfSpacesAt [
 ]
 
 { #category : #tests }
-TreeParserTest >> testPercentageOf [
+PerfTreeParserTest >> testPercentageOf [
 	"Limit cases"
 
 	self assert: (testParserSimple percentageOf: 0) isZero.
@@ -462,7 +462,7 @@ TreeParserTest >> testPercentageOf [
 ]
 
 { #category : #tests }
-TreeParserTest >> testReadLine [
+PerfTreeParserTest >> testReadLine [
 
 	"Limit cases."
 	self assert: (testParserSimple readLine: 0) isNil.
@@ -473,7 +473,7 @@ TreeParserTest >> testReadLine [
 ]
 
 { #category : #tests }
-TreeParserTest >> testRealPercentageOf [
+PerfTreeParserTest >> testRealPercentageOf [
 
 	"Limit cases."
 	self assert: (testParserSimple realPercentageOf: 0) isZero.
@@ -488,7 +488,7 @@ TreeParserTest >> testRealPercentageOf [
 ]
 
 { #category : #tests }
-TreeParserTest >> testTime [
+PerfTreeParserTest >> testTime [
 	
 	self assert: testParserSimple time equals: 397.592.
 	
@@ -496,7 +496,7 @@ TreeParserTest >> testTime [
 ]
 
 { #category : #tests }
-TreeParserTest >> testTraces [
+PerfTreeParserTest >> testTraces [
 
 	| traces |
 	traces := testNodeSimple traces.
@@ -509,7 +509,7 @@ TreeParserTest >> testTraces [
 ]
 
 { #category : #tests }
-TreeParserTest >> testWeight [
+PerfTreeParserTest >> testWeight [
 	
 	| example |
 	example := testNodeMultipleChildren firstChild firstChild.
@@ -518,7 +518,7 @@ TreeParserTest >> testWeight [
 ]
 
 { #category : #tests }
-TreeParserTest >> testWeightOf [
+PerfTreeParserTest >> testWeightOf [
 	
 	"Limit cases"
 	self assert: (testParserSimple weightOf: 0) isZero.
@@ -530,7 +530,7 @@ TreeParserTest >> testWeightOf [
 ]
 
 { #category : #tests }
-TreeParserTest >> testWithoutSpaces [
+PerfTreeParserTest >> testWithoutSpaces [
 
 	self assert: (testParserMultipleChildren withoutSpaces at: 6) equals: '--6.86%--arch_do_signal_or_restart'
 ]

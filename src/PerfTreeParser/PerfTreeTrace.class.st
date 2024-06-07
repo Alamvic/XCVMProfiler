@@ -1,33 +1,33 @@
 Class {
-	#name : #TreeTrace,
+	#name : #PerfTreeTrace,
 	#superclass : #Object,
 	#instVars : [
 		'name',
 		'weight'
 	],
-	#category : #TreeParser
+	#category : #PerfTreeParser
 }
 
 { #category : #accessing }
-TreeTrace >> name [
+PerfTreeTrace >> name [
 
 	^ name
 ]
 
 { #category : #accessing }
-TreeTrace >> name: aName [
+PerfTreeTrace >> name: aName [
 
 	name := aName
 ]
 
 { #category : #accessing }
-TreeTrace >> weight [
+PerfTreeTrace >> weight [
 
 	^ weight
 ]
 
 { #category : #accessing }
-TreeTrace >> weight: aFloat [
+PerfTreeTrace >> weight: aFloat [
 
 	weight := aFloat
 ]

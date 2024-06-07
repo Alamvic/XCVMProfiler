@@ -1,5 +1,5 @@
 Class {
-	#name : #TreeNode,
+	#name : #PerfTreeNode,
 	#superclass : #Object,
 	#instVars : [
 		'name',
@@ -8,23 +8,23 @@ Class {
 		'parent',
 		'totalTime'
 	],
-	#category : #TreeParser
+	#category : #PerfTreeParser
 }
 
 { #category : #accessing }
-TreeNode >> children [
+PerfTreeNode >> children [
 
 	^ children
 ]
 
 { #category : #accessing }
-TreeNode >> children: aCollectionOfTreeNode [
+PerfTreeNode >> children: aCollectionOfTreeNode [
 
 	children:= aCollectionOfTreeNode
 ]
 
 { #category : #accessing }
-TreeNode >> collectLeavesIn: leaves [
+PerfTreeNode >> collectLeavesIn: leaves [
 
 	self isLeaf ifTrue: [
 		leaves add: self.
@@ -34,81 +34,81 @@ TreeNode >> collectLeavesIn: leaves [
 ]
 
 { #category : #accessing }
-TreeNode >> firstChild [
+PerfTreeNode >> firstChild [
 
 	^ self children first
 ]
 
 { #category : #accessing }
-TreeNode >> isLeaf [
+PerfTreeNode >> isLeaf [
 
 	^ self children isEmpty
 ]
 
 { #category : #accessing }
-TreeNode >> isNotLeaf [
+PerfTreeNode >> isNotLeaf [
 
 	^ self children isNotEmpty
 ]
 
 { #category : #accessing }
-TreeNode >> name [
+PerfTreeNode >> name [
 
 	^ name
 ]
 
 { #category : #accessing }
-TreeNode >> name: aString [
+PerfTreeNode >> name: aString [
 
 	name := aString
 ]
 
 { #category : #accessing }
-TreeNode >> parent [
+PerfTreeNode >> parent [
 
 	^ parent
 ]
 
 { #category : #accessing }
-TreeNode >> parent: aTreeNode [
+PerfTreeNode >> parent: aTreeNode [
 
 	parent := aTreeNode
 ]
 
 { #category : #accessing }
-TreeNode >> time [
+PerfTreeNode >> time [
 
 	^ totalTime
 ]
 
 { #category : #accessing }
-TreeNode >> time: aFloat [
+PerfTreeNode >> time: aFloat [
 
 	totalTime := aFloat
 ]
 
 { #category : #accessing }
-TreeNode >> traces [
+PerfTreeNode >> traces [
 
 	| leaves |
 	leaves := OrderedCollection new.
 	self collectLeavesIn: leaves.
 
 	^ leaves collect: [ :l |
-		  TreeTrace new
+		  PerfTreeTrace new
 			  name: l name;
 			  weight: l weight;
 			  yourself ]
 ]
 
 { #category : #accessing }
-TreeNode >> weight [
+PerfTreeNode >> weight [
 
 	^ weight
 ]
 
 { #category : #accessing }
-TreeNode >> weight: aFloat [
+PerfTreeNode >> weight: aFloat [
 
 	weight := aFloat
 ]
