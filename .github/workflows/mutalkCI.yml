@@ -29,6 +29,8 @@ jobs:
     if: github.event_name != 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - uses: hpi-swa/setup-smalltalkCI@v1
         id: smalltalkci
@@ -55,6 +57,8 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - uses: hpi-swa/setup-smalltalkCI@v1
         id: smalltalkci
