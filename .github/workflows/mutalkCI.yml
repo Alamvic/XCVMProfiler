@@ -39,7 +39,7 @@ jobs:
         shell: bash
         timeout-minutes: 15
 
-      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://matburnx/mutalk/tree/-CI-not-working" BaselineOfMuTalk
+      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://matburnx/mutalk:-CI-not-working" BaselineOfMuTalk
         shell: bash
       
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}}
@@ -65,7 +65,7 @@ jobs:
         shell: bash
         timeout-minutes: 15
         
-      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://matburnx/mutalk/tree/-CI-not-working" BaselineOfMuTalk
+      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://matburnx/mutalk:-CI-not-working" BaselineOfMuTalk
         shell: bash
 
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} 
