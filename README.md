@@ -1,5 +1,5 @@
 # XCVMProfiler
-VM Profiler based on instruments (and soon perf)
+VM Profiler based on [instruments](https://help.apple.com/instruments/mac/current/#/dev7b09c84f5) and [perf](https://perf.wiki.kernel.org/)
 
 ## Install
 ```smalltalk
