@@ -1,6 +1,6 @@
 Class {
-	#name : #PerfTreeNode,
-	#superclass : #Object,
+	#name : 'PerfTreeNode',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'weight',
@@ -8,86 +8,97 @@ Class {
 		'parent',
 		'totalTime'
 	],
-	#category : #PerfTreeParser
+	#category : 'PerfTreeParser',
+	#package : 'PerfTreeParser'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> children [
 
 	^ children
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> children: aCollectionOfTreeNode [
 
 	children:= aCollectionOfTreeNode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> collectLeavesIn: leaves [
 
-	self isLeaf ifTrue: [
-		leaves add: self.
-		^ leaves ].
+	(self isLeaf and: [ self isNotAlreadyLeafIn: leaves ]) ifTrue: [
+		leaves add: self ].
 
-	^ self children collect: [ :child | child collectLeavesIn: leaves ]
+	self children do: [ :child | child collectLeavesIn: leaves ].
+
+	^ leaves
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> firstChild [
 
 	^ self children first
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> isLeaf [
 
 	^ self children isEmpty
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
+PerfTreeNode >> isNotAlreadyLeafIn: leaves [
+
+	(leaves anySatisfy: [ :leaf |
+		 leaf name = self name and: [ leaf weight = self weight ] ])
+		ifTrue: [ ^ false ]
+		ifFalse: [ ^ true ]
+]
+
+{ #category : 'accessing' }
 PerfTreeNode >> isNotLeaf [
 
 	^ self children isNotEmpty
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> name: aString [
 
 	name := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> parent [
 
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> parent: aTreeNode [
 
 	parent := aTreeNode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> time [
 
 	^ totalTime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> time: aFloat [
 
 	totalTime := aFloat
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> traces [
 
 	| leaves |
@@ -101,13 +112,13 @@ PerfTreeNode >> traces [
 			  yourself ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> weight [
 
 	^ weight
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeNode >> weight: aFloat [
 
 	weight := aFloat

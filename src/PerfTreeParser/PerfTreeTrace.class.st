@@ -1,32 +1,33 @@
 Class {
-	#name : #PerfTreeTrace,
-	#superclass : #Object,
+	#name : 'PerfTreeTrace',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'weight'
 	],
-	#category : #PerfTreeParser
+	#category : 'PerfTreeParser',
+	#package : 'PerfTreeParser'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeTrace >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeTrace >> name: aName [
 
 	name := aName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeTrace >> weight [
 
 	^ weight
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeTrace >> weight: aFloat [
 
 	weight := aFloat

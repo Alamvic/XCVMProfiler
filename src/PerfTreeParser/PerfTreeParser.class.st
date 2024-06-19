@@ -1,14 +1,15 @@
 Class {
-	#name : #PerfTreeParser,
-	#superclass : #Object,
+	#name : 'PerfTreeParser',
+	#superclass : 'Object',
 	#instVars : [
 		'content',
 		'totalTime'
 	],
-	#category : #PerfTreeParser
+	#category : 'PerfTreeParser',
+	#package : 'PerfTreeParser'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PerfTreeParser class >> fromFile: aFile [
 
 	^ self new
@@ -16,19 +17,19 @@ PerfTreeParser class >> fromFile: aFile [
 		  yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PerfTreeParser class >> parseFile: aFile [
 
 	^ (self fromFile: aFile) root
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> content [
 
 	^ content
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> content: aFile [
 	"Extract the interesting content from the file."
 
@@ -39,7 +40,7 @@ PerfTreeParser >> content: aFile [
 	[ (fileContents at: i) beginsWith: '# sample duration' ] whileFalse: [
 		i := i + 1 ].
 
-	self time: (((fileContents at: i) last: 10) first: 7) asNumber.
+	self time: ((((fileContents at: i) last: 10) first: 7) copyWithout: Character space) asNumber.
 
 	content := fileContents reject: [ :line | line beginsWith: '#' ].
 	content := content select: [ :line |
@@ -47,41 +48,38 @@ PerfTreeParser >> content: aFile [
 			           isNotEmpty ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> differenceOfSpacesAt: aNodeIndex [
 	"Gives the difference of the number of spaces between 2 followed lines."
 
-	^ (aNodeIndex between: 1 and: self numberOfFunctions)
-		  ifFalse: [ nil ]
-		  ifTrue: [
-			  (self numberOfSpacesAt: aNodeIndex + 1)
-			  - (self numberOfSpacesAt: aNodeIndex) ]
+	^ (self numberOfSpacesAt: aNodeIndex + 1)
+	  - (self numberOfSpacesAt: aNodeIndex)
 ]
 
-{ #category : #accessing }
-PerfTreeParser >> findChildrenIndexOfIndex: aNode [
+{ #category : 'accessing' }
+PerfTreeParser >> findChildrenIndexOfIndex: aNodeIndex [
 	"Gives an ordered collection of every indexes of the lines where there is a child."
 
-	| lastNode everyChildren |
-	lastNode := self numberOfFunctions.
+	| lastNodeIndex everyChildren newBranch spaces nodeSpaces |
+	lastNodeIndex := self numberOfFunctions.
 	everyChildren := OrderedCollection new.
 
-	(aNode between: 1 and: lastNode) ifFalse: [ ^ 0 ].
+	(self percentageOf: aNodeIndex) = (self percentageOf: aNodeIndex + 1) ifTrue: [
+		everyChildren add: aNodeIndex + 1.
+		^ everyChildren ].
 
-	(((self differenceOfSpacesAt: aNode) between: 1 and: 10) or: [
-		 (self percentageOf: aNode) = (self percentageOf: aNode + 1) ])
-		ifTrue: [
-			everyChildren add: aNode + 1.
-			^ everyChildren ].
-
-	aNode to: lastNode do: [ :i |
-		(self numberOfSpacesAt: i) - (self numberOfSpacesAt: aNode) = 11
-			ifTrue: [ everyChildren add: i ] ].
+	newBranch := false.
+	nodeSpaces := self numberOfSpacesAt: aNodeIndex.
+	aNodeIndex + 1 to: lastNodeIndex do: [ :i |
+		spaces := self numberOfSpacesAt: i.
+		spaces <= nodeSpaces ifTrue: [ newBranch := true ].
+		((spaces - nodeSpaces between: 1 and: 11) and: [
+			 newBranch not ]) ifTrue: [ everyChildren add: i ] ].
 
 	^ everyChildren
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> findChildrenOfIndex: aNodeIndex [
 	"Gives the nodes representing every children at the node aNodeIndex."
 
@@ -91,13 +89,11 @@ PerfTreeParser >> findChildrenOfIndex: aNodeIndex [
 		  self nodeAtIndex: childIndex ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> lastSpaceAt: aLine [
 	"Gives the index of the last space or '-' at a given line."
 
 	| lastSpace line |
-	(aLine between: 1 and: self numberOfFunctions) ifFalse: [ ^ nil ].
-
 	line := self readLine: aLine.
 	lastSpace := 0.
 
@@ -107,50 +103,42 @@ PerfTreeParser >> lastSpaceAt: aLine [
 	^ lastSpace
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> nameOf: aNodeIndex [
 	"Gives the name of a function at aNodeIndex."
 
 	| aLine |
-	(aNodeIndex between: 1 and: self numberOfFunctions) ifFalse: [ ^ nil ].
-
 	aLine := self readLine: aNodeIndex.
 	^ aLine last: aLine size - (self lastSpaceAt: aNodeIndex)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> nodeAtIndex: aNodeIndex [
 	"Gives the node representing the node at aNodeIndex."
 
-	| child |
-	(aNodeIndex between: 1 and: self numberOfFunctions) ifFalse: [ ^ nil ].
-
-	child := PerfTreeNode new
+	| node |
+	node := PerfTreeNode new
 		         name: (self nameOf: aNodeIndex);
 		         weight: (self weightOf: aNodeIndex);
 		         time: self time;
 		         yourself.
-	child children: (self findChildrenOfIndex: aNodeIndex).
-	child children do: [ :grandchild | grandchild parent: child ].
-	^ child
+	node children: (self findChildrenOfIndex: aNodeIndex).
+	node children do: [ :grandchild | grandchild parent: node ].
+	^ node
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> numberOfFunctions [
 	"Gives the number of functions present in the file."
 
 	^ content size
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> numberOfSpacesAt: aNodeIndex [
 	"Gives the number of spaces at a certain line."
 
 	| count lineRead |
-	count := 0.
-
-	(aNodeIndex between: 1 and: self numberOfFunctions) ifFalse: [
-		^ count ].
 
 	lineRead := self readLine: aNodeIndex.
 	count := 1.
@@ -160,7 +148,7 @@ PerfTreeParser >> numberOfSpacesAt: aNodeIndex [
 	^ count - 1
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> percentageOf: aLine [
 	"Gives the percentage from a function at a given line"
 
@@ -169,64 +157,59 @@ PerfTreeParser >> percentageOf: aLine [
 	| stringLine numbers |
 	(aLine between: 1 and: self numberOfFunctions) ifFalse: [ ^ 0 ].
 
-	stringLine := ((self content at: aLine) copyUpTo: $%) last: 5.
+	stringLine := (((self readLine: aLine) copyUpTo: $%) last: 5)
+		              copyWithout: $-.
 
-	stringLine = ((self content at: aLine) last: 5) ifTrue: [
+	stringLine = ((self readLine: aLine) last: 5) ifTrue: [
 		^ self percentageOf: aLine - 1 ].
 
 	numbers := stringLine asNumber.
-	numbers < 0 ifTrue: [ numbers := numbers negated ].
 
 	^ numbers
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> readLine: anIndex [
 	"Reads a line from the file without the commentaries."
-
-	(anIndex between: 1 and: self numberOfFunctions)
-		ifTrue: [ ^ self content at: anIndex ]
-		ifFalse: [ ^ nil ]
+	^ self content at: anIndex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> realPercentageOf: aNodeIndex [
 
-	| children childrenPercentage |
+	| nodePercentage children childrenPercentage |
+	nodePercentage := self percentageOf: aNodeIndex.
 	children := self findChildrenIndexOfIndex: aNodeIndex.
 	childrenPercentage := 0.
-	children isCollection ifFalse: [ ^ self percentageOf: aNodeIndex ].
+	children ifEmpty: [ ^ nodePercentage ].
 
 
-	1 to: children size do: [ :childIndex |
-		childrenPercentage := childrenPercentage
-		                      +
-		                      (self percentageOf: (children at: childIndex)) ].
+	childrenPercentage := children sum: [ :child |
+		                      self percentageOf: child ].
 
-	^ (self percentageOf: aNodeIndex) - childrenPercentage roundUpTo:
-		  0.01
+	^ nodePercentage - childrenPercentage roundUpTo: 0.01
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> root [
 	"Gives the first parent of the nodes"
 
 	^ self nodeAtIndex: 1
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> time [
 
 	^ totalTime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> time: aFloat [
 
 	totalTime := aFloat.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> weightOf: aNodeIndex [
 
 	| newPercentage |
@@ -235,7 +218,7 @@ PerfTreeParser >> weightOf: aNodeIndex [
 	^ totalTime * (newPercentage/100) roundUpTo: 0.01
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PerfTreeParser >> withoutSpaces [
 	"Gives a line without the characters that are not interesting."
 

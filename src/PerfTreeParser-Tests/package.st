@@ -1,1 +1,1 @@
-Package { #name : #'PerfTreeParser-Tests' }
+Package { #name : 'PerfTreeParser-Tests' }

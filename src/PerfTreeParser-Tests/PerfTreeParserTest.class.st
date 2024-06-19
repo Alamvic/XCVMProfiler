@@ -1,6 +1,6 @@
 Class {
-	#name : #PerfTreeParserTest,
-	#superclass : #TestCase,
+	#name : 'PerfTreeParserTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'memoryFS',
 		'fileSimple',
@@ -13,10 +13,11 @@ Class {
 		'testNodeSamePercentage',
 		'testNodeMultipleChildren'
 	],
-	#category : #'PerfTreeParser-Tests'
+	#category : 'PerfTreeParser-Tests',
+	#package : 'PerfTreeParser-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 PerfTreeParserTest >> setUp [
 	"Commands ran:"
 	"sudo perf record -g --call-graph=dwarf -- ./script2.sh --all-user"
@@ -257,41 +258,37 @@ PerfTreeParserTest >> setUp [
 	
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 PerfTreeParserTest >> tearDown [
-
+	
 	fileSimple ensureDelete.
 	fileSamePercentage ensureDelete.
 	fileMultipleChildren ensureDelete.
 	super tearDown
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testDifferenceOfSpacesAt [
-
-	self assert: (testParserSimple differenceOfSpacesAt: 0) isNil.
-	
-	self assert: (testParserSimple differenceOfSpacesAt: (testParserSimple numberOfFunctions + 1)) isNil.
-	
 	"Classical case"
-	self assert: (testParserSamePercentage differenceOfSpacesAt: 6) equals: 1.
-	
-	self assert: (testParserSamePercentage differenceOfSpacesAt: 1) equals: 8.
-	
-	self assert: (testParserSamePercentage differenceOfSpacesAt: 5) isZero.
+
+	self
+		assert: (testParserSamePercentage differenceOfSpacesAt: 6)
+		equals: 1.
+
+	self
+		assert: (testParserSamePercentage differenceOfSpacesAt: 1)
+		equals: 8.
+
+	self assert:
+		(testParserSamePercentage differenceOfSpacesAt: 5) isZero
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testFindChildrenIndexOfIndex [
-	"Two cases that shouldn't happen."
-
-	self assert: (testParserSimple findChildrenIndexOfIndex: 0) isZero.
-
-	self assert: (testParserSimple findChildrenIndexOfIndex: (testParserSimple numberOfFunctions + 1)) isZero.
-
 	"The last has no children"
 
-	self assert: (testParserSimple findChildrenIndexOfIndex: (testParserSimple numberOfFunctions)) isEmpty.
+	self assert: (testParserSimple findChildrenIndexOfIndex:
+			 testParserSimple numberOfFunctions) isEmpty.
 
 	"Case where 2 functions have the same number of spaces."
 	self
@@ -309,7 +306,7 @@ PerfTreeParserTest >> testFindChildrenIndexOfIndex [
 		equals: { 4. 5. 8 } asOrderedCollection
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testFindChildrenOfIndex [
 
 	| aNode |
@@ -326,7 +323,7 @@ PerfTreeParserTest >> testFindChildrenOfIndex [
 		equals: (testParserMultipleChildren nameOf: 8)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testFindChildrenOfRecursive [
 
 	| aNode |
@@ -340,7 +337,7 @@ PerfTreeParserTest >> testFindChildrenOfRecursive [
 		equals: (testParserMultipleChildren nameOf: 7)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testIsLeaf [
 
 	| example |
@@ -353,45 +350,38 @@ PerfTreeParserTest >> testIsLeaf [
 	self assert: example children first isNotLeaf not.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testLastSpaceAt [
 
-	self assert: (testParserSimple lastSpaceAt: 0) isNil.
-	
-	self assert: (testParserSimple lastSpaceAt: (testParserSimple numberOfFunctions + 1)) isNil.
+	self assert: (testParserSimple lastSpaceAt: (testParserSimple numberOfFunctions)) equals: 37.
 	
 	self assert: (testParserSimple lastSpaceAt: 1) equals: 86.
 	
 	self assert: (testParserSimple lastSpaceAt: 2) equals: 15.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testNameOf [
-
-	"Limit cases"
-	self assert: (testParserSimple nameOf: 0) isNil.
-	
-	self assert: (testParserSimple nameOf: (testParserSimple numberOfFunctions + 1)) isNil.
-
 	"Three cases where the parsing is different."
-	self assert: (testParserSimple nameOf: 1) equals: 'entry_SYSCALL_64_after_hwframe'.
 
-	self assert: (testParserSamePercentage nameOf: 4) equals: '__x64_sys_read'.
-	
+	self
+		assert: (testParserSimple nameOf: 1)
+		equals: 'entry_SYSCALL_64_after_hwframe'.
+
+	self
+		assert: (testParserSamePercentage nameOf: 4)
+		equals: '__x64_sys_read'.
+
 	self assert: (testParserSamePercentage nameOf: 6) equals: 'vfs_read'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testNodeAtIndex [
 
-	self assert: (testParserSimple nodeAtIndex: 0) isNil.
-	
-	self assert: (testParserSimple nodeAtIndex: (testParserSimple numberOfFunctions + 1)) isNil.
-	
 	"Needs more tests!!!"
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testNodes [
 
 	| example |
@@ -404,7 +394,7 @@ PerfTreeParserTest >> testNodes [
 	self assert: example third name equals: '__x64_sys_openat'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testNodesSameParent [
 	
 	| example |
@@ -415,79 +405,81 @@ PerfTreeParserTest >> testNodesSameParent [
 	self assert: example first parent equals: example second parent
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testNumberOfFunctions [
 
 	self assert: (testParserSimple numberOfFunctions) equals: 4
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testNumberOfSpacesAt [
 
 	
-	self assert: (testParserSimple numberOfSpacesAt: 0) isZero.
-	
-	self assert: (testParserSimple numberOfSpacesAt: (testParserSimple numberOfFunctions + 1)) isZero.
+	self assert: (testParserSimple numberOfSpacesAt: (testParserSimple numberOfFunctions)) equals: 27.
 
 	self assert: (testParserSimple numberOfSpacesAt: 1) equals: 4.
 	
 	self assert: (testParserSimple numberOfSpacesAt: 3) equals: 16
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testPercentageOf [
-	"Limit cases"
-
-	self assert: (testParserSimple percentageOf: 0) isZero.
-
-	self assert: (testParserSimple percentageOf: (testParserSimple numberOfFunctions + 1)) isZero.
-
 	"Cases with 4 digits."
+
 	self assert: (testParserSimple percentageOf: 3) equals: 45.91.
 
 	self assert: (testParserSimple percentageOf: 1) equals: 46.02.
 
+	self
+		assert:
+		(testParserSimple percentageOf: testParserSimple numberOfFunctions)
+		equals: 36.78.
+
 	"Case with 3 digits."
-	self assert: (testParserMultipleChildren percentageOf: 8) equals: 0.53.
+	self
+		assert: (testParserMultipleChildren percentageOf: 8)
+		equals: 0.53.
 
 	"Case with same percentage"
 	self
 		assert: (testParserSamePercentage percentageOf: 4)
 		equals: (testParserSamePercentage percentageOf: 5).
-	
+
 	self
 		assert: (testParserSamePercentage percentageOf: 5)
 		equals: (testParserSamePercentage percentageOf: 6)
-	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testReadLine [
 
-	"Limit cases."
-	self assert: (testParserSimple readLine: 0) isNil.
+	self
+		assert: (testParserSimple readLine: 3)
+		equals: '                --45.91%--do_syscall_64'.
 	
-	self assert: (testParserSimple readLine: (testParserSimple numberOfFunctions + 1)) isNil.
-
-	self assert: (testParserSimple readLine: 3) equals: '                --45.91%--do_syscall_64'
+	self assert: (testParserSimple readLine: (testParserSimple numberOfFunctions)) equals: '                          |--36.78%--__x64_sys_read'
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testRealPercentageOf [
 
-	"Limit cases."
-	self assert: (testParserSimple realPercentageOf: 0) isZero.
-
-	self assert: (testParserSimple realPercentageOf: (testParserSimple numberOfFunctions + 1)) isZero.
+	self
+		assert:
+		(testParserSimple realPercentageOf:
+			 testParserSimple numberOfFunctions)
+		equals:
+		(testParserSimple percentageOf: testParserSimple numberOfFunctions).
 
 	self
 		assert: (testParserSamePercentage realPercentageOf: 3)
 		equals: 9.13.
 
-	self assert: (testParserSamePercentage realPercentageOf: 4) equals: 0.0
+	self
+		assert: (testParserSamePercentage realPercentageOf: 4)
+		equals: 0.0
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testTime [
 	
 	self assert: testParserSimple time equals: 397.592.
@@ -495,20 +487,29 @@ PerfTreeParserTest >> testTime [
 	self assert: testParserSimple root time equals: 397.592.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testTraces [
 
-	| traces |
+	| traces multipleTraces |
 	traces := testNodeSimple traces.
+	multipleTraces := testNodeMultipleChildren traces.
 
 	self assert: traces size equals: 1.
-	
+
 	self assert: traces first name equals: '__x64_sys_read'.
-	
+
 	self assert: traces first weight equals: 146.24.
+
+	self assert: multipleTraces size equals: 3.
+
+	self assert: multipleTraces first name equals: '__x64_sys_read'.
+
+	self assert: multipleTraces last name equals: 'do_sys_openat2'.
+
+	self assert: multipleTraces last weight equals: 2.11
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testWeight [
 	
 	| example |
@@ -517,19 +518,18 @@ PerfTreeParserTest >> testWeight [
 	self assert: example weight equals: 6.84.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testWeightOf [
-	
-	"Limit cases"
-	self assert: (testParserSimple weightOf: 0) isZero.
-	
-	self assert: (testParserSimple weightOf: (testParserSimple numberOfFunctions + 1)) isZero.
-	
-	"Classical case"
-	self assert: (testParserSimple weightOf: 3) equals: 36.31.
+
+	self
+		assert:
+		(testParserSimple weightOf: testParserSimple numberOfFunctions)
+		equals: 146.24.
+
+	self assert: (testParserSimple weightOf: 3) equals: 36.31
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 PerfTreeParserTest >> testWithoutSpaces [
 
 	self assert: (testParserMultipleChildren withoutSpaces at: 6) equals: '--6.86%--arch_do_signal_or_restart'
