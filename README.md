@@ -12,7 +12,7 @@ Metacello new
 
 ### How to use
 ```smalltalk
-fr := (FileLocator home / 'path/to/XCVMProfiler/resources/test-profile.trace.txt') asFileReference.
+fr := (FileLocator home / 'path/to/XCVMProfiler/resources/test-profile.trace') asFileReference.
 "To get the XML data"
 tree := XCTraceTree fromTimeProfileFileReference: fr.
 samples := tree samples.
@@ -36,11 +36,11 @@ Metacello new
 fr := (FileLocator home / 'path/to/XCVMProfiler/resources/perf_stock_multiple_children.txt') asFileReference.
 
 "Use `parseFile:` to directly get the head of the node with all the parsing done"
-node := TreeParser parseFile: fr.
+node := PerfTreeParser parseFile: fr.
 
 "To get the traces of the nodes:"
 traces := node traces.
 
 "You can use `fromFile:` if you want to play with the parser"
-parser := TreeParser fromFile: fr
+parser := PerfTreeParser fromFile: fr
 ```
