@@ -47,6 +47,8 @@ jobs:
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}}
         shell: bash
 
+      - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
+
       - uses: actions/upload-artifact@v4
         with:
           name: mutation-testing-output
@@ -85,6 +87,8 @@ jobs:
 #      - name: commit mutation testing
 #        if: github.event.inputs.mode == 'commit'
 #        run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} --commit=${{github.event.inputs.commit}}
+
+      - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
 
       - uses: actions/upload-artifact@v4
         with:
