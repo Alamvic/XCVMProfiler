@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : 'instance creation' }
+PerfTreeParser class >> findTraces: aFile [
+
+	^ (self parseFile: aFile) collect: [:tree | tree traces ]
+]
+
+{ #category : 'instance creation' }
 PerfTreeParser class >> fromFile: aFile [
 
 	^ self new
@@ -20,7 +26,7 @@ PerfTreeParser class >> fromFile: aFile [
 { #category : 'instance creation' }
 PerfTreeParser class >> parseFile: aFile [
 
-	^ (self fromFile: aFile) root
+	^ (self fromFile: aFile) roots
 ]
 
 { #category : 'accessing' }
@@ -64,9 +70,10 @@ PerfTreeParser >> findChildrenIndexOfIndex: aNodeIndex [
 	lastNodeIndex := self numberOfFunctions.
 	everyChildren := OrderedCollection new.
 
-	(self percentageOf: aNodeIndex) = (self percentageOf: aNodeIndex + 1) ifTrue: [
-		everyChildren add: aNodeIndex + 1.
-		^ everyChildren ].
+	(self percentageOf: aNodeIndex) = (self percentageOf: aNodeIndex + 1)
+		ifTrue: [
+			everyChildren add: aNodeIndex + 1.
+			^ everyChildren ].
 
 	newBranch := false.
 	nodeSpaces := self numberOfSpacesAt: aNodeIndex.
@@ -74,7 +81,8 @@ PerfTreeParser >> findChildrenIndexOfIndex: aNodeIndex [
 		spaces := self numberOfSpacesAt: i.
 		spaces <= nodeSpaces ifTrue: [ newBranch := true ].
 		((spaces - nodeSpaces between: 1 and: 11) and: [
-			 newBranch not ]) ifTrue: [ everyChildren add: i ] ].
+			 (self percentageOf: i) ~= (self percentageOf: i - 1) and: [
+				 newBranch not ] ]) ifTrue: [ everyChildren add: i ] ].
 
 	^ everyChildren
 ]
@@ -123,7 +131,7 @@ PerfTreeParser >> nodeAtIndex: aNodeIndex [
 		         time: self time;
 		         yourself.
 	node children: (self findChildrenOfIndex: aNodeIndex).
-	node children do: [ :grandchild | grandchild parent: node ].
+	node children do: [ :child | child parent: node ].
 	^ node
 ]
 
@@ -157,8 +165,8 @@ PerfTreeParser >> percentageOf: aLine [
 	| stringLine numbers |
 	(aLine between: 1 and: self numberOfFunctions) ifFalse: [ ^ 0 ].
 
-	stringLine := (((self readLine: aLine) copyUpTo: $%) last: 5)
-		              copyWithout: $-.
+	stringLine := ((((self readLine: aLine) copyUpTo: $%) last: 5)
+		              copyWithout: $-) copyWithout: Character space.
 
 	stringLine = ((self readLine: aLine) last: 5) ifTrue: [
 		^ self percentageOf: aLine - 1 ].
@@ -195,6 +203,18 @@ PerfTreeParser >> root [
 	"Gives the first parent of the nodes"
 
 	^ self nodeAtIndex: 1
+]
+
+{ #category : 'accessing' }
+PerfTreeParser >> roots [
+
+	| roots |
+	roots := OrderedCollection new.
+	
+	1 to: self numberOfFunctions do: [:i |
+		(self numberOfSpacesAt: i) <= 5 ifTrue: [ roots add: (self nodeAtIndex: i) ] ].
+	
+	^ roots
 ]
 
 { #category : 'accessing' }
