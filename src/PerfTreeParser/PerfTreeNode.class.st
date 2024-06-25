@@ -1,0 +1,125 @@
+Class {
+	#name : 'PerfTreeNode',
+	#superclass : 'Object',
+	#instVars : [
+		'name',
+		'weight',
+		'children',
+		'parent',
+		'totalTime'
+	],
+	#category : 'PerfTreeParser',
+	#package : 'PerfTreeParser'
+}
+
+{ #category : 'accessing' }
+PerfTreeNode >> children [
+
+	^ children
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> children: aCollectionOfTreeNode [
+
+	children:= aCollectionOfTreeNode
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> collectLeavesIn: leaves [
+
+	(self isLeaf and: [ self isNotAlreadyLeafIn: leaves ]) ifTrue: [
+		leaves add: self ].
+
+	self children do: [ :child | child collectLeavesIn: leaves ].
+
+	^ leaves
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> firstChild [
+
+	^ self children first
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> isLeaf [
+
+	^ self children isEmpty
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> isNotAlreadyLeafIn: leaves [
+
+	(leaves anySatisfy: [ :leaf |
+		 leaf name = self name and: [ leaf weight = self weight ] ])
+		ifTrue: [ ^ false ]
+		ifFalse: [ ^ true ]
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> isNotLeaf [
+
+	^ self children isNotEmpty
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> name [
+
+	^ name
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> name: aString [
+
+	name := aString
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> parent [
+
+	^ parent
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> parent: aTreeNode [
+
+	parent := aTreeNode
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> time [
+
+	^ totalTime
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> time: aFloat [
+
+	totalTime := aFloat
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> traces [
+
+	| leaves |
+	leaves := OrderedCollection new.
+	self collectLeavesIn: leaves.
+
+	^ leaves collect: [ :l |
+		  PerfTreeTrace new
+			  name: l name;
+			  weight: l weight;
+			  yourself ]
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> weight [
+
+	^ weight
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> weight: aFloat [
+
+	weight := aFloat
+]

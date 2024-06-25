@@ -6,7 +6,7 @@ SmalltalkCISpec {
       #platforms : [ #pharo ]
     },
     SCIMetacelloLoadSpec {
-      #baseline : 'TreeParser',
+      #baseline : 'PerfTreeParser',
       #directory : 'src',
       #platforms : [ #pharo ]
     }
