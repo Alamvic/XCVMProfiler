@@ -338,6 +338,21 @@ PerfTreeParserTest >> testFindChildrenOfRecursive [
 ]
 
 { #category : 'tests' }
+PerfTreeParserTest >> testHardestCall [
+
+	| multipleChildrenTree multipleChildrenTraces samePercentageTraces samePercentageTree |
+	multipleChildrenTraces := testNodeMultipleChildren traces.
+	multipleChildrenTree := PerfTreeTree new traces: multipleChildrenTraces.
+	
+	samePercentageTraces := testNodeSamePercentage traces.
+	samePercentageTree := PerfTreeTree new traces: samePercentageTraces.
+	
+	self assert: multipleChildrenTree hardestCall name equals: '__x64_sys_read'.
+	
+	self assert: samePercentageTree hardestCall name equals: 'ext4_file_read_iter'
+]
+
+{ #category : 'tests' }
 PerfTreeParserTest >> testIsLeaf [
 
 	| example |
@@ -543,6 +558,21 @@ PerfTreeParserTest >> testTraces [
 	self assert: multipleTraces last name equals: 'do_sys_openat2'.
 
 	self assert: multipleTraces last time equals: 2.11
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTreeTotalTime [
+	
+	| multipleChildrenTree multipleChildrenTraces samePercentageTraces samePercentageTree |
+	multipleChildrenTraces := testNodeMultipleChildren traces.
+	multipleChildrenTree := PerfTreeTree new traces: multipleChildrenTraces.
+	
+	samePercentageTraces := testNodeSamePercentage traces.
+	samePercentageTree := PerfTreeTree new traces: samePercentageTraces.
+	
+	self assert: multipleChildrenTree totalTime equals: 175.63.
+	
+	self assert: samePercentageTree totalTime equals: 144.97
 ]
 
 { #category : 'tests' }
