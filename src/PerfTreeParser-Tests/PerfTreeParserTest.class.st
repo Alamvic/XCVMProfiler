@@ -246,15 +246,15 @@ PerfTreeParserTest >> setUp [
 
 	fileSimple := memoryFS / ('perf_stock_simple.txt').
 	testParserSimple := PerfTreeParser fromFile: fileSimple.
-	testNodeSimple := PerfTreeParser parseFile: fileSimple.
+	testNodeSimple := (PerfTreeParser parseFile: fileSimple) first.
 	
 	fileSamePercentage := memoryFS / ('perf_stock_same_percentage.txt').
 	testParserSamePercentage := PerfTreeParser fromFile: fileSamePercentage.
-	testNodeSamePercentage := PerfTreeParser parseFile: fileSamePercentage.
+	testNodeSamePercentage := (PerfTreeParser parseFile: fileSamePercentage) first.
 	
 	fileMultipleChildren := memoryFS / ('perf_stock_multiple_children.txt').
 	testParserMultipleChildren := PerfTreeParser fromFile: fileMultipleChildren.
-	testNodeMultipleChildren := PerfTreeParser parseFile: fileMultipleChildren.
+	testNodeMultipleChildren := (PerfTreeParser parseFile: fileMultipleChildren) first.
 	
 ]
 
@@ -542,7 +542,7 @@ PerfTreeParserTest >> testTotalTime [
 PerfTreeParserTest >> testTraces [
 
 	| traces multipleTraces |
-	traces := testNodeSimple traces.
+	traces := (PerfTreeParser findTraces: fileSimple) first.
 	multipleTraces := testNodeMultipleChildren traces.
 
 	self assert: traces size equals: 1.
