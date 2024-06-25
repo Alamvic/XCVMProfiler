@@ -231,7 +231,7 @@ PerfTreeParserTest >> setUp [
                |          
                 --45.91%--do_syscall_64
                           |          
-                          |--36.78%--__x64_sys_read
+                          |--36.78%--__x64_sys_read (inlined)
                           |
                           |          
                           |--6.88%--syscall_exit_to_user_mode
@@ -372,7 +372,9 @@ PerfTreeParserTest >> testNameOf [
 		assert: (testParserSamePercentage nameOf: 4)
 		equals: '__x64_sys_read'.
 
-	self assert: (testParserSamePercentage nameOf: 6) equals: 'vfs_read'
+	self assert: (testParserSamePercentage nameOf: 6) equals: 'vfs_read'.
+	
+	self assert: (testParserMultipleChildren nameOf: 4) equals: '__x64_sys_read (inlined)'.
 ]
 
 { #category : 'tests' }
@@ -387,7 +389,7 @@ PerfTreeParserTest >> testNodes [
 	| example |
 	example := testNodeMultipleChildren firstChild firstChild children.
 
-	self assert: example first name equals: '__x64_sys_read'.
+	self assert: example first name equals: '__x64_sys_read (inlined)'.
 
 	self assert: example second name equals: 'syscall_exit_to_user_mode'.
 
@@ -502,7 +504,7 @@ PerfTreeParserTest >> testTraces [
 
 	self assert: multipleTraces size equals: 3.
 
-	self assert: multipleTraces first name equals: '__x64_sys_read'.
+	self assert: multipleTraces first name equals: '__x64_sys_read (inlined)'.
 
 	self assert: multipleTraces last name equals: 'do_sys_openat2'.
 

@@ -105,9 +105,12 @@ PerfTreeParser >> lastSpaceAt: aLine [
 	line := self readLine: aLine.
 	lastSpace := 0.
 
-	1 to: line size do: [ :i |
-		((line at: i) = Character space or: [ (line at: i) = $- ]) ifTrue: [
-			lastSpace := i ] ].
+	2 to: line size do: [ :i |
+		(((line at: i) = Character space and: [
+			  (line at: i - 1) = Character space ]) or: [
+			 (line at: i) = $- or: [
+				 (line at: i) = Character space and: [ (line at: i - 1) = $] ] ] ])
+			ifTrue: [ lastSpace := i ] ].
 	^ lastSpace
 ]
 
@@ -168,7 +171,7 @@ PerfTreeParser >> percentageOf: aLine [
 	stringLine := ((((self readLine: aLine) copyUpTo: $%) last: 5)
 		              copyWithout: $-) copyWithout: Character space.
 
-	stringLine = ((self readLine: aLine) last: 5) ifTrue: [
+	stringLine = ((self readLine: aLine) last: stringLine size) ifTrue: [
 		^ self percentageOf: aLine - 1 ].
 
 	numbers := stringLine asNumber.
