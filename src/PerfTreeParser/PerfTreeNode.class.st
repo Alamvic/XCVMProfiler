@@ -52,7 +52,7 @@ PerfTreeNode >> isLeaf [
 PerfTreeNode >> isNotAlreadyLeafIn: leaves [
 
 	(leaves anySatisfy: [ :leaf |
-		 leaf name = self name and: [ leaf weight = self weight ] ])
+		 leaf name = self name and: [ leaf time = self time ] ])
 		ifTrue: [ ^ false ]
 		ifFalse: [ ^ true ]
 ]
