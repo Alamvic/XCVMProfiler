@@ -482,9 +482,45 @@ PerfTreeParserTest >> testRealPercentageOf [
 { #category : 'tests' }
 PerfTreeParserTest >> testTime [
 	
+	| example |
+	example := testNodeMultipleChildren firstChild firstChild.
+	
+	self assert: example time equals: 6.84.
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTimeOf [
+
+	self
+		assert:
+		(testParserSimple timeOf: testParserSimple numberOfFunctions)
+		equals: 146.24.
+
+	self assert: (testParserSimple timeOf: 3) equals: 36.31
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTimeWithChildrenOf [
+	
+	self
+		assert:
+		(testParserSimple timeWithChildrenOf:
+			 testParserSimple numberOfFunctions)
+		equals:
+		(testParserSimple timeOf: testParserSimple numberOfFunctions).
+	
+	self assert: (testParserMultipleChildren timeWithChildrenOf: 3) equals: 182.54.
+	
+	self assert: (testParserSamePercentage timeWithChildrenOf: 5) equals: 146.24.
+	
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTotalTime [
+	
 	self assert: testParserSimple time equals: 397.592.
 	
-	self assert: testParserSimple root time equals: 397.592.
+	self assert: testParserSimple root totalTime equals: 397.592.
 ]
 
 { #category : 'tests' }
@@ -498,7 +534,7 @@ PerfTreeParserTest >> testTraces [
 
 	self assert: traces first name equals: '__x64_sys_read'.
 
-	self assert: traces first weight equals: 146.24.
+	self assert: traces first time equals: 146.24.
 
 	self assert: multipleTraces size equals: 3.
 
@@ -506,27 +542,7 @@ PerfTreeParserTest >> testTraces [
 
 	self assert: multipleTraces last name equals: 'do_sys_openat2'.
 
-	self assert: multipleTraces last weight equals: 2.11
-]
-
-{ #category : 'tests' }
-PerfTreeParserTest >> testWeight [
-	
-	| example |
-	example := testNodeMultipleChildren firstChild firstChild.
-	
-	self assert: example weight equals: 6.84.
-]
-
-{ #category : 'tests' }
-PerfTreeParserTest >> testWeightOf [
-
-	self
-		assert:
-		(testParserSimple weightOf: testParserSimple numberOfFunctions)
-		equals: 146.24.
-
-	self assert: (testParserSimple weightOf: 3) equals: 36.31
+	self assert: multipleTraces last time equals: 2.11
 ]
 
 { #category : 'tests' }

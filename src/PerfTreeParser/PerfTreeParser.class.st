@@ -119,8 +119,9 @@ PerfTreeParser >> nodeAtIndex: aNodeIndex [
 	| node |
 	node := PerfTreeNode new
 		         name: (self nameOf: aNodeIndex);
-		         weight: (self weightOf: aNodeIndex);
-		         time: self time;
+		         time: (self timeOf: aNodeIndex);
+		         totalTime: self time;
+					timeWithChildren: (self timeWithChildrenOf: aNodeIndex);
 		         yourself.
 	node children: (self findChildrenOfIndex: aNodeIndex).
 	node children do: [ :grandchild | grandchild parent: node ].
@@ -210,10 +211,19 @@ PerfTreeParser >> time: aFloat [
 ]
 
 { #category : 'accessing' }
-PerfTreeParser >> weightOf: aNodeIndex [
+PerfTreeParser >> timeOf: aNodeIndex [
 
 	| newPercentage |
 	newPercentage := self realPercentageOf: aNodeIndex.
+
+	^ totalTime * (newPercentage/100) roundUpTo: 0.01
+]
+
+{ #category : 'accessing' }
+PerfTreeParser >> timeWithChildrenOf: aNodeIndex [
+
+	| newPercentage |
+	newPercentage := self percentageOf: aNodeIndex.
 
 	^ totalTime * (newPercentage/100) roundUpTo: 0.01
 ]
