@@ -1,15 +1,16 @@
 Class {
-	#name : #XCTraceTree,
-	#superclass : #Object,
+	#name : 'XCTraceTree',
+	#superclass : 'Object',
 	#instVars : [
 		'dom',
 		'samples',
 		'indexes'
 	],
-	#category : #XCTrace
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 XCTraceTree class >> fromTimeProfileFileReference: aFileReference [ 
 	
 	^ self new
@@ -17,44 +18,44 @@ XCTraceTree class >> fromTimeProfileFileReference: aFileReference [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTraceTree >> dom: aXMLDocument [ 
 	
 	dom := aXMLDocument
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 XCTraceTree >> indexAt: aName [
 
 	^ indexes at: aName ifAbsentPut: [ Dictionary new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTraceTree >> indexAt: aString atId: anId [
 
 	^ (self indexAt: aString) at: anId
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTraceTree >> indexAt: indexName atId: id put: aValue [
 
 	^ (self indexAt: indexName) at: id ifAbsentPut: aValue
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 XCTraceTree >> initialize [
 
 	super initialize.
 	indexes := Dictionary new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTraceTree >> rootTime [
 	
 	^ (self samples collect: [ :s | s weight ]) sum
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 XCTraceTree >> samples [
 
 	^ samples ifNil: [

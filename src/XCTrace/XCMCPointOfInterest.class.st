@@ -1,17 +1,18 @@
 Class {
-	#name : #XCMCPointOfInterest,
-	#superclass : #Object,
-	#category : #XCTrace
+	#name : 'XCMCPointOfInterest',
+	#superclass : 'XCPointOfInterestAbstract',
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCMCPointOfInterest >> name [
 	
 	^ 'Machine Code'
 ]
 
-{ #category : #testing }
-XCMCPointOfInterest >> wantsFrame: aXMLElement index: anInteger frames: frames [
+{ #category : 'accessing' }
+XCMCPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
-	^ (aXMLElement attributeAt: 'name') beginsWith: '0x'
+	^ aNameOfElement beginsWith: '0x'
 ]

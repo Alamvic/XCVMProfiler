@@ -1,14 +1,15 @@
 Class {
-	#name : #XCCompositePointOfInterest,
-	#superclass : #Object,
+	#name : 'XCCompositePointOfInterest',
+	#superclass : 'XCPointOfInterestAbstract',
 	#instVars : [
 		'name',
 		'pointsOfInterest'
 	],
-	#category : #XCTrace
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 XCCompositePointOfInterest class >> named: aName [
 
 	^ self new
@@ -16,39 +17,39 @@ XCCompositePointOfInterest class >> named: aName [
 		  yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 XCCompositePointOfInterest >> addPointOfInterest: aPointOfInterest [
 
 	pointsOfInterest add: aPointOfInterest
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 XCCompositePointOfInterest >> addPointOfInterestForFunctionNamed: aString [
 
 	self addPointOfInterest:
 		(XCFunctionCallPointOfInterest named: aString)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 XCCompositePointOfInterest >> initialize [
 
 	super initialize.
 	pointsOfInterest := Set new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCCompositePointOfInterest >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCCompositePointOfInterest >> name: anObject [
 
 	name := anObject
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 XCCompositePointOfInterest >> printOn: aStream [
 
 	super printOn: aStream.
@@ -57,9 +58,9 @@ XCCompositePointOfInterest >> printOn: aStream [
 	aStream nextPut: $)
 ]
 
-{ #category : #testing }
-XCCompositePointOfInterest >> wantsFrame: aXMLElement index: anInteger frames: frames [
+{ #category : 'accessing' }
+XCCompositePointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
 	^ pointsOfInterest anySatisfy: [ :poi |
-		  poi wantsFrame: aXMLElement index: anInteger frames: frames ]
+		  poi wantsFrame: aNameOfElement index: anInteger frames: frames ]
 ]

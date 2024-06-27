@@ -1,21 +1,22 @@
 Class {
-	#name : #XCPrimitiveFromInterpreterPointOfInterest,
-	#superclass : #Object,
-	#category : #XCTrace
+	#name : 'XCPrimitiveFromInterpreterPointOfInterest',
+	#superclass : 'XCPointOfInterestAbstract',
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCPrimitiveFromInterpreterPointOfInterest >> name [
 	
 	^ 'Interpreter -> Primitive'
 ]
 
-{ #category : #testing }
-XCPrimitiveFromInterpreterPointOfInterest >> wantsFrame: aXMLElement index: anInteger frames: frames [
+{ #category : 'accessing' }
+XCPrimitiveFromInterpreterPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
-	^ ((aXMLElement attributeAt: 'name') beginsWith: 'primitive') and: [
+	^ (aNameOfElement beginsWith: 'primitive') and: [
 		  | callerName |
-		  callerName := (frames at: anInteger + 1) attributeAt: 'name'.
+		  callerName := frames at: anInteger + 1.
 		  ((callerName beginsWith: '0x') or: [
 			   (callerName beginsWith: 'ce') and: callerName third isUppercase ])
 			  not ]

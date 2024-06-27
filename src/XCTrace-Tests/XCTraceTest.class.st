@@ -1,6 +1,6 @@
 Class {
-	#name : #XCTraceTest,
-	#superclass : #TestCase,
+	#name : 'XCTraceTest',
+	#superclass : 'TestCase',
 	#instVars : [
 		'memoryFS',
 		'fr',
@@ -9,10 +9,11 @@ Class {
 		'frEmpty',
 		'treeEmpty'
 	],
-	#category : #'XCTrace-Tests'
+	#category : 'XCTrace-Tests',
+	#package : 'XCTrace-Tests'
 }
 
-{ #category : #running }
+{ #category : 'running' }
 XCTraceTest >> setUp [
 	super setUp.
 	memoryFS := FileSystem memory.
@@ -39,7 +40,7 @@ XCTraceTest >> setUp [
 
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 XCTraceTest >> tearDown [ 
 
 	fr ensureDelete.
@@ -47,47 +48,47 @@ XCTraceTest >> tearDown [
 	super tearDown.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 XCTraceTest >> testContentOfProfiler [
-	"""
-	Needs a rework.
+	
+	"Needs a rework."
 	|profiler names|
 	profiler := 	XCVMProfiler default classify: treeSamples.
 	names := profiler threads collect: [:p |
 		p pointsOfInterest do: [:n |
 			{'Machine Code'.'Trampolines'.'MC -> Primitive'.'compilation'.'interpret'.'Interpreter -> Primitive'} includes: (n name)]].
-	"""
+	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 XCTraceTest >> testFrameIsNotEmpty [
 	self assert: (treeSamples first stackTrace frames) isNotEmpty.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 XCTraceTest >> testNameOfASample [
 	self assert: ((treeSamples second stackTrace frameNameAt: 10) asString sameAs: 'dyld4::Loader::getLoader(Diagnostics&, dyld4::RuntimeState&, char const*, dyld4::Loader::LoadOptions const&)').
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 XCTraceTest >> testSamplesTime [
 	self assert: ((treeSamples first sampleTime) asString sameAs: '383060916').
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 XCTraceTest >> testSamplesWeight [
 	self assert: ((treeSamples first weight) asString sameAs: '1000000').
 
 ]
 
-{ #category : #'basic tests' }
+{ #category : 'basic tests' }
 XCTraceTest >> testSizeOfEmptySample [
 	self assert: treeEmpty samples size equals: 0.
 	
 ]
 
-{ #category : #'basic tests' }
+{ #category : 'basic tests' }
 XCTraceTest >> testSizeOfSamplesWithContent [
 	self assert: tree samples size equals: 2.
 	

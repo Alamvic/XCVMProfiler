@@ -1,14 +1,11 @@
 Class {
-	#name : #XCVMDifferentialPrimitiveProfiler,
-	#superclass : #Object,
-	#instVars : [
-		'profiles',
-		'files'
-	],
-	#category : #XCTrace
+	#name : 'XCVMDifferentialPrimitiveProfiler',
+	#superclass : 'XCVMDifferentialProfilerAbstract',
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 XCVMDifferentialPrimitiveProfiler class >> onFiles: aCollection [ 
 	
 	^ self new
@@ -16,13 +13,7 @@ XCVMDifferentialPrimitiveProfiler class >> onFiles: aCollection [
 		yourself
 ]
 
-{ #category : #accessing }
-XCVMDifferentialPrimitiveProfiler >> files: aCollection [ 
-	
-	files := aCollection
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCVMDifferentialPrimitiveProfiler >> primitiveNames [
 	
 	"Assume all will have the same primitives listed for now"
@@ -33,17 +24,7 @@ XCVMDifferentialPrimitiveProfiler >> primitiveNames [
 	^ (thread samplesForPoi: poi) collect: [:e | e primitiveName ] as: Set.
 ]
 
-{ #category : #accessing }
-XCVMDifferentialPrimitiveProfiler >> profiles [
-
-	^ profiles ifNil: [
-		  profiles := files collect: [ :file |
-			              XCVMProfiler default classify:
-				              (XCTraceTree fromTimeProfileFileReference: file)
-					              samples ] ]
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCVMDifferentialPrimitiveProfiler >> samplesForPrimitive: aString [
 
 	^ self profiles collect: [ :oneProfile |
@@ -54,7 +35,7 @@ XCVMDifferentialPrimitiveProfiler >> samplesForPrimitive: aString [
 			e primitiveName = aString ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCVMDifferentialPrimitiveProfiler >> table [
 
 	| samplesPerPrimitive lines |

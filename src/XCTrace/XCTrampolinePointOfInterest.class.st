@@ -1,19 +1,19 @@
 Class {
-	#name : #XCTrampolinePointOfInterest,
-	#superclass : #Object,
-	#category : #XCTrace
+	#name : 'XCTrampolinePointOfInterest',
+	#superclass : 'XCPointOfInterestAbstract',
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTrampolinePointOfInterest >> name [
 	
 	^ 'Trampolines'
 ]
 
-{ #category : #testing }
-XCTrampolinePointOfInterest >> wantsFrame: aXMLElement index: anInteger frames: frames [
+{ #category : 'accessing' }
+XCTrampolinePointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
-	| name |
-	name := aXMLElement attributeAt: 'name'.
-	^ (name beginsWith: 'ce') and: [ (name at: 3) isUppercase ]
+	^ (aNameOfElement beginsWith: 'ce') and: [
+		  (aNameOfElement at: 3) isUppercase ]
 ]

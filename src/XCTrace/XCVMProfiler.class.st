@@ -1,14 +1,15 @@
 Class {
-	#name : #XCVMProfiler,
-	#superclass : #Object,
+	#name : 'XCVMProfiler',
+	#superclass : 'Object',
 	#instVars : [
 		'threads',
 		'pointsOfInterest'
 	],
-	#category : #XCTrace
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCVMProfiler class >> default [
 
 	^ self new
@@ -38,27 +39,27 @@ XCVMProfiler class >> default [
 		  yourself
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 XCVMProfiler >> addPointOfInterest: aPointOfInterest [
 	
 	pointsOfInterest add: aPointOfInterest
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 XCVMProfiler >> addPointOfInterestForFunctionNamed: aString [
 
 	self addPointOfInterest:
 		(XCFunctionCallPointOfInterest named: aString)
 ]
 
-{ #category : #classification }
+{ #category : 'classification' }
 XCVMProfiler >> classify: samples [
 	"The samples should be treated in order because of their internal crossed references..."
 
 	samples do: [ :sample | self classifySample: sample ]
 ]
 
-{ #category : #classification }
+{ #category : 'classification' }
 XCVMProfiler >> classifySample: sample [
 
 	| threadProfiler |
@@ -71,7 +72,7 @@ XCVMProfiler >> classifySample: sample [
 	^ threadProfiler classifySample: sample
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 XCVMProfiler >> initialize [
 
 	super initialize.
@@ -79,7 +80,7 @@ XCVMProfiler >> initialize [
 	pointsOfInterest := Set new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCVMProfiler >> threads [
 	^ threads
 ]

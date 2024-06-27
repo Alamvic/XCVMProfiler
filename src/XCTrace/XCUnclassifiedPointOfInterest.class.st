@@ -1,16 +1,23 @@
 Class {
-	#name : #XCUnclassifiedPointOfInterest,
-	#superclass : #Object,
-	#category : #XCTrace
+	#name : 'XCUnclassifiedPointOfInterest',
+	#superclass : 'XCPointOfInterestAbstract',
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCUnclassifiedPointOfInterest >> name [
 	
 	^ 'Others'
 ]
 
-{ #category : #testing }
-XCUnclassifiedPointOfInterest >> wantsFrame: aXMLElement index: anInteger frames: frames [ 
-	self shouldBeImplemented.
+{ #category : 'accessing' }
+XCUnclassifiedPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
+
+	^ (XCPointOfInterestAbstract subclasses select: [ :subclass |
+		   subclass ~= self class and: [
+			   subclass
+				   wantsFrame: aNameOfElement
+				   index: anInteger
+				   frames: frames ] ]) isEmpty
 ]

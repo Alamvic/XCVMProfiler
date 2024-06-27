@@ -1,13 +1,14 @@
 Class {
-	#name : #XCFunctionCallPointOfInterest,
-	#superclass : #Object,
+	#name : 'XCFunctionCallPointOfInterest',
+	#superclass : 'XCPointOfInterestAbstract',
 	#instVars : [
 		'functionName'
 	],
-	#category : #XCTrace
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 XCFunctionCallPointOfInterest class >> named: aName [
 
 	^ self new
@@ -15,25 +16,25 @@ XCFunctionCallPointOfInterest class >> named: aName [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCFunctionCallPointOfInterest >> functionName [
 
 	^ functionName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCFunctionCallPointOfInterest >> functionName: anObject [
 
 	functionName := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCFunctionCallPointOfInterest >> name [
 	
 	^ functionName
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 XCFunctionCallPointOfInterest >> printOn: aStream [
 
 	super printOn: aStream.
@@ -42,7 +43,7 @@ XCFunctionCallPointOfInterest >> printOn: aStream [
 	aStream nextPut: $)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 XCFunctionCallPointOfInterest >> wantsFrame: aXMLElement index: anInteger frames: frames [
 
 	^ functionName = (aXMLElement attributeAt: 'name')

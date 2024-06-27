@@ -1,38 +1,11 @@
 Class {
-	#name : #XCVMDifferentialProfiler,
-	#superclass : #Object,
-	#instVars : [
-		'profiles',
-		'files'
-	],
-	#category : #XCTrace
+	#name : 'XCVMDifferentialProfiler',
+	#superclass : 'XCVMDifferentialProfilerAbstract',
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #'instance creation' }
-XCVMDifferentialProfiler class >> onFiles: aCollection [ 
-	
-	^ self new
-		files: aCollection;
-		yourself
-]
-
-{ #category : #accessing }
-XCVMDifferentialProfiler >> files: aCollection [ 
-	
-	files := aCollection
-]
-
-{ #category : #accessing }
-XCVMDifferentialProfiler >> profiles [
-
-	^ profiles ifNil: [
-		  profiles := files collect: [ :file |
-			              XCVMProfiler default classify:
-				              (XCTraceTree fromTimeProfileFileReference: file)
-					              samples ] ]
-]
-
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCVMDifferentialProfiler >> table [
 
 	^ (String crlf join:

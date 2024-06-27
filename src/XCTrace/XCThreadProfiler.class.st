@@ -1,27 +1,28 @@
 Class {
-	#name : #XCThreadProfiler,
-	#superclass : #Object,
+	#name : 'XCThreadProfiler',
+	#superclass : 'Object',
 	#instVars : [
 		'pointsOfInterest',
 		'unclassified'
 	],
-	#category : #XCTrace
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #adding }
+{ #category : 'adding' }
 XCThreadProfiler >> addPointOfInterest: aPoi [
 
 	pointsOfInterest at: aPoi put: OrderedCollection new
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 XCThreadProfiler >> addPointOfInterestForFunction: aString [
 
 	self addPointOfInterest:
 		(XCFunctionCallPointOfInterest named: aString)
 ]
 
-{ #category : #classification }
+{ #category : 'classification' }
 XCThreadProfiler >> classify: samples [
 
 	samples do: [ :e |
@@ -30,7 +31,7 @@ XCThreadProfiler >> classify: samples [
 		(pointsOfInterest at: poi) add: e ]
 ]
 
-{ #category : #classification }
+{ #category : 'classification' }
 XCThreadProfiler >> classifySample: aSample [
 
 	| poi |
@@ -39,7 +40,7 @@ XCThreadProfiler >> classifySample: aSample [
 	^ poi
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 XCThreadProfiler >> initialize [
 
 	super initialize.
@@ -49,7 +50,7 @@ XCThreadProfiler >> initialize [
 		(unclassified := XCUnclassifiedPointOfInterest new)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 XCThreadProfiler >> percentages [
 	
 	| total |
@@ -57,44 +58,44 @@ XCThreadProfiler >> percentages [
 	^ pointsOfInterest collect: [ :samples | ((samples size / total) * 100) asFloat ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCThreadProfiler >> pointOfInterestForSample: aXCTraceSample [
 
-	| pois frames |
+	| pois framesNames |
 	pois := self pointsOfInterest.
-	frames := aXCTraceSample stackTrace frames.
-	frames doWithIndex: [ :e :i |
+	framesNames := aXCTraceSample stackTrace framesNames.
+	framesNames doWithIndex: [ :e :i |
 		pois
-			detect: [ :poi | poi wantsFrame: e index: i frames: frames ]
+			detect: [ :poi | poi wantsFrame: e index: i frames: framesNames ]
 			ifFound: [ :found | ^ found ] ].
 	^ unclassified
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCThreadProfiler >> pointOfInterestWithId: aString [ 
 	
 	^ pointsOfInterest keys detect: [ :e | e name = aString ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCThreadProfiler >> pointsOfInterest [
 
 	^ pointsOfInterest keys copyWithout: unclassified
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCThreadProfiler >> samplesForPoi: aPoi [ 
 	
 	^ pointsOfInterest at: aPoi
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCThreadProfiler >> totalSamples [
 	
 	^ pointsOfInterest sum: [ :e | e size ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 XCThreadProfiler >> totalTimes [
 
 	^ pointsOfInterest collect: [ :samples | samples size ]
