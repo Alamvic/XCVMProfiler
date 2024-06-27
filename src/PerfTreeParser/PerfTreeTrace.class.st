@@ -3,7 +3,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'name',
-		'weight'
+		'time'
 	],
 	#category : 'PerfTreeParser',
 	#package : 'PerfTreeParser'
@@ -22,13 +22,13 @@ PerfTreeTrace >> name: aName [
 ]
 
 { #category : 'accessing' }
-PerfTreeTrace >> weight [
+PerfTreeTrace >> time [
 
-	^ weight
+	^ time
 ]
 
 { #category : 'accessing' }
-PerfTreeTrace >> weight: aFloat [
+PerfTreeTrace >> time: anObject [
 
-	weight := aFloat
+	time := anObject
 ]

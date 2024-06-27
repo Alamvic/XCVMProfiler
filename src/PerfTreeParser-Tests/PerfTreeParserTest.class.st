@@ -338,6 +338,21 @@ PerfTreeParserTest >> testFindChildrenOfRecursive [
 ]
 
 { #category : 'tests' }
+PerfTreeParserTest >> testHardestCall [
+
+	| multipleChildrenTree multipleChildrenTraces samePercentageTraces samePercentageTree |
+	multipleChildrenTraces := testNodeMultipleChildren traces.
+	multipleChildrenTree := PerfTreeTree new traces: multipleChildrenTraces.
+	
+	samePercentageTraces := testNodeSamePercentage traces.
+	samePercentageTree := PerfTreeTree new traces: samePercentageTraces.
+	
+	self assert: multipleChildrenTree hardestCall name equals: '__x64_sys_read'.
+	
+	self assert: samePercentageTree hardestCall name equals: 'ext4_file_read_iter'
+]
+
+{ #category : 'tests' }
 PerfTreeParserTest >> testIsLeaf [
 
 	| example |
@@ -482,9 +497,45 @@ PerfTreeParserTest >> testRealPercentageOf [
 { #category : 'tests' }
 PerfTreeParserTest >> testTime [
 	
+	| example |
+	example := testNodeMultipleChildren firstChild firstChild.
+	
+	self assert: example time equals: 6.84.
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTimeOf [
+
+	self
+		assert:
+		(testParserSimple timeOf: testParserSimple numberOfFunctions)
+		equals: 146.24.
+
+	self assert: (testParserSimple timeOf: 3) equals: 36.31
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTimeWithChildrenOf [
+	
+	self
+		assert:
+		(testParserSimple timeWithChildrenOf:
+			 testParserSimple numberOfFunctions)
+		equals:
+		(testParserSimple timeOf: testParserSimple numberOfFunctions).
+	
+	self assert: (testParserMultipleChildren timeWithChildrenOf: 3) equals: 182.54.
+	
+	self assert: (testParserSamePercentage timeWithChildrenOf: 5) equals: 146.24.
+	
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTotalTime [
+	
 	self assert: testParserSimple time equals: 397.592.
 	
-	self assert: testParserSimple root time equals: 397.592.
+	self assert: testParserSimple root totalTime equals: 397.592.
 ]
 
 { #category : 'tests' }
@@ -498,7 +549,7 @@ PerfTreeParserTest >> testTraces [
 
 	self assert: traces first name equals: '__x64_sys_read'.
 
-	self assert: traces first weight equals: 146.24.
+	self assert: traces first time equals: 146.24.
 
 	self assert: multipleTraces size equals: 3.
 
@@ -506,27 +557,22 @@ PerfTreeParserTest >> testTraces [
 
 	self assert: multipleTraces last name equals: 'do_sys_openat2'.
 
-	self assert: multipleTraces last weight equals: 2.11
+	self assert: multipleTraces last time equals: 2.11
 ]
 
 { #category : 'tests' }
-PerfTreeParserTest >> testWeight [
+PerfTreeParserTest >> testTreeTotalTime [
 	
-	| example |
-	example := testNodeMultipleChildren firstChild firstChild.
+	| multipleChildrenTree multipleChildrenTraces samePercentageTraces samePercentageTree |
+	multipleChildrenTraces := testNodeMultipleChildren traces.
+	multipleChildrenTree := PerfTreeTree new traces: multipleChildrenTraces.
 	
-	self assert: example weight equals: 6.84.
-]
-
-{ #category : 'tests' }
-PerfTreeParserTest >> testWeightOf [
-
-	self
-		assert:
-		(testParserSimple weightOf: testParserSimple numberOfFunctions)
-		equals: 146.24.
-
-	self assert: (testParserSimple weightOf: 3) equals: 36.31
+	samePercentageTraces := testNodeSamePercentage traces.
+	samePercentageTree := PerfTreeTree new traces: samePercentageTraces.
+	
+	self assert: multipleChildrenTree totalTime equals: 175.63.
+	
+	self assert: samePercentageTree totalTime equals: 144.97
 ]
 
 { #category : 'tests' }
