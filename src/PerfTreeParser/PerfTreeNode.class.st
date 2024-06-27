@@ -43,6 +43,12 @@ PerfTreeNode >> firstChild [
 ]
 
 { #category : 'accessing' }
+PerfTreeNode >> isFromInstruments [
+
+	^ false
+]
+
+{ #category : 'accessing' }
 PerfTreeNode >> isLeaf [
 
 	^ self children isEmpty

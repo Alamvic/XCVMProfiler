@@ -59,15 +59,20 @@ XCThreadProfiler >> percentages [
 ]
 
 { #category : 'accessing' }
-XCThreadProfiler >> pointOfInterestForSample: aXCTraceSample [
+XCThreadProfiler >> pointOfInterestForSample: aSample [
 
 	| pois framesNames |
 	pois := self pointsOfInterest.
-	framesNames := aXCTraceSample stackTrace framesNames.
+	framesNames := aSample isFromInstruments
+		               ifTrue: [ aSample stackTrace framesNames ]
+		               ifFalse: [
+		               aSample traces collect: [ :trace | trace name ] ].
+
 	framesNames doWithIndex: [ :e :i |
 		pois
 			detect: [ :poi | poi wantsFrame: e index: i frames: framesNames ]
 			ifFound: [ :found | ^ found ] ].
+
 	^ unclassified
 ]
 

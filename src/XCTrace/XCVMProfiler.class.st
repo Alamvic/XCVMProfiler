@@ -63,12 +63,21 @@ XCVMProfiler >> classify: samples [
 XCVMProfiler >> classifySample: sample [
 
 	| threadProfiler |
-	threadProfiler := threads at: sample threadId ifAbsentPut: [
-		                  | tp |
-		                  tp := XCThreadProfiler new.
-		                  pointsOfInterest do: [ :e |
-			                  tp addPointOfInterest: e ].
-		                  tp ].
+	threadProfiler := sample isFromInstruments
+		                  ifTrue: [
+			                  threads at: sample threadId ifAbsentPut: [
+				                  | tp |
+				                  tp := XCThreadProfiler new.
+				                  pointsOfInterest do: [ :e |
+					                  tp addPointOfInterest: e ].
+				                  tp ] ]
+		                  ifFalse: [
+			                  threads at: sample name ifAbsentPut: [
+				                  | tp |
+				                  tp := XCThreadProfiler new.
+				                  pointsOfInterest do: [ :e |
+					                  tp addPointOfInterest: e ].
+				                  tp ] ].
 	^ threadProfiler classifySample: sample
 ]
 
