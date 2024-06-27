@@ -43,8 +43,8 @@ XCFunctionCallPointOfInterest >> printOn: aStream [
 	aStream nextPut: $)
 ]
 
-{ #category : 'testing' }
-XCFunctionCallPointOfInterest >> wantsFrame: aXMLElement index: anInteger frames: frames [
+{ #category : 'accessing' }
+XCFunctionCallPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
-	^ functionName = (aXMLElement attributeAt: 'name')
+	^ functionName = aNameOfElement
 ]
