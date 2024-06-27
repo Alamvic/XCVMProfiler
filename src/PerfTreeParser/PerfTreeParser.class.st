@@ -105,9 +105,12 @@ PerfTreeParser >> lastSpaceAt: aLine [
 	line := self readLine: aLine.
 	lastSpace := 0.
 
-	1 to: line size do: [ :i |
-		((line at: i) = Character space or: [ (line at: i) = $- ]) ifTrue: [
-			lastSpace := i ] ].
+	2 to: line size do: [ :i |
+		(((line at: i) = Character space and: [
+			  (line at: i - 1) = Character space ]) or: [
+			 (line at: i) = $- or: [
+				 (line at: i) = Character space and: [ (line at: i - 1) = $] ] ] ])
+			ifTrue: [ lastSpace := i ] ].
 	^ lastSpace
 ]
 
@@ -127,8 +130,9 @@ PerfTreeParser >> nodeAtIndex: aNodeIndex [
 	| node |
 	node := PerfTreeNode new
 		         name: (self nameOf: aNodeIndex);
-		         weight: (self weightOf: aNodeIndex);
-		         time: self time;
+		         time: (self timeOf: aNodeIndex);
+		         totalTime: self time;
+					timeWithChildren: (self timeWithChildrenOf: aNodeIndex);
 		         yourself.
 	node children: (self findChildrenOfIndex: aNodeIndex).
 	node children do: [ :child | child parent: node ].
@@ -168,7 +172,7 @@ PerfTreeParser >> percentageOf: aLine [
 	stringLine := ((((self readLine: aLine) copyUpTo: $%) last: 5)
 		              copyWithout: $-) copyWithout: Character space.
 
-	stringLine = ((self readLine: aLine) last: 5) ifTrue: [
+	stringLine = ((self readLine: aLine) last: stringLine size) ifTrue: [
 		^ self percentageOf: aLine - 1 ].
 
 	numbers := stringLine asNumber.
@@ -230,10 +234,19 @@ PerfTreeParser >> time: aFloat [
 ]
 
 { #category : 'accessing' }
-PerfTreeParser >> weightOf: aNodeIndex [
+PerfTreeParser >> timeOf: aNodeIndex [
 
 	| newPercentage |
 	newPercentage := self realPercentageOf: aNodeIndex.
+
+	^ totalTime * (newPercentage/100) roundUpTo: 0.01
+]
+
+{ #category : 'accessing' }
+PerfTreeParser >> timeWithChildrenOf: aNodeIndex [
+
+	| newPercentage |
+	newPercentage := self percentageOf: aNodeIndex.
 
 	^ totalTime * (newPercentage/100) roundUpTo: 0.01
 ]
