@@ -3,10 +3,11 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'name',
-		'weight',
 		'children',
 		'parent',
-		'totalTime'
+		'totalTime',
+		'time',
+		'timeWithChildren'
 	],
 	#category : 'PerfTreeParser',
 	#package : 'PerfTreeParser'
@@ -51,7 +52,7 @@ PerfTreeNode >> isLeaf [
 PerfTreeNode >> isNotAlreadyLeafIn: leaves [
 
 	(leaves anySatisfy: [ :leaf |
-		 leaf name = self name and: [ leaf weight = self weight ] ])
+		 leaf name = self name and: [ leaf time = self time ] ])
 		ifTrue: [ ^ false ]
 		ifFalse: [ ^ true ]
 ]
@@ -89,11 +90,35 @@ PerfTreeNode >> parent: aTreeNode [
 { #category : 'accessing' }
 PerfTreeNode >> time [
 
-	^ totalTime
+	^ time
 ]
 
 { #category : 'accessing' }
 PerfTreeNode >> time: aFloat [
+
+	time := aFloat
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> timeWithChildren [
+
+	^ timeWithChildren
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> timeWithChildren: anObject [
+
+	timeWithChildren := anObject
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> totalTime [
+
+	^ totalTime
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> totalTime: aFloat [
 
 	totalTime := aFloat
 ]
@@ -108,18 +133,6 @@ PerfTreeNode >> traces [
 	^ leaves collect: [ :l |
 		  PerfTreeTrace new
 			  name: l name;
-			  weight: l weight;
+			  time: l time;
 			  yourself ]
-]
-
-{ #category : 'accessing' }
-PerfTreeNode >> weight [
-
-	^ weight
-]
-
-{ #category : 'accessing' }
-PerfTreeNode >> weight: aFloat [
-
-	weight := aFloat
 ]
