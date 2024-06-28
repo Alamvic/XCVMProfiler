@@ -70,10 +70,14 @@ PerfTreeParser >> findChildrenIndexOfIndex: aNodeIndex [
 	lastNodeIndex := self numberOfFunctions.
 	everyChildren := OrderedCollection new.
 
-	(self percentageOf: aNodeIndex) = (self percentageOf: aNodeIndex + 1)
-		ifTrue: [
-			everyChildren add: aNodeIndex + 1.
-			^ everyChildren ].
+	(aNodeIndex + 1 between: 1 and: self numberOfFunctions) ifFalse: [
+		^ everyChildren ].
+
+	((self percentageOf: aNodeIndex)
+	 = (self percentageOf: aNodeIndex + 1) and: [
+		 ((self readLine: aNodeIndex + 1) findString: '[') = 0 ]) ifTrue: [
+		everyChildren add: aNodeIndex + 1.
+		^ everyChildren ].
 
 	newBranch := false.
 	nodeSpaces := self numberOfSpacesAt: aNodeIndex.
