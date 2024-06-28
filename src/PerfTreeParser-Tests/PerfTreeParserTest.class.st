@@ -468,6 +468,41 @@ PerfTreeParserTest >> testPercentageOf [
 ]
 
 { #category : 'tests' }
+PerfTreeParserTest >> testRawPercentageOf [
+	"Cases with 4 digits."
+
+	self assert: (testParserSimple rawPercentageOf: 1) equals: '46.02'.
+
+	self
+		assert: testNodeSimple rawPercentage
+		equals: (testParserSimple rawPercentageOf: 1).
+
+	self
+		assert:
+		(testParserSimple rawPercentageOf:
+			 testParserSimple numberOfFunctions)
+		equals: testNodeSimple traces first rawPercentage.
+
+	"Case with 3 digits."
+	self
+		assert: (testParserMultipleChildren rawPercentageOf: 8)
+		equals: '0.53'.
+
+	self
+		assert: testNodeMultipleChildren traces last rawPercentage
+		equals: (testParserMultipleChildren rawPercentageOf: 8).
+
+	"Case with same percentage"
+	self
+		assert: (testParserSamePercentage rawPercentageOf: 4)
+		equals: (testParserSamePercentage rawPercentageOf: 5).
+
+	self
+		assert: (testParserSamePercentage rawPercentageOf: 5)
+		equals: (testParserSamePercentage rawPercentageOf: 6)
+]
+
+{ #category : 'tests' }
 PerfTreeParserTest >> testReadLine [
 
 	self
