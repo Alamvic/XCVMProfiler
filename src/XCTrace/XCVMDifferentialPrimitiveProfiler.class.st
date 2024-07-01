@@ -5,14 +5,6 @@ Class {
 	#package : 'XCTrace'
 }
 
-{ #category : 'instance creation' }
-XCVMDifferentialPrimitiveProfiler class >> onFiles: aCollection [ 
-	
-	^ self new
-		files: aCollection;
-		yourself
-]
-
 { #category : 'accessing' }
 XCVMDifferentialPrimitiveProfiler >> primitiveNames [
 	

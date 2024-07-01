@@ -28,7 +28,11 @@ XCVMDifferentialProfilerAbstract >> profiles [
 
 	^ profiles ifNil: [
 		  profiles := files collect: [ :file |
-			              XCVMProfiler default classify:
-				              (XCTraceTree fromTimeProfileFileReference: file)
-					              samples ] ]
+			              (file contents beginsWith: #<)
+				              ifTrue: [
+					              XCVMProfiler default classify:
+						              (XCTraceTree fromTimeProfileFileReference: file)
+							              samples ]
+				              ifFalse: [
+					              (PerfTreeParser parseFile: file) ] ] ]
 ]

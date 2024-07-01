@@ -14,9 +14,9 @@ XCVMDifferentialProfiler >> table [
 			    :concern |
 			    concern , String tab
 			    , (String tab join: (self profiles collect: [ :e |
-						      ((e value threads at: '2') totalTimes associations
+						      ((e value threads at: (e value threads keys second)) totalTimes associations
 							       detect: [ :a | a key name = concern ]) value ])) ]))
 	  , String crlf , String crlf , String crlf
 	  , (String tab join: (self profiles collect: [ :p |
-				    (p value threads at: '2') totalSamples asString ]))
+				    (p value threads at: (p value threads keys second)) totalSamples asString ]))
 ]
