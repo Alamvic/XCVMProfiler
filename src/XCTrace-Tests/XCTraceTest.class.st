@@ -55,7 +55,7 @@ XCTraceTest >> testContentOfProfiler [
 	|profiler names|
 	profiler := 	XCVMProfiler default classify: treeSamples.
 	names := profiler threads collect: [:p |
-		p pointsOfInterest do: [:n |
+		p pointsOfInterest keysDo: [:n |
 			{'Machine Code'.'Trampolines'.'MC -> Primitive'.'compilation'.'interpret'.'Interpreter -> Primitive'} includes: (n name)]].
 	
 ]

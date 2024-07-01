@@ -58,6 +58,13 @@ XCTraceSample >> threadId [
 ]
 
 { #category : 'api - accessing' }
+XCTraceSample >> time [
+
+	^ self sampleTime asString asNumber
+	  / (10 ** (self sampleTime size - 3))
+]
+
+{ #category : 'api - accessing' }
 XCTraceSample >> tree [
 
 	^ tree

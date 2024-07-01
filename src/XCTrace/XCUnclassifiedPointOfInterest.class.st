@@ -16,7 +16,7 @@ XCUnclassifiedPointOfInterest >> wantsFrame: aNameOfElement index: anInteger fra
 
 	^ (XCPointOfInterestAbstract subclasses select: [ :subclass |
 		   subclass ~= self class and: [
-			   subclass
+			   subclass new
 				   wantsFrame: aNameOfElement
 				   index: anInteger
 				   frames: frames ] ]) isEmpty

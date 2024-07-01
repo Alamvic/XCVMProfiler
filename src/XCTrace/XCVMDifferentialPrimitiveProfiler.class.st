@@ -11,7 +11,7 @@ XCVMDifferentialPrimitiveProfiler >> primitiveNames [
 	"Assume all will have the same primitives listed for now"
 	| oneProfile poi thread |
 	oneProfile := self profiles anyOne.
-	thread := oneProfile threads at: '2'.
+	thread := oneProfile threads at: (oneProfile threads keys second).
 	poi := thread pointOfInterestWithId: 'MC -> Primitive'.
 	^ (thread samplesForPoi: poi) collect: [:e | e primitiveName ] as: Set.
 ]
@@ -21,7 +21,7 @@ XCVMDifferentialPrimitiveProfiler >> samplesForPrimitive: aString [
 
 	^ self profiles collect: [ :oneProfile |
 		| poi thread |
-		thread := oneProfile threads at: '2'.
+		thread := oneProfile threads at: (oneProfile threads keys second).
 		poi := thread pointOfInterestWithId: 'MC -> Primitive'.
 		(thread samplesForPoi: poi) select: [ :e |
 			e primitiveName = aString ] ]

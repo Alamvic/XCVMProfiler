@@ -69,7 +69,7 @@ XCThreadProfiler >> pointOfInterestForSample: aSample [
 		               aSample traces collect: [ :trace | trace name ] ].
 
 	framesNames doWithIndex: [ :e :i |
-		pois
+		pois keys
 			detect: [ :poi | poi wantsFrame: e index: i frames: framesNames ]
 			ifFound: [ :found | ^ found ] ].
 
@@ -85,7 +85,7 @@ XCThreadProfiler >> pointOfInterestWithId: aString [
 { #category : 'accessing' }
 XCThreadProfiler >> pointsOfInterest [
 
-	^ pointsOfInterest keys copyWithout: unclassified
+	^ pointsOfInterest
 ]
 
 { #category : 'accessing' }
@@ -103,5 +103,6 @@ XCThreadProfiler >> totalSamples [
 { #category : 'as yet unclassified' }
 XCThreadProfiler >> totalTimes [
 
-	^ pointsOfInterest collect: [ :samples | samples size ]
+	^ pointsOfInterest collect: [ :samples |
+		  samples sum: [ :sample | sample time ] ]
 ]

@@ -34,5 +34,5 @@ XCVMDifferentialProfilerAbstract >> profiles [
 						              (XCTraceTree fromTimeProfileFileReference: file)
 							              samples ]
 				              ifFalse: [
-					              (PerfTreeParser parseFile: file) ] ] ]
+					              XCVMProfiler default classify: (PerfTreeParser parseFile: file) ] ] ]
 ]
