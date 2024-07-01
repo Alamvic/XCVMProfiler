@@ -61,6 +61,7 @@ jobs:
           } >> $GITHUB_OUTPUT
 
       - uses: actions/github-script@v6
+        github-token: ${{ secrets.MUTALK_PR }}
         env:
           MUTATION_REPORT: steps.mutation_report.outputs.MUTATION_REPORT
         with:
