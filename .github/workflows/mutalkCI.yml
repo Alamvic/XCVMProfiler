@@ -1,32 +1,15 @@
 name: MutalkCI
 
 on:
-  push:
-    branches: [ main ]
-    paths-ignore:
-    - 'README.md'
-    - 'resources/**'
   pull_request:
     branches: [ main ]
     paths-ignore:
     - 'README.md'
     - 'resources/**'
 
-# workflow_dispatch:
-#    inputs:
-#        mode:
-#           description: 'modes: full (run on all project), diff (run on the last commit diff), commit (especify a commit to calculate diff)'
-#          required: true
-#          default: 'diff'
-#        commit:
-#          description: 'If mode == commit, here you enter the Commid id/name/shortId to evaluate the diff'
-#          required: false
-#          default: ''
-
 jobs:
-  eventBased:
+  mutation_testing:
     runs-on: ubuntu-latest
-    if: github.event_name != 'workflow_dispatch'
     permissions:
           pull-requests: write
     steps:
@@ -79,66 +62,6 @@ jobs:
             })
 
       - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: mutation-testing-output
-          path: ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_export.json
-
-  manual:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: hpi-swa/setup-smalltalkCI@v1
-        id: smalltalkci
-        with:
-          smalltalk-image: Pharo64-stable
-
-      - run: smalltalkci -s ${{ steps.smalltalkci.outputs.smalltalk-image }}
-        shell: bash
-        timeout-minutes: 15
-        
-      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://pharo-contributions/mutalk/src" BaselineOfMuTalk
-        shell: bash
-
-      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} 
-
-#      - name: full mutation testing
-#        if: github.event.inputs.mode == 'full'
-#        run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} 
-
-#      - name: diff mutation testing
-#        if: github.event.inputs.mode == 'diff'
-#        run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}}  --diff
-
-#      - name: commit mutation testing
-#        if: github.event.inputs.mode == 'commit'
-#        run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} --commit=${{github.event.inputs.commit}}
-
-      - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
-
-      - name: Create report
-        id: report
-        run: |
-          echo 'MUTATION_REPORT<<EOF' > $GITHUB_OUTPUT
-          cat "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md" >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
-
-      - uses: actions/github-script@v6
-        env:
-          MUTATION_REPORT: steps.report.outputs.MUTATION_REPORT
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: process.env.MUTATION_REPORT
-            })
 
       - uses: actions/upload-artifact@v4
         with:
