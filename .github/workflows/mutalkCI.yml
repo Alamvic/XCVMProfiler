@@ -32,34 +32,12 @@ jobs:
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}}
         shell: bash
 
-      - name: Create report
-        id: mutation_report
-        shell: bash
-        run: |
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          {
-            echo "MUTATION_REPORT<<$EOF"
-            sed -e '$a\' "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md"
-            echo "$EOF"
-          } >> $GITHUB_OUTPUT
-
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
+          comment_tag: mut_report
           filePath: "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md"
       
-      - uses: actions/github-script@v6
-        env:
-          MUTATION_REPORT: steps.mutation_report.outputs.MUTATION_REPORT
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: process.env.MUTATION_REPORT
-            })
-
       - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
 
       - uses: actions/upload-artifact@v4
