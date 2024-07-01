@@ -164,7 +164,8 @@ PerfTreeParserTest >> setUp [
                           |          |          
                           |           --36.46%--ext4_file_read_iter
                           |                     |          
-'].
+     0.00%     0.00%  sh               [kernel.kallsyms]           [k] ghes_notify_nmi
+     0.00%     0.00%  sh               [kernel.kallsyms]           [k] nmi_cpu_backtrace'].
 
 	memoryFS / ('perf_stock_multiple_children.txt') writeStreamDo: [:stream | stream nextPutAll: '# ========
 # captured on    : Wed May 29 09:28:58 2024
@@ -347,7 +348,7 @@ PerfTreeParserTest >> testHardestCall [
 	samePercentageTraces := testNodeSamePercentage traces.
 	samePercentageTree := PerfTreeTree new traces: samePercentageTraces.
 	
-	self assert: multipleChildrenTree hardestCall name equals: '__x64_sys_read'.
+	self assert: multipleChildrenTree hardestCall name equals: '__x64_sys_read (inlined)'.
 	
 	self assert: samePercentageTree hardestCall name equals: 'ext4_file_read_iter'
 ]
@@ -494,6 +495,19 @@ PerfTreeParserTest >> testRealPercentageOf [
 	self
 		assert: (testParserSamePercentage realPercentageOf: 4)
 		equals: 0.0
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testSmallTrees [
+
+	| lastTree beforeTheLastTree |
+	lastTree := (PerfTreeParser parseFile: fileSamePercentage) last.
+	beforeTheLastTree := (PerfTreeParser parseFile: fileSamePercentage) second.
+	
+	self assert: beforeTheLastTree children isEmpty.
+	self assert: lastTree children isEmpty.
+
+	
 ]
 
 { #category : 'tests' }
