@@ -47,6 +47,25 @@ jobs:
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}}
         shell: bash
 
+      - name: Create report
+        id: report
+        run: |
+          echo 'MUTATION_REPORT<<EOF' > $GITHUB_OUTPUT
+          cat "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - uses: actions/github-script@v6
+        env:
+          MUTATION_REPORT: steps.report.outputs.MUTATION_REPORT
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: process.env.MUTATION_REPORT
+            })
+
       - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
 
       - uses: actions/upload-artifact@v4
@@ -89,6 +108,25 @@ jobs:
 #        run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} --commit=${{github.event.inputs.commit}}
 
       - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
+
+      - name: Create report
+        id: report
+        run: |
+          echo 'MUTATION_REPORT<<EOF' > $GITHUB_OUTPUT
+          cat "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - uses: actions/github-script@v6
+        env:
+          MUTATION_REPORT: steps.report.outputs.MUTATION_REPORT
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: process.env.MUTATION_REPORT
+            })
 
       - uses: actions/upload-artifact@v4
         with:
