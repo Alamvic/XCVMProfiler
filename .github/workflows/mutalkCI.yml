@@ -1,7 +1,7 @@
 name: MutalkCI
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [ main ]
     paths-ignore:
     - 'README.md'
@@ -46,6 +46,7 @@ jobs:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
+          GITHUB_TOKEN: ${{ secrets.MUTALK_PR }}
           filePath: "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md"
       
       - uses: actions/github-script@v6
