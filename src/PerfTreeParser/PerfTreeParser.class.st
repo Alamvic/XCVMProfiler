@@ -11,7 +11,7 @@ Class {
 
 { #category : 'instance creation' }
 PerfTreeParser class >> findTraces: aFile [
-
+	"Test"
 	^ (self parseFile: aFile) collect: [:tree | tree traces ]
 ]
 
