@@ -12,7 +12,7 @@ on:
     - 'README.md'
     - 'resources/**'
 
-  workflow_dispatch:
+# workflow_dispatch:
 #    inputs:
 #        mode:
 #           description: 'modes: full (run on all project), diff (run on the last commit diff), commit (especify a commit to calculate diff)'
@@ -27,6 +27,8 @@ jobs:
   eventBased:
     runs-on: ubuntu-latest
     if: github.event_name != 'workflow_dispatch'
+    permissions:
+          pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,11 +43,40 @@ jobs:
         shell: bash
         timeout-minutes: 15
 
-      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://matburnx/mutalk:-CI-not-working" BaselineOfMuTalk
+      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://pharo-contributions/mutalk/src" BaselineOfMuTalk
         shell: bash
       
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}}
         shell: bash
+
+      - name: Create report
+        id: mutation_report
+        shell: bash
+        run: |
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          {
+            echo "MUTATION_REPORT<<$EOF"
+            sed -e '$a\' "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md"
+            echo "$EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md"
+      
+      - uses: actions/github-script@v6
+        env:
+          MUTATION_REPORT: steps.mutation_report.outputs.MUTATION_REPORT
+        with:
+          github-token: ${{ secrets.MUTALK_PR }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: process.env.MUTATION_REPORT
+            })
 
       - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
 
@@ -71,7 +102,7 @@ jobs:
         shell: bash
         timeout-minutes: 15
         
-      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://matburnx/mutalk:-CI-not-working" BaselineOfMuTalk
+      - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} metacello install "github://pharo-contributions/mutalk/src" BaselineOfMuTalk
         shell: bash
 
       - run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} 
@@ -89,6 +120,25 @@ jobs:
 #        run: ${{env.SMALLTALK_CI_VM}} ${{env.SMALLTALK_CI_IMAGE}} mutalk --project=${{github.event.repository.name}} --commit=${{github.event.inputs.commit}}
 
       - run: cp ${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md $GITHUB_STEP_SUMMARY
+
+      - name: Create report
+        id: report
+        run: |
+          echo 'MUTATION_REPORT<<EOF' > $GITHUB_OUTPUT
+          cat "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - uses: actions/github-script@v6
+        env:
+          MUTATION_REPORT: steps.report.outputs.MUTATION_REPORT
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: process.env.MUTATION_REPORT
+            })
 
       - uses: actions/upload-artifact@v4
         with:
