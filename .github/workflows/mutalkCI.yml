@@ -27,6 +27,8 @@ jobs:
   eventBased:
     runs-on: ubuntu-latest
     if: github.event_name != 'workflow_dispatch'
+    permissions:
+          pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
