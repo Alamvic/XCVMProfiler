@@ -50,14 +50,16 @@ XCTraceTest >> tearDown [
 
 { #category : 'as yet unclassified' }
 XCTraceTest >> testContentOfProfiler [
-	
 	"Needs a rework."
-	|profiler names|
-	profiler := 	XCVMProfiler default classify: treeSamples.
-	names := profiler threads collect: [:p |
-		p pointsOfInterest keysDo: [:n |
-			{'Machine Code'.'Trampolines'.'MC -> Primitive'.'compilation'.'interpret'.'Interpreter -> Primitive'} includes: (n name)]].
-	
+
+	| profiler |
+	profiler := XCVMProfiler new
+		            addPointOfInterest: XCMCPointOfInterest new;
+		            classify: treeSamples.
+	self
+		assert:
+		(profiler threads keys select: [ :key | key isNotEmpty ]) size
+		equals: 1
 ]
 
 { #category : 'tests' }

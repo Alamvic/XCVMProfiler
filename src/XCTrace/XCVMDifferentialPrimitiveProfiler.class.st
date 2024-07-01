@@ -36,7 +36,7 @@ XCVMDifferentialPrimitiveProfiler >> table [
 
 	"Now tabularize"
 	lines := samplesPerPrimitive collect: [ :primitiveSamples |
-		         { primitiveSamples key }
+		         primitiveSamples key
 		         , (primitiveSamples value collect: #size) ].
 
 	^ String crlf join: (lines collect: [ :l | String tab join: l ])
