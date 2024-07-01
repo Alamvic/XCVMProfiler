@@ -12,7 +12,7 @@ on:
     - 'README.md'
     - 'resources/**'
 
-  workflow_dispatch:
+# workflow_dispatch:
 #    inputs:
 #        mode:
 #           description: 'modes: full (run on all project), diff (run on the last commit diff), commit (especify a commit to calculate diff)'
