@@ -53,7 +53,7 @@ jobs:
         run: |
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           {
-            "MUTATION_REPORT<<$EOF"
+            echo "MUTATION_REPORT<<$EOF"
             sed -e '$a\' "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md"
             echo "$EOF"
           } >> $GITHUB_OUTPUT
