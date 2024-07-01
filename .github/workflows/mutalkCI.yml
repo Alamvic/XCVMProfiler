@@ -48,7 +48,8 @@ jobs:
         shell: bash
 
       - name: Create report
-        id: report
+        id: mutation_report
+        shell: bash
         run: |
           echo 'MUTATION_REPORT<<EOF' > $GITHUB_OUTPUT
           cat "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md" >> $GITHUB_OUTPUT
@@ -56,7 +57,7 @@ jobs:
 
       - uses: actions/github-script@v6
         env:
-          MUTATION_REPORT: steps.report.outputs.MUTATION_REPORT
+          MUTATION_REPORT: steps.mutation_report.outputs.MUTATION_REPORT
         with:
           script: |
             github.rest.issues.createComment({
