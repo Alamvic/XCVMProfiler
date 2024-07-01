@@ -6,7 +6,7 @@ on:
     paths-ignore:
     - 'README.md'
     - 'resources/**'
-  pull_request_target:
+  pull_request:
     branches: [ main ]
     paths-ignore:
     - 'README.md'
@@ -60,6 +60,11 @@ jobs:
             echo "$EOF"
           } >> $GITHUB_OUTPUT
 
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md"
+      
       - uses: actions/github-script@v6
         env:
           MUTATION_REPORT: steps.mutation_report.outputs.MUTATION_REPORT
