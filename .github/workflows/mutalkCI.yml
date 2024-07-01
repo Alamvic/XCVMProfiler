@@ -54,6 +54,7 @@ jobs:
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "MUTATION_REPORT<<$EOF" > $GITHUB_OUTPUT
           cat "${{env.SMALLTALK_CI_BUILD_BASE}}/__mutalk_summary.md" >> $GITHUB_OUTPUT
+          echo $GITHUB_OUTPUT
           echo "$EOF" >> $GITHUB_OUTPUT
 
       - uses: actions/github-script@v6
