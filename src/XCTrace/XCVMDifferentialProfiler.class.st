@@ -8,22 +8,33 @@ Class {
 { #category : 'accessing' }
 XCVMDifferentialProfiler >> table [
 
-	| theKeys theValues |
-	^ (String crlf join:
-		   (#( 'Machine Code' Trampolines 'MC -> Primitive'
-		       compilation interpret 'Interpreter -> Primitive' Others ) collect: [
-			    :concern |
+	| theKeys theValues profilesNames finalTime |
+	profilesNames := #( 'Machine Code' Trampolines 'MC -> Primitive'
+	                    compilation interpret 'Interpreter -> Primitive'
+	                    Others ).
+	finalTime := 0.0.
+	^ (String crlf join: (profilesNames collect: [ :concern |
 			    concern , String tab
 			    , (String tab join: (self profiles collect: [ :e |
 						      theKeys := e threads keys select: [ :key |
 							                 key isNotEmpty and: [
 								                 ((e threads at: key) pointsOfInterest keys
-									                  select: [ :n | ((e threads at: key) pointsOfInterest at: n) isNotEmpty ]) first name = concern ] ].
+									                  select: [ :n |
+									                  ((e threads at: key) pointsOfInterest at: n)
+										                  isNotEmpty ]) first name = concern ] ].
 						      theValues := theKeys collect: [ :aKey |
 							                   (e threads at: aKey) pointsOfInterest values
 								                   select: [ :v | v isNotEmpty ] ].
-						      theValues size ])) ])) , String crlf ", String crlf
-	  , String crlf , (String tab join: (self profiles collect: [ :p |
-			    p threads keys collect: [ :key |
-				    (p value threads at: key) totalSamples asString ] ]))"
+						      theValues := theValues collect: [ :val | val first first ].
+						      finalTime := finalTime + (theValues sum: [ :val |
+							                    val isFromInstruments
+								                    ifTrue: [ val time ]
+								                    ifFalse: [
+								                    val traces sum: [ :trace | trace time ] ] ]).
+						      theValues sum: [ :val |
+							      val isFromInstruments
+								      ifTrue: [ val time ]
+								      ifFalse: [ val traces sum: [ :trace | trace time ] ] ] ])) ]))
+	  , String crlf , String crlf , String crlf , 'Total' , String tab
+	  , finalTime asString
 ]
