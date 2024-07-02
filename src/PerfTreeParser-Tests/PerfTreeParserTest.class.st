@@ -270,7 +270,6 @@ PerfTreeParserTest >> tearDown [
 
 { #category : 'tests' }
 PerfTreeParserTest >> testDifferenceOfSpacesAt [
-	"Classical case"
 
 	self
 		assert: (testParserSamePercentage differenceOfSpacesAt: 6)
@@ -286,25 +285,37 @@ PerfTreeParserTest >> testDifferenceOfSpacesAt [
 
 { #category : 'tests' }
 PerfTreeParserTest >> testFindChildrenIndexOfIndex [
-	"The last has no children"
-
-	self assert: (testParserSimple findChildrenIndexOfIndex:
-			 testParserSimple numberOfFunctions) isEmpty.
-
-	"Case where 2 functions have the same number of spaces."
-	self
-		assert: (testParserSimple findChildrenIndexOfIndex: 3)
-		equals: { 4 } asOrderedCollection.
-
 	"Classical case"
+
 	self
 		assert: (testParserSamePercentage findChildrenIndexOfIndex: 5)
-		equals: { 6 } asOrderedCollection.
+		equals: { 6 } asOrderedCollection
+]
 
+{ #category : 'tests' }
+PerfTreeParserTest >> testFindChildrenIndexOfIndexWithMutltipleChildren [
 	"Multiple children"
+
 	self
 		assert: (testParserMultipleChildren findChildrenIndexOfIndex: 3)
 		equals: { 4. 5. 8 } asOrderedCollection
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testFindChildrenIndexOfIndexWithNoChildren [
+	"The last has no children"
+
+	self assert: (testParserSimple findChildrenIndexOfIndex:
+			 testParserSimple numberOfFunctions) isEmpty
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testFindChildrenIndexOfIndexWithSameNumberOfSpaces [
+	"Case where 2 functions have the same number of spaces."
+
+	self
+		assert: (testParserSimple findChildrenIndexOfIndex: 3)
+		equals: { 4 } asOrderedCollection
 ]
 
 { #category : 'tests' }
@@ -358,12 +369,21 @@ PerfTreeParserTest >> testIsLeaf [
 
 	| example |
 	example := testNodeSimple firstChild firstChild.
-	
+
 	self assert: example isLeaf not.
+
+	self assert: example children first isLeaf
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testIsNotLeaf [
+
+	| example |
+	example := testNodeSimple firstChild firstChild.
+
 	self assert: example isNotLeaf.
-	
-	self assert: example children first isLeaf.
-	self assert: example children first isNotLeaf not.
+
+	self assert: example children first isNotLeaf not
 ]
 
 { #category : 'tests' }
@@ -451,14 +471,22 @@ PerfTreeParserTest >> testPercentageOf [
 	self
 		assert:
 		(testParserSimple percentageOf: testParserSimple numberOfFunctions)
-		equals: 36.78.
+		equals: 36.78
+]
 
+{ #category : 'tests' }
+PerfTreeParserTest >> testPercentageOfWith3Digits [
 	"Case with 3 digits."
+
 	self
 		assert: (testParserMultipleChildren percentageOf: 8)
-		equals: 0.53.
+		equals: 0.53
+]
 
+{ #category : 'tests' }
+PerfTreeParserTest >> testPercentageOfWithSamePercentage [
 	"Case with same percentage"
+
 	self
 		assert: (testParserSamePercentage percentageOf: 4)
 		equals: (testParserSamePercentage percentageOf: 5).
@@ -484,16 +512,25 @@ PerfTreeParserTest >> testRawPercentageOf [
 			 testParserSimple numberOfFunctions)
 		equals: testNodeSimple traces first rawPercentage.
 
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testRawPercentageOfWith3Digits [
 	"Case with 3 digits."
+
 	self
 		assert: (testParserMultipleChildren rawPercentageOf: 8)
 		equals: '0.53'.
 
 	self
 		assert: testNodeMultipleChildren traces last rawPercentage
-		equals: (testParserMultipleChildren rawPercentageOf: 8).
+		equals: (testParserMultipleChildren rawPercentageOf: 8)
+]
 
+{ #category : 'tests' }
+PerfTreeParserTest >> testRawPercentageOfWithSamePercentage [
 	"Case with same percentage"
+
 	self
 		assert: (testParserSamePercentage rawPercentageOf: 4)
 		equals: (testParserSamePercentage rawPercentageOf: 5).
@@ -596,17 +633,36 @@ PerfTreeParserTest >> testTraces [
 	traces := (PerfTreeParser findTraces: fileSimple) first.
 	multipleTraces := testNodeMultipleChildren traces.
 
-	self assert: traces size equals: 1.
-
 	self assert: traces first name equals: '__x64_sys_read'.
 
-	self assert: traces first time equals: 146.24.
+	self
+		assert: multipleTraces first name
+		equals: '__x64_sys_read (inlined)'.
+
+	self assert: multipleTraces last name equals: 'do_sys_openat2'
+]
+
+{ #category : 'tests' }
+PerfTreeParserTest >> testTracesNumber [
+
+	| traces multipleTraces |
+	traces := (PerfTreeParser findTraces: fileSimple) first.
+	multipleTraces := testNodeMultipleChildren traces.
+
+	self assert: traces size equals: 1.
 
 	self assert: multipleTraces size equals: 3.
 
-	self assert: multipleTraces first name equals: '__x64_sys_read (inlined)'.
+]
 
-	self assert: multipleTraces last name equals: 'do_sys_openat2'.
+{ #category : 'tests' }
+PerfTreeParserTest >> testTracesTime [
+
+	| traces multipleTraces |
+	traces := (PerfTreeParser findTraces: fileSimple) first.
+	multipleTraces := testNodeMultipleChildren traces.
+
+	self assert: traces first time equals: 146.24.
 
 	self assert: multipleTraces last time equals: 2.11
 ]
