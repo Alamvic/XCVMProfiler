@@ -7,7 +7,8 @@ Class {
 		'parent',
 		'totalTime',
 		'time',
-		'timeWithChildren'
+		'timeWithChildren',
+		'rawPercentage'
 	],
 	#category : 'PerfTreeParser',
 	#package : 'PerfTreeParser'
@@ -88,6 +89,18 @@ PerfTreeNode >> parent: aTreeNode [
 ]
 
 { #category : 'accessing' }
+PerfTreeNode >> rawPercentage [
+
+	^ rawPercentage
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> rawPercentage: anObject [
+
+	rawPercentage := anObject
+]
+
+{ #category : 'accessing' }
 PerfTreeNode >> time [
 
 	^ time
@@ -134,5 +147,6 @@ PerfTreeNode >> traces [
 		  PerfTreeTrace new
 			  name: l name;
 			  time: l time;
+			  rawPercentage: l rawPercentage;
 			  yourself ]
 ]

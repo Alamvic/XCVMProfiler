@@ -137,6 +137,7 @@ PerfTreeParser >> nodeAtIndex: aNodeIndex [
 		         time: (self timeOf: aNodeIndex);
 		         totalTime: self time;
 					timeWithChildren: (self timeWithChildrenOf: aNodeIndex);
+					rawPercentage: (self rawPercentageOf: aNodeIndex);
 		         yourself.
 	node children: (self findChildrenOfIndex: aNodeIndex).
 	node children do: [ :child | child parent: node ].
@@ -165,23 +166,37 @@ PerfTreeParser >> numberOfSpacesAt: aNodeIndex [
 ]
 
 { #category : 'accessing' }
-PerfTreeParser >> percentageOf: aLine [
+PerfTreeParser >> percentageOf: aLineIndex [
 	"Gives the percentage from a function at a given line"
 
 	"In the case of multiples functions for one percentage, it gives the same percentage to every functions."
 
 	| stringLine numbers |
-	(aLine between: 1 and: self numberOfFunctions) ifFalse: [ ^ 0 ].
+	stringLine := self rawPercentageOf: aLineIndex.
 
-	stringLine := ((((self readLine: aLine) copyUpTo: $%) last: 5)
-		              copyWithout: $-) copyWithout: Character space.
-
-	stringLine = ((self readLine: aLine) last: stringLine size) ifTrue: [
-		^ self percentageOf: aLine - 1 ].
+	stringLine ifEmpty: [ ^ 0 ].
 
 	numbers := stringLine asNumber.
 
 	^ numbers
+]
+
+{ #category : 'accessing' }
+PerfTreeParser >> rawPercentageOf: aLine [
+	"Gives the percentage from a function at a given line"
+
+	"In the case of multiples functions for one percentage, it gives the same percentage to every functions."
+
+	| stringLine |
+	(aLine between: 1 and: self numberOfFunctions) ifFalse: [ ^ '' ].
+
+	stringLine := ((((self readLine: aLine) copyUpTo: $%) last: 5)
+		               copyWithout: $-) copyWithout: Character space.
+
+	stringLine = ((self readLine: aLine) last: stringLine size) ifTrue: [
+		^ self rawPercentageOf: aLine - 1 ].
+
+	^ stringLine
 ]
 
 { #category : 'accessing' }
