@@ -13,7 +13,7 @@ PerfTreeTree >> hardestCall [
 
 	| hardest |
 	traces ifEmpty: [ ^ nil ] ifNotEmpty: [ hardest := traces first ].
-	traces do: [:trace | trace time > hardest time ifTrue: [ hardest := trace ] ].
+	traces do: [:trace | trace rawPercentage asNumber > hardest rawPercentage asNumber ifTrue: [ hardest := trace ] ].
 	^ hardest
 ]
 
