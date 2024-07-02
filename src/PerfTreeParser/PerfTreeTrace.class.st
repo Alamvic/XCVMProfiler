@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'name',
-		'time'
+		'time',
+		'rawPercentage'
 	],
 	#category : 'PerfTreeParser',
 	#package : 'PerfTreeParser'
@@ -19,6 +20,18 @@ PerfTreeTrace >> name [
 PerfTreeTrace >> name: aName [
 
 	name := aName
+]
+
+{ #category : 'accessing' }
+PerfTreeTrace >> rawPercentage [
+
+	^ rawPercentage
+]
+
+{ #category : 'accessing' }
+PerfTreeTrace >> rawPercentage: anObject [
+
+	rawPercentage := anObject
 ]
 
 { #category : 'accessing' }
