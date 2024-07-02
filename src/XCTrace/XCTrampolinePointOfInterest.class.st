@@ -15,5 +15,5 @@ XCTrampolinePointOfInterest >> name [
 XCTrampolinePointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
 	^ (aNameOfElement beginsWith: 'ce') and: [
-		  (aNameOfElement at: 3) isUppercase ]
+		  aNameOfElement third isUppercase ]
 ]

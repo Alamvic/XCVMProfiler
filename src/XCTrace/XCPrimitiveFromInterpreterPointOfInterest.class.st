@@ -18,6 +18,6 @@ XCPrimitiveFromInterpreterPointOfInterest >> wantsFrame: aNameOfElement index: a
 		  | callerName |
 		  callerName := frames at: anInteger + 1.
 		  ((callerName beginsWith: '0x') or: [
-			   (callerName beginsWith: 'ce') and: callerName third isUppercase ])
+			   (callerName beginsWith: 'ce') and: [callerName third isUppercase] ])
 			  not ]
 ]
