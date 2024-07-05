@@ -12,7 +12,7 @@ Class {
 { #category : 'instance creation' }
 PerfTreeParser class >> findTraces: aFile [
 
-	^ (self parseFile: aFile) collect: [:tree | tree traces ]
+	^ (self parseFile: aFile) collect: [:tree | tree traces + 1 ]
 ]
 
 { #category : 'instance creation' }
