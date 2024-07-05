@@ -8,4 +8,5 @@ on:
     - 'resources/**'
 
 jobs:
-  uses: pharo-contributions/mutalk/.github/workflows/mutalk-workflow.yml
+  mutation_testing:
+    uses: pharo-contributions/mutalk/.github/workflows/mutalk-workflow.yml
