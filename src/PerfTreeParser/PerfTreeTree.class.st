@@ -11,6 +11,7 @@ Class {
 { #category : 'accessing' }
 PerfTreeTree >> hardestCall [
 
+	"Comment"
 	| hardest |
 	traces ifEmpty: [ ^ nil ] ifNotEmpty: [ hardest := traces first ].
 	traces do: [:trace | trace rawPercentage asNumber > hardest rawPercentage asNumber ifTrue: [ hardest := trace ] ].
