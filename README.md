@@ -52,8 +52,3 @@ traces := node traces.
 "You can use `fromFile:` if you want to play with the parser"
 parser := PerfTreeParser fromFile: fr
 ```
-traces := node traces.
-
-"You can use `fromFile:` if you want to play with the parser"
-parser := PerfTreeParser fromFile: fr
-```
