@@ -9,4 +9,4 @@ on:
 
 jobs:
   mutation_testing:
-    uses: pharo-contributions/mutalk/.github/workflows/mutalk-workflow.yml
+    uses: pharo-contributions/mutalk/.github/workflows/mutalk-workflow.yml@master
