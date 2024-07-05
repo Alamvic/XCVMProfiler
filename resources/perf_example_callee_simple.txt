@@ -1,0 +1,67 @@
+# ========
+# captured on    : Thu Jul  4 10:38:02 2024
+# header version : 1
+# data offset    : 352
+# data size      : 197273944
+# feat offset    : 197274296
+# hostname : matburnx-laptop
+# os release : 6.9.3-76060903-generic
+# perf version : 6.9.3
+# arch : x86_64
+# nrcpus online : 12
+# nrcpus avail : 12
+# cpudesc : AMD Ryzen 5 4600H with Radeon Graphics
+# cpuid : AuthenticAMD,23,96,1
+# total memory : 15776048 kB
+# cmdline : /usr/lib/linux-tools-6.9.3-76060903/perf record --no-buffering -g --call-graph=dwarf -- ./script.sh --all-user 
+# event : name = cycles:P, , id = { 1684, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1692, 1693, 1694, 1695 }, type = 0 (PERF_TYPE_HARDWARE), size = 136, config = 0 (PERF_COUNT_HW_CPU_CYCLES), { sample_period, sample_freq } = 4000, sample_type = IP|TID|TIME|ADDR|CALLCHAIN|PERIOD|REGS_USER|STACK_USER|DATA_SRC, read_format = ID|LOST, disabled = 1, inherit = 1, mmap = 1, comm = 1, freq = 1, enable_on_exec = 1, task = 1, precise_ip = 2, mmap_data = 1, sample_id_all = 1, exclude_callchain_user = 1, mmap2 = 1, comm_exec = 1, ksymbol = 1, bpf_event = 1, { wakeup_events, wakeup_watermark } = 1, sample_regs_user = 0xff0fff, sample_stack_user = 8192
+# CPU_TOPOLOGY info available, use -I to display
+# NUMA_TOPOLOGY info available, use -I to display
+# pmu mappings: cpu = 4, amd_iommu_0 = 12, breakpoint = 5, ibs_fetch = 10, ibs_op = 11, kprobe = 8, msr = 13, power = 14, software = 1, tracepoint = 2, uprobe = 9
+# CACHE info available, use -I to display
+# time of first sample : 4882.047629
+# time of last sample : 4887.986708
+# sample duration :   5939.078 ms
+# MEM_TOPOLOGY info available, use -I to display
+# bpf_prog_info 2: bpf_prog_7cc47bbf07148bfe_hid_tail_call addr 0xffffffffc015e958 size 126
+# bpf_prog_info 5: bpf_prog_e3dbd137be8d6168 addr 0xffffffffc015eb38 size 313
+# bpf_prog_info 6: bpf_prog_6deef7357e7b4530 addr 0xffffffffc015ecb8 size 58
+# bpf_prog_info 7: bpf_prog_6deef7357e7b4530 addr 0xffffffffc015ed10 size 58
+# bpf_prog_info 8: bpf_prog_0ecd07b7b633809f addr 0xffffffffc0160e18 size 780
+# bpf_prog_info 9: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0161148 size 94
+# bpf_prog_info 10: bpf_prog_6deef7357e7b4530 addr 0xffffffffc01611cc size 94
+# bpf_prog_info 11: bpf_prog_ee0e253c78993a24 addr 0xffffffffc0168b14 size 667
+# bpf_prog_info 12: bpf_prog_ee0e253c78993a24 addr 0xffffffffc0169010 size 673
+# bpf_prog_info 13: bpf_prog_8b9c33f36f812014 addr 0xffffffffc016b494 size 1111
+# bpf_prog_info 14: bpf_prog_6deef7357e7b4530 addr 0xffffffffc016b918 size 95
+# bpf_prog_info 15: bpf_prog_6deef7357e7b4530 addr 0xffffffffc016b998 size 95
+# bpf_prog_info 19: bpf_prog_6deef7357e7b4530 addr 0xffffffffc01732d4 size 95
+# bpf_prog_info 20: bpf_prog_6deef7357e7b4530 addr 0xffffffffc0173358 size 95
+# bpf_prog_info 21: bpf_prog_28a890580b33b0dc addr 0xffffffffc0176aac size 873
+# bpf_prog_info 22: bpf_prog_ee0e253c78993a24 addr 0xffffffffc0177488 size 677
+# bpf_prog_info 26: bpf_prog_9705fcac2e5a1fc2_syscall__execve addr 0xffffffffc0195798 size 5366
+# bpf_prog_info 27: bpf_prog_7f9f8929ef94c0a5_do_ret_sys_execve addr 0xffffffffc0196ce8 size 592
+# btf info of id 5
+# btf info of id 192
+# cpu pmu capabilities: max_precise=0
+# AMD systems uses ibs_op// PMU for some precise events, e.g.: cycles:p, see the 'perf list' man page for further details.
+# missing features: (null) BRANCH_STACK GROUP_DESC AUXTRACE STAT CLOCKID DIR_FORMAT COMPRESSED CLOCK_DATA HYBRID_TOPOLOGY 
+# ========
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 23K of event 'cycles:P'
+# Event count (approx.): 10666908531
+#
+# Children      Self  Command          Shared Object                                Symbol                                                                                            
+# ........  ........  ...............  ...........................................  ..................................................................................................
+#
+     3.31%     0.02%  pharo            [kernel.kallsyms]                            [k] do_syscall_64
+            |          
+             --3.29%--do_syscall_64
+                       |          
+                        --3.29%--entry_SYSCALL_64_after_hwframe
+                                  |          
+                                   --2.12%--__GI___libc_read (inlined)
+
