@@ -99,10 +99,3 @@ XCThreadProfiler >> totalSamples [
 	
 	^ pointsOfInterest sum: [ :e | e size ]
 ]
-
-{ #category : 'as yet unclassified' }
-XCThreadProfiler >> totalTimes [
-
-	^ pointsOfInterest collect: [ :samples |
-		  samples sum: [ :sample | sample time ] ]
-]
