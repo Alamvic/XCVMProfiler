@@ -60,8 +60,8 @@ XCTraceSample >> threadId [
 { #category : 'api - accessing' }
 XCTraceSample >> time [
 
-	^ self sampleTime asString asNumber
-	  / (10 ** (self sampleTime size - 3))
+	^ (self sampleTime asString asNumber
+	  / (10 ** (self sampleTime size - 3))) asFloat 
 ]
 
 { #category : 'api - accessing' }

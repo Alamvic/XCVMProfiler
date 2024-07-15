@@ -8,11 +8,10 @@ Class {
 { #category : 'accessing' }
 XCVMDifferentialProfiler >> table [
 
-	| theKeys theValues profilesNames finalTime |
+	| theKeys theValues profilesNames categoryTime finalTime |
 	profilesNames := #( 'Machine Code' Trampolines 'MC -> Primitive'
-	                    compilation interpret 'Interpreter -> Primitive'
-	                    Others ).
-	finalTime := 0.0.
+	                    compilation interpret 'Interpreter -> Primitive' ).
+	finalTime := 0 asFloat.
 	^ (String crlf join: (profilesNames collect: [ :concern |
 			    concern , String tab
 			    , (String tab join: (self profiles collect: [ :e |
@@ -26,15 +25,14 @@ XCVMDifferentialProfiler >> table [
 							                   (e threads at: aKey) pointsOfInterest values
 								                   select: [ :v | v isNotEmpty ] ].
 						      theValues := theValues collect: [ :val | val first first ].
-						      finalTime := finalTime + (theValues sum: [ :val |
-							                    val isFromInstruments
-								                    ifTrue: [ val time ]
-								                    ifFalse: [
-								                    val traces sum: [ :trace | trace time ] ] ]).
-						      theValues sum: [ :val |
-							      val isFromInstruments
-								      ifTrue: [ val time ]
-								      ifFalse: [ val traces sum: [ :trace | trace time ] ] ] ])) ]))
-	  , String crlf , String crlf , String crlf , 'Total' , String tab
-	  , finalTime asString
+
+						      categoryTime := theValues sum: [ :val |
+							                      val isFromInstruments
+								                      ifTrue: [ val time ]
+								                      ifFalse: [
+								                      val traces sum: [ :trace | trace time ] ] ].
+
+						      finalTime := finalTime + categoryTime.
+						      categoryTime ])) ])) , String crlf , String crlf
+	  , String crlf , 'Total' , String tab , finalTime asString
 ]

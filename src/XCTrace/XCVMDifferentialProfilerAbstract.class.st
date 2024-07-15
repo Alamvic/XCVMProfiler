@@ -36,3 +36,8 @@ XCVMDifferentialProfilerAbstract >> profiles [
 				              ifFalse: [
 					              XCVMProfiler default classify: (PerfTreeParser parseFile: file) ] ] ]
 ]
+
+{ #category : 'as yet unclassified' }
+XCVMDifferentialProfilerAbstract >> table [
+	^ self subclassResponsibility
+]

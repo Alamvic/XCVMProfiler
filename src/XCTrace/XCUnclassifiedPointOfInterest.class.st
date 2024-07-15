@@ -14,10 +14,10 @@ XCUnclassifiedPointOfInterest >> name [
 { #category : 'accessing' }
 XCUnclassifiedPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
-	^ (XCPointOfInterestAbstract subclasses select: [ :subclass |
+	^ false "(XCPointOfInterestAbstract subclasses select: [ :subclass |
 		   subclass ~= self class and: [
 			   subclass new
 				   wantsFrame: aNameOfElement
 				   index: anInteger
-				   frames: frames ] ]) isEmpty
+				   frames: frames ] ]) isEmpty"
 ]
