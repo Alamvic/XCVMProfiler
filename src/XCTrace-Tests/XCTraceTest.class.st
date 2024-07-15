@@ -48,7 +48,7 @@ XCTraceTest >> tearDown [
 	super tearDown.
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 XCTraceTest >> testContentOfProfiler [
 	"Needs a rework."
 
@@ -68,8 +68,29 @@ XCTraceTest >> testFrameIsNotEmpty [
 ]
 
 { #category : 'tests' }
+XCTraceTest >> testIsFromInstruments [
+
+	self assert: treeSamples anyOne isFromInstruments
+]
+
+{ #category : 'tests' }
 XCTraceTest >> testNameOfASample [
 	self assert: ((treeSamples second stackTrace frameNameAt: 10) asString sameAs: 'dyld4::Loader::getLoader(Diagnostics&, dyld4::RuntimeState&, char const*, dyld4::Loader::LoadOptions const&)').
+]
+
+{ #category : 'tests' }
+XCTraceTest >> testProfilerTable [
+	"For now primitive profile doesnt work properly"
+
+	"The test for it is therefore pretty weak"
+
+	| profile primitiveProfile |
+	profile := XCVMDifferentialProfiler onFiles: { fr }.
+	primitiveProfile := XCVMDifferentialPrimitiveProfiler onFiles: { fr }.
+
+	self assert: (profile table first: 12) equals: 'Machine Code'.
+
+	self assert: primitiveProfile table isString
 ]
 
 { #category : 'tests' }
@@ -84,13 +105,13 @@ XCTraceTest >> testSamplesWeight [
 
 ]
 
-{ #category : 'basic tests' }
+{ #category : 'tests' }
 XCTraceTest >> testSizeOfEmptySample [
 	self assert: treeEmpty samples size equals: 0.
 	
 ]
 
-{ #category : 'basic tests' }
+{ #category : 'tests' }
 XCTraceTest >> testSizeOfSamplesWithContent [
 	self assert: tree samples size equals: 2.
 	
