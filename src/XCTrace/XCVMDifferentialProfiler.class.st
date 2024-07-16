@@ -12,6 +12,7 @@ XCVMDifferentialProfiler >> table [
 	profilesNames := #( 'Machine Code' Trampolines 'MC -> Primitive'
 	                    compilation interpret 'Interpreter -> Primitive' ).
 	finalTime := 0 asFloat.
+
 	^ (String crlf join: (profilesNames collect: [ :concern |
 			    concern , String tab
 			    , (String tab join: (self profiles collect: [ :e |
