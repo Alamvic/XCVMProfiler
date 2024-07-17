@@ -2,7 +2,10 @@ Class {
 	#name : 'VMBenchSQLTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'getter'
+		'getter',
+		'testClient',
+		'testContent',
+		'testExporter'
 	],
 	#category : 'VMBenchSQL-Tests',
 	#package : 'VMBenchSQL-Tests'
@@ -11,9 +14,8 @@ Class {
 { #category : 'running' }
 VMBenchSQLTest >> setUp [
 
-	| str |
 	super setUp.
-	str := 'Machine Code	10687.13
+	testContent := 'Machine Code	10687.13
 Trampolines	110.71
 MC -> Primitive	0
 compilation	49.61
@@ -22,14 +24,44 @@ Interpreter -> Primitive	96.79
 
 
 Total	10944.24'.
-	
-	getter := VMBenchGetter fromContent: str
+
+	getter := VMBenchGetter fromContent: testContent.
+	testClient := P3Client new url:
+		              'psql://postgres:postgres@localhost:5432/postgres'.
+	testClient connect.
+
+	testExporter := VMBenchSQLExporter new
+		                client: testClient;
+		                content: getter structuredContent;
+		                timeStamp: Date today yyyymmdd;
+		                tableName: 'bench';
+		                yourself
 ]
 
 { #category : 'running' }
 VMBenchSQLTest >> tearDown [
 
+	testClient execute: 'DROP TABLE IF EXISTS ' , 'bench'.
+	testClient close.
 	super tearDown
+]
+
+{ #category : 'running' }
+VMBenchSQLTest >> testExport [
+
+	self
+		assert: testExporter export first second
+		equals: testExporter export second second.
+
+	self assert: testExporter export second first equals: 2
+]
+
+{ #category : 'running' }
+VMBenchSQLTest >> testExportSize [
+
+	self assert: testExporter export size equals: 7.
+
+	self assert: testExporter export first size equals: 5
 ]
 
 { #category : 'running' }

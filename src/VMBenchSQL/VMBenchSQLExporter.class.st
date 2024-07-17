@@ -22,13 +22,19 @@ VMBenchSQLExporter class >> fromContent: aStructuredContent WithUser: aUserName 
 		yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 VMBenchSQLExporter >> client [
 
 	^ client
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
+VMBenchSQLExporter >> client: aClient [
+
+	client := aClient
+]
+
+{ #category : 'accessing' }
 VMBenchSQLExporter >> clientWithUserName: aUserName [
 
 	client := P3Client new url: 'psql://' , aUserName , '@localhost'.
@@ -56,19 +62,25 @@ VMBenchSQLExporter >> export [
 		,
 		' (id int, bench_id int, timestamp date, profile varchar(30), value real);'.
 
-	lastData := (client query: 'SELECT * FROM ' , tableName) data last.
+	(client query: 'SELECT * FROM ' , tableName) data
+		ifNotEmpty: [
+			lastData := (client query: 'SELECT * FROM ' , tableName) data last.
 
-	lastBenchId := lastData second.
-	newBenchId := lastBenchId + 1.
+			lastBenchId := lastData second.
+			newBenchId := lastBenchId + 1.
 
-	lastId := lastData first.
-	newId := lastId + 1.
+			lastId := lastData first.
+			newId := lastId + 1 ]
+		ifEmpty: [
+			newBenchId := 1.
+			newId := 1 ].
+
 
 	content keysDo: [ :key |
 		client execute:
-			('INSERT INTO ' , tableName , ' VALUES (' , newId asString , ', '
-			, newBenchId asString , ', ''' , timeStamp , ''' , ''' , key asString , ''' ,'
-			, (content at: key) asString , ');').
+			'INSERT INTO ' , tableName , ' VALUES (' , newId asString , ', '
+			, newBenchId asString , ', ''' , timeStamp , ''' , '''
+			, key asString , ''' ,' , (content at: key) asString , ');'.
 		newId := newId + 1 ].
 
 	^ (client query: 'SELECT * FROM ' , tableName) data
