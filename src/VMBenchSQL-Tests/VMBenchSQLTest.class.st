@@ -13,7 +13,7 @@ VMBenchSQLTest >> setUp [
 
 	| str |
 	super setUp.
-	str := 'Machine Code	10687.130000000005
+	str := 'Machine Code	10687.13
 Trampolines	110.71
 MC -> Primitive	0
 compilation	49.61
@@ -21,7 +21,7 @@ interpret	0
 Interpreter -> Primitive	96.79
 
 
-Total	10944.240000000005'.
+Total	10944.24'.
 	
 	getter := VMBenchGetter fromContent: str
 ]
@@ -42,9 +42,9 @@ VMBenchSQLTest >> testSizeOfStructuredContent [
 { #category : 'running' }
 VMBenchSQLTest >> testStructuredContent [
 
-	self assert: (getter structuredContent at: ' MC -> Primitive') isZero.
+	self assert: (getter structuredContent at: 'MC -> Primitive') isZero.
 
 	self
-		assert: (getter structuredContent at: ' compilation')
+		assert: (getter structuredContent at: 'compilation')
 		equals: 49.61
 ]

@@ -14,7 +14,7 @@ VMBenchGetter class >> fromContent: aTableContent [
 
 	^ self new
 		originalContent: aTableContent;
-		timeStamp: Date today;
+		timeStamp: Date today yyyymmdd;
 		yourself
 ]
 
@@ -45,7 +45,10 @@ VMBenchGetter >> structuredContent [
 
 	2 to: subs size do: [ :i |
 		(subs at: i) first asString isAllDigits not
-			ifTrue: [ newSubs at: j put: (newSubs at: j) , ' ' , (subs at: i) ]
+			ifTrue: [
+				newSubs at: j put: ((newSubs at: j)
+						 ifEmpty: [ (newSubs at: j) , (subs at: i) ]
+						 ifNotEmpty: [ (newSubs at: j) , ' ' , (subs at: i) ]) ]
 			ifFalse: [
 				newSubs add: (subs at: i).
 				i ~= subs size ifTrue: [ newSubs add: '' ].
@@ -53,7 +56,7 @@ VMBenchGetter >> structuredContent [
 
 	dictContent := Dictionary new.
 	1 to: newSubs size by: 2 do: [ :i |
-	dictContent at: (newSubs at: i) put: (newSubs at: i + 1) asNumber ].
+		dictContent at: (newSubs at: i) put: (newSubs at: i + 1) asNumber ].
 
 	^ dictContent
 ]
