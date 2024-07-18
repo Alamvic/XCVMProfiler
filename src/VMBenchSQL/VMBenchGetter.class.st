@@ -19,10 +19,6 @@ VMBenchGetter class >> fromContent: aTableContent [
 ]
 
 { #category : 'accessing' }
-VMBenchGetter >> exportToSQLDatabase [
-]
-
-{ #category : 'accessing' }
 VMBenchGetter >> originalContent [
 
 	^ originalContent
