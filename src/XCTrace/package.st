@@ -1,1 +1,1 @@
-Package { #name : #XCTrace }
+Package { #name : 'XCTrace' }

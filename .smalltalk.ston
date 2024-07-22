@@ -9,6 +9,11 @@ SmalltalkCISpec {
       #baseline : 'PerfTreeParser',
       #directory : 'src',
       #platforms : [ #pharo ]
+    },
+    SCIMetacelloLoadSpec {
+      #baseline : 'VMBenchSQL',
+      #directory : 'src',
+      #platforms : [ #pharo ]
     }
   ]
 }
