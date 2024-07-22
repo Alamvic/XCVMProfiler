@@ -2,7 +2,6 @@ Class {
 	#name : 'VMBenchSQLTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'getter',
 		'testClient',
 		'testContent',
 		'testExporter'
@@ -70,15 +69,15 @@ VMBenchSQLTest >> testExportSize [
 VMBenchSQLTest >> testSizeOfStructuredContent [
 	"There are 6 categories plus the Total category."
 
-	self assert: getter structuredContent size equals: 7
+	self assert: testExporter content size equals: 7
 ]
 
 { #category : 'running' }
 VMBenchSQLTest >> testStructuredContent [
 
-	self assert: (getter structuredContent at: 'MC -> Primitive') isZero.
+	self assert: (testExporter content at: 'MC -> Primitive') isZero.
 
 	self
-		assert: (getter structuredContent at: 'compilation')
+		assert: (testExporter content at: 'compilation')
 		equals: 49.61
 ]

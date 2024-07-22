@@ -49,12 +49,6 @@ VMBenchSQLExporter >> content [
 ]
 
 { #category : 'accessing' }
-VMBenchSQLExporter >> content: anObject [
-
-	content := anObject
-]
-
-{ #category : 'accessing' }
 VMBenchSQLExporter >> data [
 
 	^ (client query: 'SELECT * FROM ' , tableName) data
@@ -121,7 +115,6 @@ VMBenchSQLExporter >> newId [
 VMBenchSQLExporter >> structuredContent: aContent [
 
 	| subs newSubs j |
-
 	subs := aContent substrings.
 	newSubs := OrderedCollection new.
 	newSubs add: subs first.
@@ -140,7 +133,7 @@ VMBenchSQLExporter >> structuredContent: aContent [
 
 	content := Dictionary new.
 	1 to: newSubs size by: 2 do: [ :i |
-		content at: (newSubs at: i) put: (newSubs at: i + 1) asNumber ].
+	content at: (newSubs at: i) put: (newSubs at: i + 1) asNumber ].
 
 	^ content
 ]
