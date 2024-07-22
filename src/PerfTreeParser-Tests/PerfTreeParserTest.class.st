@@ -19,9 +19,7 @@ Class {
 
 { #category : 'running' }
 PerfTreeParserTest >> setUp [
-	"Commands ran:"
-	"sudo perf record -g --call-graph=dwarf -- ./script2.sh --all-user"
-	"sudo perf report --header --stdio > perf_example.txt"
+	"For the commands ran, look at the README"
 
 	super setUp.
 	memoryFS := FileSystem memory.
