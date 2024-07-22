@@ -68,12 +68,6 @@ XCTraceTest >> testFrameIsNotEmpty [
 ]
 
 { #category : 'tests' }
-XCTraceTest >> testIsFromInstruments [
-
-	self assert: treeSamples anyOne isFromInstruments
-]
-
-{ #category : 'tests' }
 XCTraceTest >> testNameOfASample [
 	self assert: ((treeSamples second stackTrace frameNameAt: 10) asString sameAs: 'dyld4::Loader::getLoader(Diagnostics&, dyld4::RuntimeState&, char const*, dyld4::Loader::LoadOptions const&)').
 ]

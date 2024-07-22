@@ -63,21 +63,12 @@ VMProfiler >> classify: samples [
 VMProfiler >> classifySample: sample [
 
 	| threadProfiler |
-	threadProfiler := sample isFromInstruments
-		                  ifTrue: [
-			                  threads at: sample threadId ifAbsentPut: [
+	threadProfiler := threads at: sample sampleName ifAbsentPut: [
 				                  | tp |
 				                  tp := VMThreadProfiler new.
 				                  pointsOfInterest do: [ :e |
 					                  tp addPointOfInterest: e ].
-				                  tp ] ]
-		                  ifFalse: [
-			                  threads at: sample name ifAbsentPut: [
-				                  | tp |
-				                  tp := VMThreadProfiler new.
-				                  pointsOfInterest do: [ :e |
-					                  tp addPointOfInterest: e ].
-				                  tp ] ].
+				                  tp ].
 	^ threadProfiler classifySample: sample
 ]
 

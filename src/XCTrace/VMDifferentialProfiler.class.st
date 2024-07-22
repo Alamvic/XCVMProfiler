@@ -28,10 +28,7 @@ VMDifferentialProfiler >> table [
 						      theValues := theValues collect: [ :val | val first first ].
 
 						      categoryTime := theValues sum: [ :val |
-							                      val isFromInstruments
-								                      ifTrue: [ val time ]
-								                      ifFalse: [
-								                      val traces sum: [ :trace | trace time ] ] ].
+							                      val sumOfTime ].
 
 						      finalTime := finalTime + categoryTime.
 						      categoryTime ])) ])) , String crlf , String crlf

@@ -40,6 +40,16 @@ VMThreadProfiler >> classifySample: aSample [
 	^ poi
 ]
 
+{ #category : 'initialization' }
+VMThreadProfiler >> initialize [
+
+	super initialize.
+	pointsOfInterest := Dictionary new.
+
+	self addPointOfInterest:
+		(unclassified := VMUnclassifiedPointOfInterest new)
+]
+
 { #category : 'as yet unclassified' }
 VMThreadProfiler >> percentages [
 	
@@ -51,16 +61,13 @@ VMThreadProfiler >> percentages [
 { #category : 'accessing' }
 VMThreadProfiler >> pointOfInterestForSample: aSample [
 
-	| pois framesNames |
+	| pois tracesNames |
 	pois := self pointsOfInterest.
-	framesNames := aSample isFromInstruments
-		               ifTrue: [ aSample stackTrace framesNames ]
-		               ifFalse: [
-		               aSample traces collect: [ :trace | trace name ] ].
+	tracesNames := aSample tracesNames.
 
-	framesNames doWithIndex: [ :e :i |
+	tracesNames doWithIndex: [ :e :i |
 		pois keys
-			detect: [ :poi | poi wantsFrame: e index: i frames: framesNames ]
+			detect: [ :poi | poi wantsFrame: e index: i frames: tracesNames ]
 			ifFound: [ :found | ^ found ] ].
 
 	^ unclassified

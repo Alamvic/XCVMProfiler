@@ -50,12 +50,6 @@ XCAbstractTraceObject >> childrenNamed: aPropertyName ifAbsent: aBlock [
 	^ children
 ]
 
-{ #category : 'api - accessing' }
-XCAbstractTraceObject >> isFromInstruments [
-
-	^ true
-]
-
 { #category : 'accessing' }
 XCAbstractTraceObject >> node [ 
 	^ node

@@ -30,6 +30,13 @@ VMCompositePointOfInterest >> addPointOfInterestForFunctionNamed: aString [
 		(VMFunctionCallPointOfInterest named: aString)
 ]
 
+{ #category : 'initialization' }
+VMCompositePointOfInterest >> initialize [
+
+	super initialize.
+	pointsOfInterest := Set new
+]
+
 { #category : 'accessing' }
 VMCompositePointOfInterest >> name [
 

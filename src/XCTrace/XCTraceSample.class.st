@@ -37,6 +37,12 @@ XCTraceSample >> primitiveName [
 	self error: 'Not a primitive sample!'
 ]
 
+{ #category : 'accessing' }
+XCTraceSample >> sampleName [
+
+	^ self threadId
+]
+
 { #category : 'api - accessing' }
 XCTraceSample >> sampleTime [
 
@@ -51,6 +57,13 @@ XCTraceSample >> stackTrace [
 	^ XCBacktrace sample: self node: backtraceNode
 ]
 
+{ #category : 'api - accessing' }
+XCTraceSample >> sumOfTime [
+
+	^ (self sampleTime asString asNumber
+	  / (10 ** (self sampleTime size - 3))) asFloat 
+]
+
 { #category : 'accessing' }
 XCTraceSample >> threadId [
 	
@@ -58,10 +71,9 @@ XCTraceSample >> threadId [
 ]
 
 { #category : 'api - accessing' }
-XCTraceSample >> time [
+XCTraceSample >> tracesNames [
 
-	^ (self sampleTime asString asNumber
-	  / (10 ** (self sampleTime size - 3))) asFloat 
+	^ self stackTrace framesNames
 ]
 
 { #category : 'api - accessing' }
