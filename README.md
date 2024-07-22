@@ -32,6 +32,14 @@ Metacello new
 ```
 
 ### How to use
+#### For perf
+You need to use these parameters in order for the parser to work as intended:
+```console
+sudo perf record -a -g --call-graph=dwarf -- ./script.sh
+sudo perf report --header --call-graph=callee --stdio > perf_example.txt
+```
+
+#### For Pharo
 ```smalltalk
 fr := (FileLocator home / 'path/to/XCVMProfiler/resources/perf_stock_multiple_children.txt') asFileReference.
 
