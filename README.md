@@ -41,7 +41,7 @@ sudo perf report --header --call-graph=callee --stdio > perf_example.txt
 
 #### For Pharo
 ```smalltalk
-fr := (FileLocator home / 'path/to/XCVMProfiler/resources/perf_stock_multiple_children.txt') asFileReference.
+fr := (FileLocator home / 'path/to/XCVMProfiler/resources/perf_example_callee_multiple_children.txt') asFileReference.
 
 "Use `parseFile:` to directly get the head of the node with all the parsing done"
 node := PerfTreeParser parseFile: fr.
