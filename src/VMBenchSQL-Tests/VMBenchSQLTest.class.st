@@ -25,14 +25,13 @@ Interpreter -> Primitive	96.79
 
 Total	10944.24'.
 
-	getter := VMBenchGetter fromContent: testContent.
 	testClient := P3Client new url:
 		              'psql://postgres:postgres@localhost:5432/postgres'.
 	testClient connect.
 
 	testExporter := VMBenchSQLExporter new
 		                client: testClient;
-		                content: getter structuredContent;
+		                structuredContent: testContent;
 		                timeStamp: Date today yyyymmdd;
 		                tableName: 'bench';
 		                yourself

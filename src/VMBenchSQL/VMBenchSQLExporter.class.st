@@ -12,10 +12,10 @@ Class {
 }
 
 { #category : 'instance creation' }
-VMBenchSQLExporter class >> fromContent: aStructuredContent WithUser: aUserName TableName: aTableName andTimeStamp: aTimeStamp [
+VMBenchSQLExporter class >> fromContent: aContent WithUser: aUserName TableName: aTableName andTimeStamp: aTimeStamp [
 
 	^ self new
-		content: aStructuredContent;
+		structuredContent: aContent;
 		clientWithUserName: aUserName;
 		tableName: aTableName;
 		timeStamp: aTimeStamp;
@@ -115,6 +115,34 @@ VMBenchSQLExporter >> newBenchId [
 VMBenchSQLExporter >> newId [
 
 	^ self lastId + 1
+]
+
+{ #category : 'accessing' }
+VMBenchSQLExporter >> structuredContent: aContent [
+
+	| subs newSubs j |
+
+	subs := aContent substrings.
+	newSubs := OrderedCollection new.
+	newSubs add: subs first.
+	j := 1.
+
+	2 to: subs size do: [ :i |
+		(subs at: i) first asString isAllDigits not
+			ifTrue: [
+				newSubs at: j put: ((newSubs at: j)
+						 ifEmpty: [ (newSubs at: j) , (subs at: i) ]
+						 ifNotEmpty: [ (newSubs at: j) , ' ' , (subs at: i) ]) ]
+			ifFalse: [
+				newSubs add: (subs at: i).
+				i ~= subs size ifTrue: [ newSubs add: '' ].
+				j := j + 2 ] ].
+
+	content := Dictionary new.
+	1 to: newSubs size by: 2 do: [ :i |
+		content at: (newSubs at: i) put: (newSubs at: i + 1) asNumber ].
+
+	^ content
 ]
 
 { #category : 'accessing' }
