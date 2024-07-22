@@ -47,7 +47,8 @@ PerfTreeParser >> content: aFile [
 		i := i + 1 ].
 
 	self time: (((fileContents at: i) copyFrom: '# sample duration :' size + 1 to: ((fileContents at: i) size - 2)) copyWithout: Character space) asNumber.
-	content := fileContents reject: [ :line | line beginsWith: '#' ].
+
+  content := fileContents reject: [ :line | line beginsWith: '#' ].
 	content := content select: [ :line |
 		           ((line copyWithout: Character space) copyWithout: $|)
 			           isNotEmpty ]
@@ -62,21 +63,21 @@ PerfTreeParser >> differenceOfSpacesAt: aNodeIndex [
 ]
 
 { #category : 'accessing' }
-PerfTreeParser >> findChildrenIndexOfIndex: aNodeIndex [
+PerfTreeParser >> findParentIndexOfIndex: aNodeIndex [
 	"Gives an ordered collection of every indexes of the lines where there is a child."
 
-	| lastNodeIndex everyChildren newBranch spaces nodeSpaces |
+	| lastNodeIndex everyParent newBranch spaces nodeSpaces |
 	lastNodeIndex := self numberOfFunctions.
-	everyChildren := OrderedCollection new.
+	everyParent := OrderedCollection new.
 
 	(aNodeIndex + 1 between: 1 and: self numberOfFunctions) ifFalse: [
-		^ everyChildren ].
+		^ everyParent ].
 
 	((self percentageOf: aNodeIndex)
 	 = (self percentageOf: aNodeIndex + 1) and: [
 		 ((self readLine: aNodeIndex + 1) findString: '[') = 0 ]) ifTrue: [
-		everyChildren add: aNodeIndex + 1.
-		^ everyChildren ].
+		everyParent add: aNodeIndex + 1.
+		^ everyParent ].
 
 	newBranch := false.
 	nodeSpaces := self numberOfSpacesAt: aNodeIndex.
@@ -85,18 +86,18 @@ PerfTreeParser >> findChildrenIndexOfIndex: aNodeIndex [
 		spaces <= nodeSpaces ifTrue: [ newBranch := true ].
 		((spaces - nodeSpaces between: 1 and: 11) and: [
 			 (self percentageOf: i) ~= (self percentageOf: i - 1) and: [
-				 newBranch not ] ]) ifTrue: [ everyChildren add: i ] ].
+				 newBranch not ] ]) ifTrue: [ everyParent add: i ] ].
 
-	^ everyChildren
+	^ everyParent
 ]
 
 { #category : 'accessing' }
-PerfTreeParser >> findChildrenOfIndex: aNodeIndex [
+PerfTreeParser >> findParentOfIndex: aNodeIndex [
 	"Gives the nodes representing every children at the node aNodeIndex."
 
-	| collectionOfChildrenIndexes |
-	collectionOfChildrenIndexes := self findChildrenIndexOfIndex: aNodeIndex.
-	^ collectionOfChildrenIndexes collect: [ :childIndex |
+	| collectionOfParentIndexes |
+	collectionOfParentIndexes := self findParentIndexOfIndex: aNodeIndex.
+	^ collectionOfParentIndexes collect: [ :childIndex |
 		  self nodeAtIndex: childIndex ]
 ]
 
@@ -135,11 +136,11 @@ PerfTreeParser >> nodeAtIndex: aNodeIndex [
 		         name: (self nameOf: aNodeIndex);
 		         time: (self timeOf: aNodeIndex);
 		         totalTime: self time;
-					timeWithChildren: (self timeWithChildrenOf: aNodeIndex);
+					timeWithParents: (self timeWithParentOf: aNodeIndex);
 					rawPercentage: (self rawPercentageOf: aNodeIndex);
 		         yourself.
-	node children: (self findChildrenOfIndex: aNodeIndex).
-	node children do: [ :child | child parent: node ].
+	node parents: (self findParentOfIndex: aNodeIndex).
+	node parents do: [ :parent | parent child: node ].
 	^ node
 ]
 
@@ -209,7 +210,7 @@ PerfTreeParser >> realPercentageOf: aNodeIndex [
 
 	| nodePercentage children childrenPercentage |
 	nodePercentage := self percentageOf: aNodeIndex.
-	children := self findChildrenIndexOfIndex: aNodeIndex.
+	children := self findParentIndexOfIndex: aNodeIndex.
 	childrenPercentage := 0.
 	children ifEmpty: [ ^ nodePercentage ].
 
@@ -217,14 +218,7 @@ PerfTreeParser >> realPercentageOf: aNodeIndex [
 	childrenPercentage := children sum: [ :child |
 		                      self percentageOf: child ].
 
-	^ nodePercentage - childrenPercentage roundUpTo: 0.01
-]
-
-{ #category : 'accessing' }
-PerfTreeParser >> root [
-	"Gives the first parent of the nodes"
-
-	^ self nodeAtIndex: 1
+	^ nodePercentage - childrenPercentage round: 2
 ]
 
 { #category : 'accessing' }
@@ -257,16 +251,16 @@ PerfTreeParser >> timeOf: aNodeIndex [
 	| newPercentage |
 	newPercentage := self realPercentageOf: aNodeIndex.
 
-	^ totalTime * (newPercentage/100) roundUpTo: 0.01
+	^ totalTime * (newPercentage/100) round: 2
 ]
 
 { #category : 'accessing' }
-PerfTreeParser >> timeWithChildrenOf: aNodeIndex [
+PerfTreeParser >> timeWithParentOf: aNodeIndex [
 
 	| newPercentage |
 	newPercentage := self percentageOf: aNodeIndex.
 
-	^ totalTime * (newPercentage/100) roundUpTo: 0.01
+	^ totalTime * (newPercentage/100) round: 2
 ]
 
 { #category : 'accessing' }

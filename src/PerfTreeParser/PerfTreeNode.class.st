@@ -3,27 +3,27 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'name',
-		'children',
-		'parent',
 		'totalTime',
 		'time',
-		'timeWithChildren',
-		'rawPercentage'
+		'rawPercentage',
+		'child',
+		'parents',
+		'timeWithParents'
 	],
 	#category : 'PerfTreeParser',
 	#package : 'PerfTreeParser'
 }
 
 { #category : 'accessing' }
-PerfTreeNode >> children [
+PerfTreeNode >> child [
 
-	^ children
+	^ child
 ]
 
 { #category : 'accessing' }
-PerfTreeNode >> children: aCollectionOfTreeNode [
+PerfTreeNode >> child: aCollectionOfTreeNode [
 
-	children:= aCollectionOfTreeNode
+	child:= aCollectionOfTreeNode
 ]
 
 { #category : 'accessing' }
@@ -32,15 +32,15 @@ PerfTreeNode >> collectLeavesIn: leaves [
 	(self isLeaf and: [ self isNotAlreadyLeafIn: leaves ]) ifTrue: [
 		leaves add: self ].
 
-	self children do: [ :child | child collectLeavesIn: leaves ].
+	self parents do: [ :parent | parent collectLeavesIn: leaves ].
 
 	^ leaves
 ]
 
 { #category : 'accessing' }
-PerfTreeNode >> firstChild [
+PerfTreeNode >> firstParent [
 
-	^ self children first
+	^ self parents first
 ]
 
 { #category : 'accessing' }
@@ -52,7 +52,7 @@ PerfTreeNode >> isFromInstruments [
 { #category : 'accessing' }
 PerfTreeNode >> isLeaf [
 
-	^ self children isEmpty
+	^ self child isNil
 ]
 
 { #category : 'accessing' }
@@ -67,7 +67,7 @@ PerfTreeNode >> isNotAlreadyLeafIn: leaves [
 { #category : 'accessing' }
 PerfTreeNode >> isNotLeaf [
 
-	^ self children isNotEmpty
+	^ self child isNotNil
 ]
 
 { #category : 'accessing' }
@@ -83,15 +83,15 @@ PerfTreeNode >> name: aString [
 ]
 
 { #category : 'accessing' }
-PerfTreeNode >> parent [
+PerfTreeNode >> parents [
 
-	^ parent
+	^ parents
 ]
 
 { #category : 'accessing' }
-PerfTreeNode >> parent: aTreeNode [
+PerfTreeNode >> parents: aTreeNode [
 
-	parent := aTreeNode
+	parents := aTreeNode
 ]
 
 { #category : 'accessing' }
@@ -119,15 +119,15 @@ PerfTreeNode >> time: aFloat [
 ]
 
 { #category : 'accessing' }
-PerfTreeNode >> timeWithChildren [
+PerfTreeNode >> timeWithParents [
 
-	^ timeWithChildren
+	^ timeWithParents
 ]
 
 { #category : 'accessing' }
-PerfTreeNode >> timeWithChildren: anObject [
+PerfTreeNode >> timeWithParents: anObject [
 
-	timeWithChildren := anObject
+	timeWithParents := anObject
 ]
 
 { #category : 'accessing' }
