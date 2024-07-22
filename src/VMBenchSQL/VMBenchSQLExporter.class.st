@@ -90,7 +90,7 @@ VMBenchSQLExporter >> lastBenchId [
 			lastData := self data last.
 
 			^ lastData second ]
-		ifEmpty: [ ^ 1 ]
+		ifEmpty: [ ^ 0 ]
 ]
 
 { #category : 'accessing' }
@@ -102,7 +102,7 @@ VMBenchSQLExporter >> lastId [
 			lastData := self data last.
 
 			^ lastData first ]
-		ifEmpty: [ ^ 1 ]
+		ifEmpty: [ ^ 0 ]
 ]
 
 { #category : 'accessing' }
