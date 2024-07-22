@@ -49,6 +49,7 @@ VMBenchSQLTest >> tearDown [
 { #category : 'running' }
 VMBenchSQLTest >> testExport [
 
+	"They should have the same bench_id"
 	self
 		assert: testExporter export first second
 		equals: testExporter export second second.
@@ -59,14 +60,16 @@ VMBenchSQLTest >> testExport [
 { #category : 'running' }
 VMBenchSQLTest >> testExportSize [
 
+	"In this example there are 7 different profiles"
 	self assert: testExporter export size equals: 7.
 
+	"Each profiles has 5 variables: id, bench_id, profile, value and timestamp"
 	self assert: testExporter export first size equals: 5
 ]
 
 { #category : 'running' }
 VMBenchSQLTest >> testSizeOfStructuredContent [
-	"There is 6 categories with the Total category."
+	"There are 6 categories plus the Total category."
 
 	self assert: getter structuredContent size equals: 7
 ]

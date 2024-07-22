@@ -55,26 +55,21 @@ VMBenchSQLExporter >> content: anObject [
 ]
 
 { #category : 'accessing' }
+VMBenchSQLExporter >> data [
+
+	^ (client query: 'SELECT * FROM ' , tableName) data
+]
+
+{ #category : 'accessing' }
 VMBenchSQLExporter >> export [
 
-	| lastData lastBenchId lastId newBenchId newId |
+	| newBenchId newId |
 	client execute: 'CREATE TABLE IF NOT EXISTS ' , tableName
 		,
 		' (id int, bench_id int, timestamp date, profile varchar(30), value real);'.
 
-	(client query: 'SELECT * FROM ' , tableName) data
-		ifNotEmpty: [
-			lastData := (client query: 'SELECT * FROM ' , tableName) data last.
-
-			lastBenchId := lastData second.
-			newBenchId := lastBenchId + 1.
-
-			lastId := lastData first.
-			newId := lastId + 1 ]
-		ifEmpty: [
-			newBenchId := 1.
-			newId := 1 ].
-
+	newId := self newId.
+	newBenchId := self newBenchId.
 
 	content keysDo: [ :key |
 		client execute:
@@ -83,7 +78,43 @@ VMBenchSQLExporter >> export [
 			, key asString , ''' ,' , (content at: key) asString , ');'.
 		newId := newId + 1 ].
 
-	^ (client query: 'SELECT * FROM ' , tableName) data
+	^ self data
+]
+
+{ #category : 'accessing' }
+VMBenchSQLExporter >> lastBenchId [
+
+	| lastData |
+	self data
+		ifNotEmpty: [
+			lastData := self data last.
+
+			^ lastData second ]
+		ifEmpty: [ ^ 1 ]
+]
+
+{ #category : 'accessing' }
+VMBenchSQLExporter >> lastId [
+
+	| lastData |
+	self data
+		ifNotEmpty: [
+			lastData := self data last.
+
+			^ lastData first ]
+		ifEmpty: [ ^ 1 ]
+]
+
+{ #category : 'accessing' }
+VMBenchSQLExporter >> newBenchId [
+
+	^ self lastBenchId + 1
+]
+
+{ #category : 'accessing' }
+VMBenchSQLExporter >> newId [
+
+	^ self lastId + 1
 ]
 
 { #category : 'accessing' }
