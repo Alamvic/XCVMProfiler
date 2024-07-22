@@ -1,6 +1,6 @@
 Class {
 	#name : 'BaselineOfVMBenchSQL',
-	#superclass : 'Object',
+	#superclass : 'BaselineOf',
 	#category : 'BaselineOfVMBenchSQL',
 	#package : 'BaselineOfVMBenchSQL'
 }
