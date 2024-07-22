@@ -1,18 +1,18 @@
 Class {
-	#name : 'XCTrampolinePointOfInterest',
-	#superclass : 'XCPointOfInterestAbstract',
+	#name : 'VMTrampolinePointOfInterest',
+	#superclass : 'VMPointOfInterestAbstract',
 	#category : 'XCTrace',
 	#package : 'XCTrace'
 }
 
 { #category : 'accessing' }
-XCTrampolinePointOfInterest >> name [
+VMTrampolinePointOfInterest >> name [
 	
 	^ 'Trampolines'
 ]
 
 { #category : 'accessing' }
-XCTrampolinePointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
+VMTrampolinePointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
 	^ (aNameOfElement beginsWith: 'ce') and: [
 		  aNameOfElement third isUppercase ]

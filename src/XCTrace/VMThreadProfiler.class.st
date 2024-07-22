@@ -1,5 +1,5 @@
 Class {
-	#name : 'XCThreadProfiler',
+	#name : 'VMThreadProfiler',
 	#superclass : 'Object',
 	#instVars : [
 		'pointsOfInterest',
@@ -10,20 +10,20 @@ Class {
 }
 
 { #category : 'adding' }
-XCThreadProfiler >> addPointOfInterest: aPoi [
+VMThreadProfiler >> addPointOfInterest: aPoi [
 
 	pointsOfInterest at: aPoi put: OrderedCollection new
 ]
 
 { #category : 'adding' }
-XCThreadProfiler >> addPointOfInterestForFunction: aString [
+VMThreadProfiler >> addPointOfInterestForFunction: aString [
 
 	self addPointOfInterest:
-		(XCFunctionCallPointOfInterest named: aString)
+		(VMFunctionCallPointOfInterest named: aString)
 ]
 
 { #category : 'classification' }
-XCThreadProfiler >> classify: samples [
+VMThreadProfiler >> classify: samples [
 
 	samples do: [ :e |
 		| poi |
@@ -32,7 +32,7 @@ XCThreadProfiler >> classify: samples [
 ]
 
 { #category : 'classification' }
-XCThreadProfiler >> classifySample: aSample [
+VMThreadProfiler >> classifySample: aSample [
 
 	| poi |
 	poi := self pointOfInterestForSample: aSample.
@@ -40,18 +40,8 @@ XCThreadProfiler >> classifySample: aSample [
 	^ poi
 ]
 
-{ #category : 'adding' }
-XCThreadProfiler >> initialize [
-
-	super initialize.
-	pointsOfInterest := Dictionary new.
-
-	self addPointOfInterest:
-		(unclassified := XCUnclassifiedPointOfInterest new)
-]
-
 { #category : 'as yet unclassified' }
-XCThreadProfiler >> percentages [
+VMThreadProfiler >> percentages [
 	
 	| total |
 	total := self totalSamples.
@@ -59,7 +49,7 @@ XCThreadProfiler >> percentages [
 ]
 
 { #category : 'accessing' }
-XCThreadProfiler >> pointOfInterestForSample: aSample [
+VMThreadProfiler >> pointOfInterestForSample: aSample [
 
 	| pois framesNames |
 	pois := self pointsOfInterest.
@@ -77,25 +67,25 @@ XCThreadProfiler >> pointOfInterestForSample: aSample [
 ]
 
 { #category : 'accessing' }
-XCThreadProfiler >> pointOfInterestWithId: aString [ 
+VMThreadProfiler >> pointOfInterestWithId: aString [ 
 	
 	^ pointsOfInterest keys detect: [ :e | e name = aString ]
 ]
 
 { #category : 'accessing' }
-XCThreadProfiler >> pointsOfInterest [
+VMThreadProfiler >> pointsOfInterest [
 
 	^ pointsOfInterest
 ]
 
 { #category : 'accessing' }
-XCThreadProfiler >> samplesForPoi: aPoi [ 
+VMThreadProfiler >> samplesForPoi: aPoi [ 
 	
 	^ pointsOfInterest at: aPoi
 ]
 
 { #category : 'accessing' }
-XCThreadProfiler >> totalSamples [
+VMThreadProfiler >> totalSamples [
 	
 	^ pointsOfInterest sum: [ :e | e size ]
 ]

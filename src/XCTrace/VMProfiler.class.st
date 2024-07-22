@@ -1,5 +1,5 @@
 Class {
-	#name : 'XCVMProfiler',
+	#name : 'VMProfiler',
 	#superclass : 'Object',
 	#instVars : [
 		'threads',
@@ -10,20 +10,20 @@ Class {
 }
 
 { #category : 'accessing' }
-XCVMProfiler class >> default [
+VMProfiler class >> default [
 
 	^ self new
 		  addPointOfInterest:
-			  ((XCCompositePointOfInterest named: 'compilation')
+			  ((VMCompositePointOfInterest named: 'compilation')
 					addPointOfInterestForFunctionNamed: 'enerageCogFullBlock';
 				   addPointOfInterestForFunctionNamed: 'ompileCogMethod';
 				   addPointOfInterestForFunctionNamed: 'cogselector';
 				   yourself);
-		  addPointOfInterest: ((XCCompositePointOfInterest named: 'gc')
+		  addPointOfInterest: ((VMCompositePointOfInterest named: 'gc')
 				   addPointOfInterestForFunctionNamed: 'fullGC';
 				   yourself);
 		  addPointOfInterestForFunctionNamed: 'interpret';
-		  addPointOfInterest: ((XCCompositePointOfInterest named: 'others')
+		  addPointOfInterest: ((VMCompositePointOfInterest named: 'others')
 				   addPointOfInterestForFunctionNamed: 'handleStackOverflow';
 				   addPointOfInterestForFunctionNamed: 'loadPharoImage';
 				   addPointOfInterestForFunctionNamed: 'reportStackState';
@@ -32,49 +32,49 @@ XCVMProfiler class >> default [
 					   'interpretMethodFromMachineCode';
 				   addPointOfInterestForFunctionNamed: 'ceNonLocalReturn';
 				   yourself);
-		  addPointOfInterest: XCMCPointOfInterest new;
-		  addPointOfInterest: XCPrimitiveFromMCPointOfInterest new;
-		  addPointOfInterest: XCPrimitiveFromInterpreterPointOfInterest new;
-		  addPointOfInterest: XCTrampolinePointOfInterest new;
+		  addPointOfInterest: VMMCPointOfInterest new;
+		  addPointOfInterest: VMPrimitiveFromMCPointOfInterest new;
+		  addPointOfInterest: VMPrimitiveFromInterpreterPointOfInterest new;
+		  addPointOfInterest: VMTrampolinePointOfInterest new;
 		  yourself
 ]
 
 { #category : 'adding' }
-XCVMProfiler >> addPointOfInterest: aPointOfInterest [
+VMProfiler >> addPointOfInterest: aPointOfInterest [
 	
 	pointsOfInterest add: aPointOfInterest
 ]
 
 { #category : 'adding' }
-XCVMProfiler >> addPointOfInterestForFunctionNamed: aString [
+VMProfiler >> addPointOfInterestForFunctionNamed: aString [
 
 	self addPointOfInterest:
-		(XCFunctionCallPointOfInterest named: aString)
+		(VMFunctionCallPointOfInterest named: aString)
 ]
 
 { #category : 'classification' }
-XCVMProfiler >> classify: samples [
+VMProfiler >> classify: samples [
 	"The samples should be treated in order because of their internal crossed references..."
 
 	samples do: [ :sample | self classifySample: sample ]
 ]
 
 { #category : 'classification' }
-XCVMProfiler >> classifySample: sample [
+VMProfiler >> classifySample: sample [
 
 	| threadProfiler |
 	threadProfiler := sample isFromInstruments
 		                  ifTrue: [
 			                  threads at: sample threadId ifAbsentPut: [
 				                  | tp |
-				                  tp := XCThreadProfiler new.
+				                  tp := VMThreadProfiler new.
 				                  pointsOfInterest do: [ :e |
 					                  tp addPointOfInterest: e ].
 				                  tp ] ]
 		                  ifFalse: [
 			                  threads at: sample name ifAbsentPut: [
 				                  | tp |
-				                  tp := XCThreadProfiler new.
+				                  tp := VMThreadProfiler new.
 				                  pointsOfInterest do: [ :e |
 					                  tp addPointOfInterest: e ].
 				                  tp ] ].
@@ -82,7 +82,7 @@ XCVMProfiler >> classifySample: sample [
 ]
 
 { #category : 'initialization' }
-XCVMProfiler >> initialize [
+VMProfiler >> initialize [
 
 	super initialize.
 	threads := Dictionary new.
@@ -90,6 +90,6 @@ XCVMProfiler >> initialize [
 ]
 
 { #category : 'accessing' }
-XCVMProfiler >> threads [
+VMProfiler >> threads [
 	^ threads
 ]

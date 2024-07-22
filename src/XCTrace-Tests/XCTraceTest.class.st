@@ -53,8 +53,8 @@ XCTraceTest >> testContentOfProfiler [
 	"Needs a rework."
 
 	| profiler |
-	profiler := XCVMProfiler new
-		            addPointOfInterest: XCMCPointOfInterest new;
+	profiler := VMProfiler new
+		            addPointOfInterest: VMMCPointOfInterest new;
 		            classify: treeSamples.
 	self
 		assert:
@@ -85,8 +85,8 @@ XCTraceTest >> testProfilerTable [
 	"The test for it is therefore pretty weak"
 
 	| profile primitiveProfile |
-	profile := XCVMDifferentialProfiler onFiles: { fr }.
-	primitiveProfile := XCVMDifferentialPrimitiveProfiler onFiles: { fr }.
+	profile := VMDifferentialProfiler onFiles: { fr }.
+	primitiveProfile := VMDifferentialPrimitiveProfiler onFiles: { fr }.
 
 	self assert: (profile table first: 12) equals: 'Machine Code'.
 

@@ -1,12 +1,12 @@
 Class {
-	#name : 'XCVMDifferentialProfiler',
-	#superclass : 'XCVMDifferentialProfilerAbstract',
+	#name : 'VMDifferentialProfiler',
+	#superclass : 'VMDifferentialProfilerAbstract',
 	#category : 'XCTrace',
 	#package : 'XCTrace'
 }
 
 { #category : 'accessing' }
-XCVMDifferentialProfiler >> table [
+VMDifferentialProfiler >> table [
 
 	| theKeys theValues profilesNames categoryTime finalTime |
 	profilesNames := #( 'Machine Code' Trampolines 'MC -> Primitive'

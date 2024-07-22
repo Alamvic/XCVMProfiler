@@ -1,18 +1,18 @@
 Class {
-	#name : 'XCUnclassifiedPointOfInterest',
-	#superclass : 'XCPointOfInterestAbstract',
+	#name : 'VMUnclassifiedPointOfInterest',
+	#superclass : 'VMPointOfInterestAbstract',
 	#category : 'XCTrace',
 	#package : 'XCTrace'
 }
 
 { #category : 'accessing' }
-XCUnclassifiedPointOfInterest >> name [
+VMUnclassifiedPointOfInterest >> name [
 	
 	^ 'Others'
 ]
 
 { #category : 'accessing' }
-XCUnclassifiedPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
+VMUnclassifiedPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
 	^ false "(XCPointOfInterestAbstract subclasses select: [ :subclass |
 		   subclass ~= self class and: [

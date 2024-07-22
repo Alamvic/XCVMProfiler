@@ -1,18 +1,18 @@
 Class {
-	#name : 'XCPrimitiveFromMCPointOfInterest',
-	#superclass : 'XCPointOfInterestAbstract',
+	#name : 'VMPrimitiveFromMCPointOfInterest',
+	#superclass : 'VMPointOfInterestAbstract',
 	#category : 'XCTrace',
 	#package : 'XCTrace'
 }
 
 { #category : 'accessing' }
-XCPrimitiveFromMCPointOfInterest >> name [
+VMPrimitiveFromMCPointOfInterest >> name [
 	
 	^ 'MC -> Primitive'
 ]
 
 { #category : 'accessing' }
-XCPrimitiveFromMCPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
+VMPrimitiveFromMCPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
 	^ (aNameOfElement beginsWith: 'primitive') "and: [
 		  | callerName |

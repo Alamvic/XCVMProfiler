@@ -1,12 +1,12 @@
 Class {
-	#name : 'XCVMDifferentialPrimitiveProfiler',
-	#superclass : 'XCVMDifferentialProfilerAbstract',
+	#name : 'VMDifferentialPrimitiveProfiler',
+	#superclass : 'VMDifferentialProfilerAbstract',
 	#category : 'XCTrace',
 	#package : 'XCTrace'
 }
 
 { #category : 'accessing' }
-XCVMDifferentialPrimitiveProfiler >> primitiveNames [
+VMDifferentialPrimitiveProfiler >> primitiveNames [
 	
 	"Assume all will have the same primitives listed for now"
 	| oneProfile poi thread |
@@ -17,7 +17,7 @@ XCVMDifferentialPrimitiveProfiler >> primitiveNames [
 ]
 
 { #category : 'accessing' }
-XCVMDifferentialPrimitiveProfiler >> samplesForPrimitive: aString [
+VMDifferentialPrimitiveProfiler >> samplesForPrimitive: aString [
 
 	^ self profiles collect: [ :oneProfile |
 		| poi thread |
@@ -28,7 +28,7 @@ XCVMDifferentialPrimitiveProfiler >> samplesForPrimitive: aString [
 ]
 
 { #category : 'accessing' }
-XCVMDifferentialPrimitiveProfiler >> table [
+VMDifferentialPrimitiveProfiler >> table [
 
 	| samplesPerPrimitive lines |
 	samplesPerPrimitive := self primitiveNames collect: [ :p |

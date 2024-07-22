@@ -1,5 +1,5 @@
 Class {
-	#name : 'XCVMDifferentialProfilerAbstract',
+	#name : 'VMDifferentialProfilerAbstract',
 	#superclass : 'Object',
 	#instVars : [
 		'profiles',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-XCVMDifferentialProfilerAbstract class >> onFiles: aCollection [ 
+VMDifferentialProfilerAbstract class >> onFiles: aCollection [ 
 	
 	^ self new
 		files: aCollection;
@@ -18,26 +18,26 @@ XCVMDifferentialProfilerAbstract class >> onFiles: aCollection [
 ]
 
 { #category : 'accessing' }
-XCVMDifferentialProfilerAbstract >> files: anObject [
+VMDifferentialProfilerAbstract >> files: anObject [
 
 	files := anObject
 ]
 
 { #category : 'accessing' }
-XCVMDifferentialProfilerAbstract >> profiles [
+VMDifferentialProfilerAbstract >> profiles [
 
 	^ profiles ifNil: [
 		  profiles := files collect: [ :file |
 			              (file contents beginsWith: #<)
 				              ifTrue: [
-					              XCVMProfiler default classify:
+					              VMProfiler default classify:
 						              (XCTraceTree fromTimeProfileFileReference: file)
 							              samples ]
 				              ifFalse: [
-					              XCVMProfiler default classify: (PerfTreeParser parseFile: file) ] ] ]
+					              VMProfiler default classify: (PerfTreeParser parseFile: file) ] ] ]
 ]
 
 { #category : 'accessing' }
-XCVMDifferentialProfilerAbstract >> table [
+VMDifferentialProfilerAbstract >> table [
 	^ self subclassResponsibility
 ]

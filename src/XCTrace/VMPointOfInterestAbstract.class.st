@@ -1,18 +1,18 @@
 Class {
-	#name : 'XCPointOfInterestAbstract',
+	#name : 'VMPointOfInterestAbstract',
 	#superclass : 'Object',
 	#category : 'XCTrace',
 	#package : 'XCTrace'
 }
 
 { #category : 'accessing' }
-XCPointOfInterestAbstract >> name [
+VMPointOfInterestAbstract >> name [
 
 	self subclassResponsibility
 ]
 
 { #category : 'accessing' }
-XCPointOfInterestAbstract >> wantsFrame: aNameOfElement index: anInteger frames: frames [
+VMPointOfInterestAbstract >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
 	self subclassResponsibility
 ]

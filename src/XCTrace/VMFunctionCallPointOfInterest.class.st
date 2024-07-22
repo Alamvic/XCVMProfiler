@@ -1,6 +1,6 @@
 Class {
-	#name : 'XCFunctionCallPointOfInterest',
-	#superclass : 'XCPointOfInterestAbstract',
+	#name : 'VMFunctionCallPointOfInterest',
+	#superclass : 'VMPointOfInterestAbstract',
 	#instVars : [
 		'functionName'
 	],
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-XCFunctionCallPointOfInterest class >> named: aName [
+VMFunctionCallPointOfInterest class >> named: aName [
 
 	^ self new
 		  functionName: aName;
@@ -17,25 +17,25 @@ XCFunctionCallPointOfInterest class >> named: aName [
 ]
 
 { #category : 'accessing' }
-XCFunctionCallPointOfInterest >> functionName [
+VMFunctionCallPointOfInterest >> functionName [
 
 	^ functionName
 ]
 
 { #category : 'accessing' }
-XCFunctionCallPointOfInterest >> functionName: anObject [
+VMFunctionCallPointOfInterest >> functionName: anObject [
 
 	functionName := anObject
 ]
 
 { #category : 'accessing' }
-XCFunctionCallPointOfInterest >> name [
+VMFunctionCallPointOfInterest >> name [
 	
 	^ functionName
 ]
 
 { #category : 'printing' }
-XCFunctionCallPointOfInterest >> printOn: aStream [
+VMFunctionCallPointOfInterest >> printOn: aStream [
 
 	super printOn: aStream.
 	aStream nextPut: $(.
@@ -44,7 +44,7 @@ XCFunctionCallPointOfInterest >> printOn: aStream [
 ]
 
 { #category : 'accessing' }
-XCFunctionCallPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
+VMFunctionCallPointOfInterest >> wantsFrame: aNameOfElement index: anInteger frames: frames [
 
 	^ functionName = aNameOfElement
 ]
