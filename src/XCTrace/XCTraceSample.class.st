@@ -1,14 +1,15 @@
 Class {
-	#name : #XCTraceSample,
-	#superclass : #XCAbstractTraceObject,
+	#name : 'XCTraceSample',
+	#superclass : 'XCAbstractTraceObject',
 	#instVars : [
 		'tree',
 		'primitiveName'
 	],
-	#category : #XCTrace
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 XCTraceSample class >> tree: aXCTraceTree [
 
 	^ self new
@@ -16,7 +17,7 @@ XCTraceSample class >> tree: aXCTraceTree [
 		  yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 XCTraceSample class >> tree: aXCTraceTree node: aXMLElement [
 
 	^ self new
@@ -25,7 +26,7 @@ XCTraceSample class >> tree: aXCTraceTree node: aXMLElement [
 		  yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTraceSample >> primitiveName [
 	
 	primitiveName ifNotNil: [ ^ primitiveName ].
@@ -36,13 +37,19 @@ XCTraceSample >> primitiveName [
 	self error: 'Not a primitive sample!'
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'accessing' }
+XCTraceSample >> sampleName [
+
+	^ self threadId
+]
+
+{ #category : 'api - accessing' }
 XCTraceSample >> sampleTime [
 
 	^ self childNamed: 'sample-time'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTraceSample >> stackTrace [
 
 	| backtraceNode |
@@ -50,24 +57,37 @@ XCTraceSample >> stackTrace [
 	^ XCBacktrace sample: self node: backtraceNode
 ]
 
-{ #category : #accessing }
+{ #category : 'api - accessing' }
+XCTraceSample >> sumOfTime [
+
+	^ (self sampleTime asString asNumber
+	  / (10 ** (self sampleTime size - 3))) asFloat 
+]
+
+{ #category : 'accessing' }
 XCTraceSample >> threadId [
 	
 	^ self childNamed: 'thread'
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
+XCTraceSample >> tracesNames [
+
+	^ self stackTrace framesNames
+]
+
+{ #category : 'api - accessing' }
 XCTraceSample >> tree [
 
 	^ tree
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCTraceSample >> tree: aXCTraceTree [ 
 	tree := aXCTraceTree
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 XCTraceSample >> weight [
 
 	^ self childNamed: 'weight'

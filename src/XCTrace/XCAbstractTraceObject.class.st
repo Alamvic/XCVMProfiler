@@ -1,19 +1,20 @@
 Class {
-	#name : #XCAbstractTraceObject,
-	#superclass : #Object,
+	#name : 'XCAbstractTraceObject',
+	#superclass : 'Object',
 	#instVars : [
 		'node'
 	],
-	#category : #XCTrace
+	#category : 'XCTrace',
+	#package : 'XCTrace'
 }
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 XCAbstractTraceObject >> childNamed: aPropertyName [
 
 	^ self childNamed: aPropertyName ifAbsent: [ self error ]
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 XCAbstractTraceObject >> childNamed: aPropertyName ifAbsent: aBlock [
 
 	| children |
@@ -27,7 +28,7 @@ XCAbstractTraceObject >> childNamed: aPropertyName ifAbsent: aBlock [
 	
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 XCAbstractTraceObject >> childrenNamed: aPropertyName [
 
 	^ (self node
@@ -40,7 +41,7 @@ XCAbstractTraceObject >> childrenNamed: aPropertyName [
 
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 XCAbstractTraceObject >> childrenNamed: aPropertyName ifAbsent: aBlock [
 
 	| children |
@@ -49,17 +50,17 @@ XCAbstractTraceObject >> childrenNamed: aPropertyName ifAbsent: aBlock [
 	^ children
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCAbstractTraceObject >> node [ 
 	^ node
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 XCAbstractTraceObject >> node: aXMLElement [ 
 	node := aXMLElement
 ]
 
-{ #category : #'api - accessing' }
+{ #category : 'api - accessing' }
 XCAbstractTraceObject >> tree [
 
 	self subclassResponsibility

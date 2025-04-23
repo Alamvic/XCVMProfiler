@@ -46,9 +46,9 @@ PerfTreeParser >> content: aFile [
 	[ (fileContents at: i) beginsWith: '# sample duration' ] whileFalse: [
 		i := i + 1 ].
 
-	self time: ((((fileContents at: i) last: 14) first: 11) copyWithout: Character space) asNumber.
+	self time: (((fileContents at: i) copyFrom: '# sample duration :' size + 1 to: ((fileContents at: i) size - 2)) copyWithout: Character space) asNumber.
 
-	content := fileContents reject: [ :line | line beginsWith: '#' ].
+  content := fileContents reject: [ :line | line beginsWith: '#' ].
 	content := content select: [ :line |
 		           ((line copyWithout: Character space) copyWithout: $|)
 			           isNotEmpty ]

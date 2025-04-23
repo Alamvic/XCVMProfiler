@@ -101,6 +101,18 @@ PerfTreeNode >> rawPercentage: anObject [
 ]
 
 { #category : 'accessing' }
+PerfTreeNode >> sampleName [
+
+	^ self name
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> sumOfTime [ 
+
+	^ self traces sum: [:trace | trace time ]
+]
+
+{ #category : 'accessing' }
 PerfTreeNode >> time [
 
 	^ time
@@ -149,4 +161,10 @@ PerfTreeNode >> traces [
 			  time: l time;
 			  rawPercentage: l rawPercentage;
 			  yourself ]
+]
+
+{ #category : 'accessing' }
+PerfTreeNode >> tracesNames [ 
+
+	^ self traces collect: [:trace | trace name ]
 ]
